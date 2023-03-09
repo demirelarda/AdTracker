@@ -64,6 +64,15 @@
 
     </LinearLayout>
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Advioo BETA TEST V0.001"
+        android:textColor="@color/black"
+        android:layout_margin="5dp">
+
+    </TextView>
+
 
 
 

@@ -13,6 +13,10 @@ android {
     namespace 'com.mycompany.advioo'
     compileSdk 33
 
+    buildFeatures {
+        viewBinding true
+    }
+
     defaultConfig {
         applicationId "com.mycompany.advioo"
         minSdk 24

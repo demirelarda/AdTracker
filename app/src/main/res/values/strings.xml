@@ -15,5 +15,9 @@
     <string name="last_name">Last Name</string>
     <string name="phone_number">Phone Number</string>
     <string name="already_have_an_account">Already Have An Account?<u>Login Now</u></string>
+    <string name="forgot_your_password_text">Forgot Your Password?</string>
+    <string name="we_send_you_an_email">We will send you an email</string>
+    <string name="logout">Logout</string>
+
 
 </resources>

@@ -12,6 +12,9 @@
         android:theme="@style/Theme.Advioo"
         tools:targetApi="31">
         <activity
+            android:name=".ui.activities.MainPageActivity"
+            android:exported="false" />
+        <activity
             android:name=".ui.MainActivity"
             android:exported="true">
             <intent-filter>
