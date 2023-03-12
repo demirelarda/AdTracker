@@ -60,8 +60,10 @@ class LoginFragment : BaseFragment() {
 
     }
 
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        /*
         binding.btnLoginAuth.setOnClickListener {
             loginUser()
         }
@@ -73,12 +75,14 @@ class LoginFragment : BaseFragment() {
             val action = LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment()
             Navigation.findNavController(it).navigate(action)
         }
+
+         */
     }
 
     fun loginUser(){
 
-        val email = binding.tfEmail.text.toString()
-        val password = binding.tfPassword.text.toString()
+        val email = binding.tfEmailLogin.text.toString()
+        val password = binding.tfPasswordLogin.text.toString()
 
         if(email != "" && password!=""){
             showProgressBar("Please Wait...")

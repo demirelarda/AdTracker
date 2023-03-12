@@ -4,8 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.auth.RegisterFragment"
-    android:background="@drawable/app_gradient_color_purple">
+    tools:context=".ui.fragments.auth.RegisterFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -42,7 +41,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="20dp"
-            style="@style/TextInputLayoutStyle">
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tf_first_name"
@@ -60,7 +59,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="20dp"
-            style="@style/TextInputLayoutStyle">
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tf_last_name"
@@ -78,7 +77,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="20dp"
-            style="@style/TextInputLayoutStyle">
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tf_email"
@@ -96,7 +95,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="20dp"
-            style="@style/TextInputLayoutStyle">
+            >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tf_password"
@@ -115,7 +114,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
             android:layout_marginTop="20dp"
-            style="@style/TextInputLayoutStyle">
+           >
 
             <com.google.android.material.textfield.TextInputEditText
                 android:id="@+id/tf_phone"
@@ -140,7 +139,7 @@
             android:textSize="16sp"
             android:textAllCaps="false"
             android:text="@string/signup"
-            android:background="@drawable/button_background_white"
+            android:background="@drawable/button_background_blue"
             >
         </androidx.appcompat.widget.AppCompatButton>
 
