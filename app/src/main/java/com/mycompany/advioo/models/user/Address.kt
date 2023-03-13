@@ -1,4 +1,4 @@
-package com.mycompany.advioo.models
+package com.mycompany.advioo.models.user
 
 data class Address(
     val city: String,

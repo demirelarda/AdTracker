@@ -1,4 +1,4 @@
-package com.mycompany.advioo.models
+package com.mycompany.advioo.models.user
 
 import com.google.firebase.Timestamp
 import com.google.type.Date

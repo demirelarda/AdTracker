@@ -1,8 +1,6 @@
 package com.mycompany.advioo.ui.fragments.auth
 
 import android.os.Bundle
-import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -14,12 +12,9 @@ import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.ktx.Firebase
-import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentRegisterBinding
-import com.mycompany.advioo.databinding.FragmentStartingBinding
-import com.mycompany.advioo.models.User
+import com.mycompany.advioo.models.user.User
 import com.mycompany.advioo.other.BaseFragment
-import java.time.LocalDateTime
 
 
 class RegisterFragment : BaseFragment() {
@@ -82,7 +77,7 @@ class RegisterFragment : BaseFragment() {
 
     }
 
-    fun registerUser(userInfo:User) {
+    fun registerUser(userInfo: User) {
         db.collection("users")
             .document(userInfo.id)
             .set(userInfo, SetOptions.merge())

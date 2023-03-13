@@ -1,6 +1,5 @@
 package com.mycompany.advioo.ui.activities
 
-import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -9,9 +8,8 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.ktx.Firebase
-import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.ActivityMainPageBinding
-import com.mycompany.advioo.models.User
+import com.mycompany.advioo.models.user.User
 import com.mycompany.advioo.ui.MainActivity
 import java.text.SimpleDateFormat
 
