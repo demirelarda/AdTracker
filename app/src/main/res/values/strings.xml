@@ -19,6 +19,9 @@
     <string name="we_send_you_an_email">We will send you an email</string>
     <string name="logout">Logout</string>
     <string name="hello_please_login_to_continue">Hello, please login to continue!</string>
+    <string name="password_again">Password Again</string>
+    <string name="btn_continue">Continue</string>
+
 
 
 </resources>
