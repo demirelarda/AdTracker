@@ -44,35 +44,7 @@ class RegisterFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        binding.btnRegisterAuth.setOnClickListener {
-            showProgressBar("Please Wait...")
-            val email : String = binding.tfEmail.text.toString()
-            val password = binding.tfPassword.text.toString()
-            FirebaseAuth.getInstance().createUserWithEmailAndPassword(email,password)
-                .addOnCompleteListener {task->
-                    if(task.isSuccessful){
-                        val userObject = User(
-                            auth.uid!!,
-                            binding.tfFirstName.text.toString(),
-                            binding.tfLastName.text.toString(),
-                            binding.tfEmail.text.toString(),
-                            binding.tfPhone.text.toString(),
-                            Timestamp.now()
-                        )
-                        registerUser(userObject)
-                    }
 
-
-                }.addOnFailureListener { e->
-                    hideProgressBar()
-                    e.localizedMessage?.let { Toast.makeText(requireContext(),it, Toast.LENGTH_LONG).show() }
-                }
-        }
-
-        binding.tvGoToLogin.setOnClickListener {
-            val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment(true)
-            Navigation.findNavController(it).navigate(action)
-        }
 
 
     }

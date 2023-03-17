@@ -21,7 +21,26 @@
     <string name="hello_please_login_to_continue">Hello, please login to continue!</string>
     <string name="password_again">Password Again</string>
     <string name="btn_continue">Continue</string>
-
-
+    <string name="address_details">Address Details</string>
+    <string name="full_name">Full Name</string>
+    <string name="address_row">Address Row 1</string>
+    <string name="address_row2">Address Row 2</string>
+    <string name="city">City</string>
+    <string name="postal_code">ZIP Code</string>
+    <string name="car_brand">Car Brand</string>
+    <string name="car_model">Car Model</string>
+    <string name="car_year">Car Year</string>
+    <string name="car_condition">Car Condition</string>
+    <string name="car_license_plate">License Plate</string>
+    <string name="average_km_driven_per_month">Average KM Driven Per Month</string>
+    <string name="where_do_you_work">Where do you work(City)</string>
+    <string name="rideshare_driver">Are you a rideshare driver?</string>
+    <string name="terms_conditions">Terms &amp; Conditions</string>
+    <string name="allow_us_to_contact_you">Allow us to contact you via email or phone</string>
+    <string name="car_details">Car Details</string>
+    <string name="search_campaign">Search Campaign</string>
+    <string name="home">Home</string>
+    <string name="my_campaigns">My Campaigns</string>
+    <string name="account">Account</string>
 
 </resources>

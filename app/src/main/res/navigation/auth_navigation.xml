@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/auth_navigation"
-    app:startDestination="@id/startingFragment">
+    app:startDestination="@id/registerUserWorkDetailsFragment">
 
     <fragment
         android:id="@+id/loginFragment"
@@ -29,6 +29,9 @@
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <action
+            android:id="@+id/action_registerFragment_to_registerUserDetailsFragment"
+            app:destination="@id/registerUserDetailsFragment" />
     </fragment>
     <fragment
         android:id="@+id/forgotPasswordFragment"
@@ -40,15 +43,13 @@
             app:destination="@id/loginFragment" />
     </fragment>
     <fragment
-        android:id="@+id/startingFragment"
-        android:name="com.mycompany.advioo.ui.fragments.auth.StartingFragment"
-        android:label="fragment_starting"
-        tools:layout="@layout/fragment_starting" >
-        <action
-            android:id="@+id/action_startingFragment_to_loginFragment"
-            app:destination="@id/loginFragment" />
-        <action
-            android:id="@+id/action_startingFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
-    </fragment>
+        android:id="@+id/registerUserDetailsFragment"
+        android:name="com.mycompany.advioo.ui.fragments.auth.RegisterAddressDetailsFragment"
+        android:label="fragment_register_user_details"
+        tools:layout="@layout/fragment_register_address_details" />
+    <fragment
+        android:id="@+id/registerUserWorkDetailsFragment"
+        android:name="com.mycompany.advioo.ui.fragments.auth.RegisterUserWorkDetailsFragment"
+        android:label="fragment_register_user_work_details"
+        tools:layout="@layout/fragment_register_user_work_details" />
 </navigation>

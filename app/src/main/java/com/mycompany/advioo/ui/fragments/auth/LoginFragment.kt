@@ -2,20 +2,15 @@ package com.mycompany.advioo.ui.fragments.auth
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
-import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentLoginBinding
-import com.mycompany.advioo.databinding.FragmentStartingBinding
 import com.mycompany.advioo.other.BaseFragment
-import com.mycompany.advioo.ui.activities.MainPageActivity
 
 
 class LoginFragment : BaseFragment() {
@@ -37,9 +32,9 @@ class LoginFragment : BaseFragment() {
         }
 
         if(!isAfterRegister){
-            val intent = Intent(requireContext(),MainPageActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+            //val intent = Intent(requireContext(),MainPageActivity::class.java)
+            //startActivity(intent)
+            //requireActivity().finish()
         }
 
 
@@ -90,9 +85,9 @@ class LoginFragment : BaseFragment() {
 
                 if(task.isSuccessful){
                     hideProgressBar()
-                    val intent = Intent(requireContext(),MainPageActivity::class.java)
-                    startActivity(intent)
-                    requireActivity().finish()
+                    //val intent = Intent(requireContext(),MainPageActivity::class.java)
+                    //startActivity(intent)
+                    //requireActivity().finish()
 
                 }
                 else{
