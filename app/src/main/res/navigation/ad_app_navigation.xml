@@ -1,6 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:id="@+id/ad_app_navigation">
-
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/ad_app_navigation"
+    app:startDestination="@id/stateListFragment">
+    <fragment
+        android:id="@+id/stateListFragment"
+        android:name="com.mycompany.advioo.ui.fragments.auth.city.StateListFragment"
+        android:label="fragment_state_list"
+        tools:layout="@layout/fragment_state_list" />
 </navigation>

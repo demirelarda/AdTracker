@@ -19,7 +19,7 @@ class HomeFeedAdapter @Inject constructor(
 
     private val diffUtil = object : DiffUtil.ItemCallback<Campaign>(){
         override fun areItemsTheSame(oldItem: Campaign, newItem: Campaign): Boolean {
-            return oldItem == newItem //bir fark yoksa true döner, fark varsa false döner.
+            return oldItem == newItem
         }
 
         override fun areContentsTheSame(oldItem: Campaign, newItem: Campaign): Boolean {
