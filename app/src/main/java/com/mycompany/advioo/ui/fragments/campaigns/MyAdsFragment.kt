@@ -1,4 +1,4 @@
-package com.mycompany.advioo.ui.fragments.ads
+package com.mycompany.advioo.ui.fragments.campaigns
 
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import com.mycompany.advioo.R
 
 
-class UserSettingsFragment : Fragment() {
+class MyAdsFragment : Fragment() {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -21,7 +21,7 @@ class UserSettingsFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_user_settings, container, false)
+        return inflater.inflate(R.layout.fragment_my_ads, container, false)
     }
 
 

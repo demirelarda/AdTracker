@@ -5,10 +5,12 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.ActivityAppAdBinding
-import com.mycompany.advioo.ui.fragments.ads.HomeFragment
-import com.mycompany.advioo.ui.fragments.ads.MyAdsFragment
-import com.mycompany.advioo.ui.fragments.ads.UserSettingsFragment
+import com.mycompany.advioo.ui.fragments.campaigns.HomeFragment
+import com.mycompany.advioo.ui.fragments.campaigns.MyAdsFragment
+import com.mycompany.advioo.ui.fragments.campaigns.UserSettingsFragment
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AppAdActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityAppAdBinding
