@@ -6,10 +6,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.mycompany.advioo.R
-import com.mycompany.advioo.TestActivityMain
 import com.mycompany.advioo.databinding.FragmentRegisterUserWorkDetailsBinding
-import com.mycompany.advioo.ui.activities.AppAdActivity
 
 
 class RegisterUserWorkDetailsFragment : Fragment() {
@@ -38,8 +35,7 @@ class RegisterUserWorkDetailsFragment : Fragment() {
     override fun onResume() {
         super.onResume()
         binding.btnSignUp.setOnClickListener {
-            val intent = Intent(requireContext(),TestActivityMain::class.java)
-            startActivity(intent)
+
         }
     }
 

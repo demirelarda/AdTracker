@@ -23,19 +23,8 @@ class LoginFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         auth = Firebase.auth
-        var isAfterRegister : Boolean = false
 
-        val bundle = arguments
-        if(bundle != null){
-            val args = LoginFragmentArgs.fromBundle(bundle)
-            isAfterRegister = args.isAfterRegister
-        }
 
-        if(!isAfterRegister){
-            //val intent = Intent(requireContext(),MainPageActivity::class.java)
-            //startActivity(intent)
-            //requireActivity().finish()
-        }
 
 
 

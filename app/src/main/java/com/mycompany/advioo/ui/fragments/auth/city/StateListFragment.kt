@@ -5,8 +5,11 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.mycompany.advioo.R
@@ -30,7 +33,6 @@ class StateListFragment @Inject constructor(
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        println("created")
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -43,8 +45,14 @@ class StateListFragment @Inject constructor(
         binding.rvStateList.layoutManager = LinearLayoutManager(requireContext())
         viewModel.getStates()
         stateListAdapter.setOnItemClickListener {
-
+            viewModel.setSelectedState(it.stateName)
+            val action = StateListFragmentDirections.actionStateListFragmentToCityListFragment(it)
+            Navigation.findNavController(requireView()).navigate(action)
         }
+        binding.ivBtnBackFromState.setOnClickListener {
+            findNavController().popBackStack()
+        }
+
     }
 
     override fun onCreateView(
@@ -57,22 +65,23 @@ class StateListFragment @Inject constructor(
     }
 
     private fun subscribeToObservers(){
-        println("entered observer")
         viewModel.stateList.observe(viewLifecycleOwner, Observer{
             when(it.status){
                 Status.SUCCESS->{
-                    println("entered status success")
                     val provinces = it.data!!.provinces
                     stateListAdapter.states = provinces
+                    fragmentBinding?.rvStateList?.visibility = View.VISIBLE
                 }
                 Status.ERROR->{
                     //error
-                    println("msg="+it.message)
-                    println("error")
+                    fragmentBinding?.rvStateList?.visibility = View.GONE
+                    fragmentBinding?.stateListProgressBar?.visibility = View.GONE
+                    Toast.makeText(requireContext(),resources.getString(R.string.error_while_getting_cities),Toast.LENGTH_LONG).show()
                 }
                 Status.LOADING->{
                     //loading
-                    println("loading")
+                    fragmentBinding?.rvStateList?.visibility = View.GONE
+                    fragmentBinding?.stateListProgressBar?.visibility = View.VISIBLE
                 }
             }
         })

@@ -43,5 +43,9 @@
     <string name="my_campaigns">My Campaigns</string>
     <string name="account">Account</string>
     <string name="canada_country_code">CA</string>
+    <string name="search_for_a_city">Search for a city</string>
+    <string name="please_select_a_state">Please select your state below:</string>
+    <string name="error_while_getting_cities">Error while getting cities! Please check your network connection!</string>
+
 
 </resources>

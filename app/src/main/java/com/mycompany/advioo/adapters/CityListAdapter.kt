@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mycompany.advioo.R
+import com.mycompany.advioo.models.city.Province
 import javax.inject.Inject
 
 class CityListAdapter @Inject constructor() : RecyclerView.Adapter<CityListAdapter.CityHolder>(){
@@ -33,6 +34,10 @@ class CityListAdapter @Inject constructor() : RecyclerView.Adapter<CityListAdapt
         get() = recyclerListDiffer.currentList
         set(value) = recyclerListDiffer.submitList(value)
 
+    fun setOnItemClickListener(listener: (String) -> Unit) {
+        onItemClickListener = listener
+    }
+
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CityListAdapter.CityHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.city_list_row,parent,false)
@@ -44,6 +49,9 @@ class CityListAdapter @Inject constructor() : RecyclerView.Adapter<CityListAdapt
         val tvCity = holder.itemView.findViewById<TextView>(R.id.row_tv_cityName)
         holder.itemView.apply {
             tvCity.text = model
+        }
+        holder.itemView.setOnClickListener {
+            onItemClickListener?.invoke(model)
         }
     }
 

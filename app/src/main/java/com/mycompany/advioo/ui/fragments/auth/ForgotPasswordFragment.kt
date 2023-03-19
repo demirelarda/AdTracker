@@ -43,8 +43,7 @@ class ForgotPasswordFragment : Fragment() {
         binding.btnSendEmail.setOnClickListener {
             auth.sendPasswordResetEmail(binding.tfEmail.text.toString()).addOnSuccessListener {
                 Toast.makeText(requireContext(),"An Email Has Been Sent To You, Please Check Your Spambox",Toast.LENGTH_LONG).show()
-                val action = ForgotPasswordFragmentDirections.actionForgotPasswordFragmentToLoginFragment(true)
-                Navigation.findNavController(requireView()).navigate(action)
+
             }
         }
 

@@ -56,8 +56,6 @@ class RegisterFragment : BaseFragment() {
             .addOnSuccessListener {
                 println("success")
                 Toast.makeText(requireContext(),"Please Login",Toast.LENGTH_LONG).show()
-                val action = RegisterFragmentDirections.actionRegisterFragmentToLoginFragment(true)
-                Navigation.findNavController(requireView()).navigate(action)
                 hideProgressBar()
             }
             .addOnFailureListener { e ->
