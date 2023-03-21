@@ -8,12 +8,26 @@
     android:layout_height="match_parent"
     android:layout_width="match_parent">
 
-<FrameLayout
 
+<FrameLayout
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
+    <ProgressBar
+        android:id="@+id/progress_bar_register_final"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        tools:visibility="visible"
+        android:clickable="true"
+        android:foreground="?android:attr/selectableItemBackground"
+        android:focusable="true">
+    </ProgressBar>
+
+
     <LinearLayout
+        android:id="@+id/ll_final_register_form"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
@@ -109,15 +123,16 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
+            android:hint="@string/car_condition"
             app:startIconDrawable="@drawable/car_status_icon"
             >
 
             <AutoCompleteTextView
-                android:id="@+id/autoCompleteTextView"
+                android:id="@+id/carConditionDropDown"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:inputType="none"
-                android:text="@string/car_condition">
+                >
             </AutoCompleteTextView>
 
         </com.google.android.material.textfield.TextInputLayout>
@@ -190,6 +205,7 @@
                 android:gravity="center"/>
 
             <CheckBox
+                android:id="@+id/cbox_rideshare"
                 android:layout_marginStart="8dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
@@ -216,6 +232,7 @@
                 android:gravity="center"/>
 
             <CheckBox
+                android:id="@+id/cbox_terms_conditions"
                 android:layout_marginStart="8dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"
@@ -241,6 +258,7 @@
                 android:gravity="center"/>
 
             <CheckBox
+                android:id="@+id/cbox_allow_mail_phone"
                 android:layout_marginStart="8dp"
                 android:minWidth="0dp"
                 android:minHeight="0dp"

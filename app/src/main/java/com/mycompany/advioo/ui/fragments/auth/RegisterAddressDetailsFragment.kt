@@ -5,19 +5,25 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.LiveData
 import androidx.navigation.Navigation
-import com.mycompany.advioo.R
-import com.mycompany.advioo.databinding.FragmentLoginBinding
 import com.mycompany.advioo.databinding.FragmentRegisterAddressDetailsBinding
-import com.mycompany.advioo.ui.fragments.auth.city.CityListFragmentArgs
+import com.mycompany.advioo.util.SnackbarHelper
+import com.mycompany.advioo.viewmodels.RegisterAddressDetailsViewModel
+import com.mycompany.advioo.viewmodels.SharedRegisterViewModel
 
 
 class RegisterAddressDetailsFragment : Fragment() {
 
     private var _binding: FragmentRegisterAddressDetailsBinding? = null
     private val binding get() = _binding!!
+    private val sharedRegisterViewModel : SharedRegisterViewModel by activityViewModels()
+    private val registerAddressDetailsViewModel : RegisterAddressDetailsViewModel by viewModels(ownerProducer = { this } )
     private lateinit var userCity: String
     private lateinit var userState: String
+
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -38,6 +44,10 @@ class RegisterAddressDetailsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+
+        //viewModel = ViewModelProvider(requireActivity()).get(SharedRegisterViewModel::class.java)
+        binding.tfFullName.setText((sharedRegisterViewModel.user.value?.firstName.toString() ?: "") +" "+ (sharedRegisterViewModel.user.value?.lastName.toString() ?: ""))
         binding.tvSelectCity.setOnClickListener {
             val action = RegisterAddressDetailsFragmentDirections.actionRegisterAddressDetailsFragmentToStateListFragment()
             Navigation.findNavController(requireView()).navigate(action)
@@ -51,6 +61,32 @@ class RegisterAddressDetailsFragment : Fragment() {
                 binding.tvSelectCity.text = "$city, $state"
             }
         }
+
+        binding.btnContinueUserWorkDetails.setOnClickListener {
+            val fullName = binding.tfFullName.text.toString().trim()
+            val city= binding.tvSelectCity.text.toString().trim()
+            val address1 = binding.tfAddressRow1.text.toString().trim()
+            val address2 = binding.tfAddressRow2.text.toString().trim()
+            val zipCode = binding.tfPostalCode.text.toString().trim()
+
+            if (registerAddressDetailsViewModel.isInputDataValid(fullName,city,address1,zipCode)) {
+                sharedRegisterViewModel.setAddressFullName(fullName)
+                sharedRegisterViewModel.setCity(city)
+                sharedRegisterViewModel.setAddressRow1(address1)
+                if(address2.isNotEmpty()){
+                    sharedRegisterViewModel.setAddressRow2(address2)
+                }
+                sharedRegisterViewModel.setZipCode(zipCode)
+                val action = RegisterAddressDetailsFragmentDirections.actionRegisterAddressDetailsFragmentToRegisterUserWorkDetailsFragment()
+                Navigation.findNavController(requireView()).navigate(action)
+            } else {
+                val errorMessage: String = resources.getString(registerAddressDetailsViewModel.errorList.get(0)) //list contains all the errors, get the first error message.
+                SnackbarHelper.showErrorSnackBar(requireView(),errorMessage)
+            }
+
+        }
+
+
     }
 
 

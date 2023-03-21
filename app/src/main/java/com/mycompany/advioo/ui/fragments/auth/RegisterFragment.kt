@@ -4,31 +4,27 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
-import com.google.firebase.Timestamp
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.ktx.auth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.SetOptions
-import com.google.firebase.ktx.Firebase
 import com.mycompany.advioo.databinding.FragmentRegisterBinding
 import com.mycompany.advioo.models.user.User
-import com.mycompany.advioo.other.BaseFragment
+import com.mycompany.advioo.util.SnackbarHelper
+import com.mycompany.advioo.viewmodels.RegisterViewModel
+import com.mycompany.advioo.viewmodels.SharedRegisterViewModel
+import javax.inject.Inject
 
 
-class RegisterFragment : BaseFragment() {
+class RegisterFragment: Fragment() {
 
     private var _binding: FragmentRegisterBinding? = null
     private val binding get() = _binding!!
-    private val db = FirebaseFirestore.getInstance()
-
-    private lateinit var auth : FirebaseAuth
+    private val sharedRegisterViewModel : SharedRegisterViewModel by activityViewModels()
+    private val registerViewModel : RegisterViewModel by viewModels(ownerProducer = { this } )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = Firebase.auth
-
     }
 
     override fun onCreateView(
@@ -44,25 +40,33 @@ class RegisterFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        //sharedRegisterViewModel = ViewModelProvider(requireActivity()).get(SharedRegisterViewModel::class.java)
+        binding.btnContinueRegisterFirst.setOnClickListener {
+            val firstName = binding.tfFirstName.text.toString().trim()
+            val lastName = binding.tfLastName.text.toString().trim()
+            val email = binding.tfEmailSignup.text.toString().trim()
+            val password = binding.tfPassword.text.toString().trim()
+            val passwordAgain = binding.tfPasswordAgain.text.toString().trim()
 
-
-
+            if (registerViewModel.isInputDataValid(firstName, lastName, email, password, passwordAgain)) {
+                sharedRegisterViewModel.user.value
+                sharedRegisterViewModel.setFirstName(firstName)
+                sharedRegisterViewModel.setLastName(lastName)
+                sharedRegisterViewModel.setEmail(email)
+                sharedRegisterViewModel.setPassword(password)
+                val action = RegisterFragmentDirections.actionRegisterFragmentToRegisterAddressDetailsFragment()
+                Navigation.findNavController(requireView()).navigate(action)
+            } else {
+                val errorMessage: String = resources.getString(registerViewModel.errorList.get(0)) //list contains all the errors, get the first error message.
+                SnackbarHelper.showErrorSnackBar(requireView(),errorMessage)
+            }
+        }
     }
 
-    fun registerUser(userInfo: User) {
-        db.collection("users")
-            .document(userInfo.id)
-            .set(userInfo, SetOptions.merge())
-            .addOnSuccessListener {
-                println("success")
-                Toast.makeText(requireContext(),"Please Login",Toast.LENGTH_LONG).show()
-                hideProgressBar()
-            }
-            .addOnFailureListener { e ->
-                Toast.makeText(requireContext(),"An Error Occurred, Please Try Again",Toast.LENGTH_LONG).show()
-                hideProgressBar()
-            }
-    }
+
+
+
+
 
 
 

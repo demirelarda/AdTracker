@@ -6,6 +6,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -47,20 +48,10 @@ class LoginFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        /*
-        binding.btnLoginAuth.setOnClickListener {
-            loginUser()
-        }
-        binding.tvGoToRegisterFromLogin.setOnClickListener {
+        binding.tvSignUp.setOnClickListener {
             val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
-            Navigation.findNavController(it).navigate(action)
+            Navigation.findNavController(requireView()).navigate(action)
         }
-        binding.tvForgotPassword.setOnClickListener {
-            val action = LoginFragmentDirections.actionLoginFragmentToForgotPasswordFragment()
-            Navigation.findNavController(it).navigate(action)
-        }
-
-         */
     }
 
     fun loginUser(){

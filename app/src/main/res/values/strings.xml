@@ -46,6 +46,33 @@
     <string name="search_for_a_city">Search for a city</string>
     <string name="please_select_a_state">Please select your state below:</string>
     <string name="error_while_getting_cities">Error while getting cities! Please check your network connection!</string>
-
+    <string name="register_failed">Register Failed</string>
+    <string name="first_name_error">First name is required!</string>
+    <string name="last_name_error">Last name is required!</string>
+    <string name="email_invalid_error">A valid e-mail is required!</string>
+    <string name="email_empty_error">E-Mail address is required!</string>
+    <string name="password_empty_error">Password is required!</string>
+    <string name="password_length_error">Password must be at least 8 characters long!</string>
+    <string name="password_confirm_empty_error">Please confirm your password!</string>
+    <string name="password_confirm_not_match">Passwords do not match!</string>
+    <string name="full_name_error">Full name is required!</string>
+    <string name="city_error">City is required!</string>
+    <string name="address_error">At least the first address row is required!</string>
+    <string name="zip_code_error">ZIP Code is required!</string>
+    <string name="terms_conditions_error">You have to accept terms&amp;conditions to sign up!</string>
+    <string name="car_brand_error">Car brand is required!</string>
+    <string name="car_model_error">Car model is required!</string>
+    <string name="car_year_error">Car year is required!</string>
+    <string name="car_condition_error">Car condition is required!</string>
+    <string name="license_plate_error">License plate is required!</string>
+    <string name="avg_km_error">Average KM is required!</string>
+    <string name="working_city_error">Working city is required!</string>
+    <string name="register_success">You have successfully registered!</string>
+    <string-array name="car_conditions">
+        <item>Like New</item>
+        <item>Good</item>
+        <item>Minor Damage</item>
+        <item>Major Damage</item>
+    </string-array>
 
 </resources>
