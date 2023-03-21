@@ -68,6 +68,15 @@
     <string name="avg_km_error">Average KM is required!</string>
     <string name="working_city_error">Working city is required!</string>
     <string name="register_success">You have successfully registered!</string>
+    <string name="login_failed">Login failed, please try again!</string>
+    <string name="login_success">Welcome,</string>
+    <string name="error_entries_blank">Please Don\'t Leave The Entries Blank</string>
+
+
+
+
+
+
     <string-array name="car_conditions">
         <item>Like New</item>
         <item>Good</item>

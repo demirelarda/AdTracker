@@ -6,6 +6,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.firestore.FirebaseFirestore
 import com.mycompany.advioo.R
 import com.mycompany.advioo.models.auth.RegisterResult
@@ -61,7 +62,21 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
                     user.id = auth.uid.toString()
-                    uploadUserData(user)
+                    val newDisplayName = user.firstName+" "+user.lastName
+                    val profileUpdates = UserProfileChangeRequest.Builder()
+                        .setDisplayName(newDisplayName)
+                        .build()
+                    auth.currentUser?.updateProfile(profileUpdates)
+                        ?.addOnCompleteListener { task ->
+                            if (task.isSuccessful) {
+                                uploadUserData(user)
+                            }
+                            else{
+                                _loadingState.postValue(false)
+                                _failState.postValue(true)
+                            }
+                        }
+
                 } else {
                     _loadingState.postValue(false)
                     _failState.postValue(true)

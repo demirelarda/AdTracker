@@ -6,30 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
+import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentLoginBinding
-import com.mycompany.advioo.other.BaseFragment
+import com.mycompany.advioo.ui.activities.AppAdActivity
+import com.mycompany.advioo.util.SnackbarHelper
+import com.mycompany.advioo.viewmodels.LoginViewModel
+import com.mycompany.advioo.viewmodels.RegisterUserWorkDetailsViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-
-class LoginFragment : BaseFragment() {
-
-    private lateinit var auth : FirebaseAuth
+@AndroidEntryPoint
+class LoginFragment : Fragment() {
 
     private var _binding: FragmentLoginBinding? = null
     private val binding get() = _binding!!
+    private val loginViewModel : LoginViewModel by viewModels(ownerProducer = { this } )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        auth = Firebase.auth
-
-
-
-
-
-
 
     }
 
@@ -48,38 +47,57 @@ class LoginFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        subscribeToObservers()
         binding.tvSignUp.setOnClickListener {
             val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
             Navigation.findNavController(requireView()).navigate(action)
         }
+
+        binding.btnLogin.setOnClickListener {
+            loginUser()
+        }
     }
 
-    fun loginUser(){
+    private fun loginUser(){
 
         val email = binding.tfEmailLogin.text.toString()
         val password = binding.tfPasswordLogin.text.toString()
 
-        if(email != "" && password!=""){
-            showProgressBar("Please Wait...")
-            auth.signInWithEmailAndPassword(email,password).addOnCompleteListener{ task->
-
-                if(task.isSuccessful){
-                    hideProgressBar()
-                    //val intent = Intent(requireContext(),MainPageActivity::class.java)
-                    //startActivity(intent)
-                    //requireActivity().finish()
-
-                }
-                else{
-                    hideProgressBar()
-                    Toast.makeText(requireContext(),"Login failed, try again!",Toast.LENGTH_LONG).show()
-                }
-            }
+        if(loginViewModel.isInputDataValid(email,password)){
+            loginViewModel.loginUser(email,password)
         }
         else{
-            hideProgressBar()
-            Toast.makeText(requireContext(),"Please Don't Leave The Entries Blank", Toast.LENGTH_LONG).show()
+            SnackbarHelper.showErrorSnackBar(requireView(),getString(R.string.error_entries_blank))
         }
+    }
+
+
+
+    private fun subscribeToObservers() {
+        loginViewModel.loadingState.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.progressBarLogin.visibility = View.VISIBLE
+            } else {
+                binding.progressBarLogin.visibility = View.GONE
+            }
+        }
+
+        loginViewModel.successState.observe(viewLifecycleOwner) { isSuccess ->
+            if (isSuccess) {
+                //Toast.makeText(requireContext(),(getString(R.string.login_success)),Toast.LENGTH_LONG).show()
+                val intent = Intent(requireContext(),AppAdActivity::class.java)
+                startActivity(intent)
+                requireActivity().finish()
+            }
+        }
+
+        loginViewModel.failState.observe(viewLifecycleOwner) { isFail ->
+            if (isFail) {
+                SnackbarHelper.showErrorSnackBar(requireView(),getString(R.string.login_failed))
+            }
+        }
+
+
 
     }
 
