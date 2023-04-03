@@ -1,8 +1,10 @@
 package com.mycompany.advioo.ui
 
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.mycompany.advioo.R
+import com.mycompany.advioo.ui.activities.AppAdActivity
 import com.mycompany.advioo.ui.fragments.AppFragmentFactory
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -16,6 +18,8 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportFragmentManager.fragmentFactory = fragmentFactory
         setContentView(R.layout.activity_main)
+        val intent = Intent(this,AppAdActivity::class.java)
+        startActivity(intent)
 
 
     }

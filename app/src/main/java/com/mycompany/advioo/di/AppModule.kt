@@ -1,6 +1,9 @@
 package com.mycompany.advioo.di
 
+import android.app.Application
 import android.content.Context
+import android.location.LocationListener
+import android.location.LocationManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.Timestamp
@@ -26,6 +29,11 @@ import javax.inject.Singleton
 @Module
 @InstallIn(SingletonComponent::class)
 object AppModule {
+
+    @Provides
+    fun provideContext(application: Application): Context {
+        return application.applicationContext
+    }
 
     @Singleton
     @Provides
@@ -57,6 +65,7 @@ object AppModule {
     @Singleton
     @Provides
     fun provideFirebaseFirestore(): FirebaseFirestore = FirebaseFirestore.getInstance()
+
     @Singleton
     @Provides
     fun provideNormalUserRepository(db: FirebaseFirestore) = UserRepository(db) as UserRepositoryInterface
@@ -66,6 +75,13 @@ object AppModule {
     fun provideHaversine() : HaversineCalculateDistance{
         return HaversineCalculateDistance()
     }
+
+    @Singleton
+    @Provides
+    fun provideLocationManager(context: Context): LocationManager {
+        return context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
+    }
+
 
     @Singleton
     @Provides

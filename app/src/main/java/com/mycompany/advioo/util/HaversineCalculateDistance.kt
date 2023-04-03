@@ -10,7 +10,6 @@ class HaversineCalculateDistance {
     companion object{
         private const val EARTH_RADIUS = 6371 //Earth Radius in KM
     }
-
     fun calculateDistance(lat1: Double, lon1: Double, lat2: Double, lon2: Double): Double {
         val latDistance = Math.toRadians(lat2 - lat1)
         val lonDistance = Math.toRadians(lon2 - lon1)

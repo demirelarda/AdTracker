@@ -75,10 +75,13 @@
     <string name="email_sent">An email has been sent to you, please check your spam box.</string>
     <string name="error_blank_email">Please enter your email!</string>
     <string name="error_sent_password">Couldn\'t send a reset email</string>
-
-
-
-
+    <string name="permission_needed_location">Permission needed for precise location.</string>
+    <string name="give_permission">Give Permission</string>
+    <string name="start_trip">Start Trip</string>
+    <string name="stop_trip">Stop Trip</string>
+    <string name="resume_trip">Resume Trip</string>
+    <string name="reset_trip">Reset Trip</string>
+    <string name="total_km_driven">Total KM driven: </string>
 
 
     <string-array name="car_conditions">

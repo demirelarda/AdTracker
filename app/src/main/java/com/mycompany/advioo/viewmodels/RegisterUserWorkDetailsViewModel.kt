@@ -55,7 +55,6 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
     private val _registerResult = MutableLiveData<RegisterResult>()
     val registerResult: LiveData<RegisterResult> = _registerResult
 
-
     fun registerUser(email: String, password: String,user: User) {
         _loadingState.postValue(true)
         auth.createUserWithEmailAndPassword(email, password)
