@@ -133,8 +133,6 @@ class RegisterUserWorkDetailsFragment : Fragment() {
             }
         }
 
-
-
     }
 
 

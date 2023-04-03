@@ -13,6 +13,7 @@ import com.mycompany.advioo.repo.CityRepository
 import com.mycompany.advioo.repo.CityRepositoryInterface
 import com.mycompany.advioo.repo.UserRepository
 import com.mycompany.advioo.repo.UserRepositoryInterface
+import com.mycompany.advioo.util.HaversineCalculateDistance
 import com.mycompany.advioo.util.Util.BASE_URL
 import dagger.Module
 import dagger.Provides
@@ -60,6 +61,11 @@ object AppModule {
     @Provides
     fun provideNormalUserRepository(db: FirebaseFirestore) = UserRepository(db) as UserRepositoryInterface
 
+    @Singleton
+    @Provides
+    fun provideHaversine() : HaversineCalculateDistance{
+        return HaversineCalculateDistance()
+    }
 
     @Singleton
     @Provides
