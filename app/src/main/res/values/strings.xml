@@ -82,7 +82,8 @@
     <string name="resume_trip">Resume Trip</string>
     <string name="reset_trip">Reset Trip</string>
     <string name="total_km_driven">Total KM driven: </string>
-
+    <string name="length_unit">KM</string>
+    <string name="out_of_bounds_error">You are out of campaign bounds! You won\'t get paid, if you are not in bounds!</string>
 
     <string-array name="car_conditions">
         <item>Like New</item>

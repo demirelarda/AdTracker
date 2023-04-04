@@ -1,12 +1,9 @@
 package com.mycompany.advioo.viewmodels
 
 
-import android.location.Location
-import android.location.LocationListener
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
-import com.mycompany.advioo.models.auth.RegisterResult
 import com.mycompany.advioo.util.HaversineCalculateDistance
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -25,4 +22,9 @@ class RunCampaignViewModel @Inject constructor(
         _distanceDriven.value = currentDistance + distance
         println("total = ${_distanceDriven.value}")
     }
+
+    fun resetDistance() {
+        _distanceDriven.value = 0.0
+    }
 }
+

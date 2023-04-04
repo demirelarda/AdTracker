@@ -27,6 +27,7 @@
                 android:textStyle="bold">
             </TextView>
             <TextView
+                android:id="@+id/tvKMDriven"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 tools:text="25.2KM"
@@ -43,7 +44,7 @@
 
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_start_trip"
+            android:id="@+id/btnStartTrip"
             android:layout_width="match_parent"
             android:layout_marginStart="18dp"
             android:layout_marginEnd="18dp"
@@ -57,7 +58,7 @@
         </androidx.appcompat.widget.AppCompatButton>
 
         <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_stop_trip"
+            android:id="@+id/btnStopTrip"
             android:layout_width="match_parent"
             android:layout_marginStart="18dp"
             android:layout_marginEnd="18dp"
@@ -70,33 +71,7 @@
             android:background="@drawable/button_background_blue">
         </androidx.appcompat.widget.AppCompatButton>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_resume_trip"
-            android:layout_width="match_parent"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="30dp"
-            android:text="@string/resume_trip"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:background="@drawable/button_background_blue">
-        </androidx.appcompat.widget.AppCompatButton>
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_reset_trip"
-            android:layout_width="match_parent"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:layout_height="55dp"
-            android:layout_marginTop="30dp"
-            android:text="@string/reset_trip"
-            android:textAllCaps="false"
-            android:textSize="16sp"
-            android:textColor="@color/white"
-            android:background="@drawable/button_background_blue">
-        </androidx.appcompat.widget.AppCompatButton>
 
 
     </LinearLayout>
