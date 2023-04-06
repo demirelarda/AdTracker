@@ -84,6 +84,10 @@
     <string name="total_km_driven">Total KM driven: </string>
     <string name="length_unit">KM</string>
     <string name="out_of_bounds_error">You are out of campaign bounds! You won\'t get paid, if you are not in bounds!</string>
+    <string name="speed">Speed: </string>
+    <string name="location_needed">Location Needed</string>
+    <string name="open_location_settings">Open Location Settings</string>
+    <string name="cancel">Cancel</string>
 
     <string-array name="car_conditions">
         <item>Like New</item>
