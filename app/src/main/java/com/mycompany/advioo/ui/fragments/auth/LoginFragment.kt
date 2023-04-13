@@ -29,6 +29,11 @@ class LoginFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        if(loginViewModel.isUserAlreadyLoggedIn()){
+            val intent = Intent(requireContext(),AppAdActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
     }
 
     override fun onCreateView(

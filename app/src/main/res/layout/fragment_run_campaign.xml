@@ -5,11 +5,23 @@
     android:layout_height="match_parent"
     tools:context=".RunCampaignFragment">
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/progressBarRunCampaign"
+        android:layout_gravity="center"
+        android:layout_marginTop="15dp"
+        android:visibility="gone"
+        tools:visibility="visible">
+    </ProgressBar>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         >
+
+
 
         <LinearLayout
             android:layout_marginTop="90dp"
@@ -71,6 +83,21 @@
             android:textSize="16sp"
             android:textColor="@color/white"
             android:background="@drawable/button_background_blue">
+        </androidx.appcompat.widget.AppCompatButton>
+
+
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btnSaveTrip"
+            android:layout_width="match_parent"
+            android:layout_marginStart="18dp"
+            android:layout_marginEnd="18dp"
+            android:layout_height="55dp"
+            android:layout_marginTop="70dp"
+            android:text="@string/save_trip"
+            android:textAllCaps="false"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:background="@color/purple_700">
         </androidx.appcompat.widget.AppCompatButton>
 
 

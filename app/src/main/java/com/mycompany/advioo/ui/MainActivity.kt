@@ -18,9 +18,11 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportFragmentManager.fragmentFactory = fragmentFactory
         setContentView(R.layout.activity_main)
+        /*
         val intent = Intent(this,AppAdActivity::class.java)
         startActivity(intent)
         finish()
+         */
 
 
     }

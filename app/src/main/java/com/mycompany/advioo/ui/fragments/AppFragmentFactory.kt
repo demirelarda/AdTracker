@@ -3,7 +3,7 @@ package com.mycompany.advioo.ui.fragments
 import android.location.LocationManager
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentFactory
-import com.mycompany.advioo.RunCampaignFragment
+
 import com.mycompany.advioo.adapters.CityListAdapter
 import com.mycompany.advioo.adapters.StateListAdapter
 import com.mycompany.advioo.models.user.User

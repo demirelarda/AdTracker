@@ -1,6 +1,7 @@
 package com.mycompany.advioo.viewmodels
 
 
+import android.location.Location
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
@@ -12,6 +13,10 @@ import javax.inject.Inject
 class RunCampaignViewModel @Inject constructor(
     val calculateDistanceWithHaversine: HaversineCalculateDistance,
 ) : ViewModel() {
+
+    private var previousLocation: Location? = null
+    private var totalDistance = 0f
+
 
     private val _distanceDriven = MutableLiveData<Double>(0.0)
     val distanceDriven: LiveData<Double> = _distanceDriven
@@ -26,5 +31,12 @@ class RunCampaignViewModel @Inject constructor(
     fun resetDistance() {
         _distanceDriven.value = 0.0
     }
-}
 
+    fun updateDistance(location: Location): Float {
+        val newDistance = previousLocation?.distanceTo(location) ?: 0f
+        totalDistance += newDistance
+        previousLocation = location
+        return totalDistance
+    }
+
+}

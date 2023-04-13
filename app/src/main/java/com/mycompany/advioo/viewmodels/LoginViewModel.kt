@@ -40,6 +40,10 @@ class LoginViewModel @Inject constructor(
         }
     }
 
+    fun isUserAlreadyLoggedIn() : Boolean{
+        return auth.currentUser!=null
+    }
+
 
     fun isInputDataValid(
         email: String,
