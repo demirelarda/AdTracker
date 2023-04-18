@@ -7,6 +7,7 @@ import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.mycompany.advioo.R
 import com.mycompany.advioo.RunCampaignFragment
+import com.mycompany.advioo.adapters.HomeFeedAdapter
 import com.mycompany.advioo.databinding.ActivityAppAdBinding
 import com.mycompany.advioo.di.AppModule
 import com.mycompany.advioo.ui.fragments.AppFragmentFactory
@@ -23,6 +24,8 @@ class AppAdActivity : AppCompatActivity() {
     lateinit var fragmentFactory: AppFragmentFactory
     @Inject
     lateinit var locationManager: LocationManager
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {

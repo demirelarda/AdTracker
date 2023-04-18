@@ -12,10 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.mycompany.advioo.R
 import com.mycompany.advioo.api.CityAPI
 import com.mycompany.advioo.models.user.User
-import com.mycompany.advioo.repo.CityRepository
-import com.mycompany.advioo.repo.CityRepositoryInterface
-import com.mycompany.advioo.repo.UserRepository
-import com.mycompany.advioo.repo.UserRepositoryInterface
+import com.mycompany.advioo.repo.*
 import com.mycompany.advioo.util.HaversineCalculateDistance
 import com.mycompany.advioo.util.Util.BASE_URL
 import dagger.Module
@@ -53,8 +50,8 @@ object AppModule {
     @Provides
     fun injectGlide(@ApplicationContext context: Context) = Glide.with(context)
         .setDefaultRequestOptions(
-            RequestOptions().placeholder(R.drawable.ic_launcher_background)
-                .error(R.drawable.ic_launcher_background)
+            RequestOptions().placeholder(R.drawable.car_icon_notification)
+                .error(R.drawable.car_icon_notification)
         )
 
 
@@ -69,6 +66,10 @@ object AppModule {
     @Singleton
     @Provides
     fun provideNormalUserRepository(db: FirebaseFirestore) = UserRepository(db) as UserRepositoryInterface
+
+    @Singleton
+    @Provides
+    fun provideNormalCampaignRepository(db: FirebaseFirestore) = CampaignRepository(db) as CampaignRepositoryInterface
 
     @Singleton
     @Provides

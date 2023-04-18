@@ -1,8 +1,11 @@
 package com.mycompany.advioo.adapters
 
+import android.media.Image
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
@@ -12,8 +15,8 @@ import com.mycompany.advioo.models.campaign.Campaign
 import javax.inject.Inject
 
 class HomeFeedAdapter @Inject constructor(
-    val glide : RequestManager
-) : RecyclerView.Adapter<HomeFeedAdapter.CampaignViewHolder>(){
+    private val glide: RequestManager
+) : RecyclerView.Adapter<HomeFeedAdapter.CampaignViewHolder>() {
 
     class CampaignViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView)
 
@@ -40,7 +43,18 @@ class HomeFeedAdapter @Inject constructor(
     }
 
     override fun onBindViewHolder(holder: HomeFeedAdapter.CampaignViewHolder, position: Int) {
+        val model = campaigns[position]
+        val tvCampaignPrice = holder.itemView.findViewById<TextView>(R.id.tv_campaign_price_row)
+        holder.itemView.apply {
+            tvCampaignPrice.text = model.campaignPaymentPerKM.toString()
+        }
+        val tvCampaignTitle = holder.itemView.findViewById<TextView>(R.id.tv_campaign_title_home_row)
+        holder.itemView.apply {
+            tvCampaignTitle.text = model.campaignTitle
+        }
 
+        val campaignImage = holder.itemView.findViewById<ImageView>(R.id.iv_home_campaign_row)
+        glide.load(model.campaignImageURL).into(campaignImage)
     }
 
     override fun getItemCount(): Int {

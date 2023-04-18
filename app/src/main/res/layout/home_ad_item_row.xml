@@ -15,6 +15,7 @@
             android:layout_height="160dp"
             app:cardCornerRadius="10dp">
             <ImageView
+                android:id="@+id/iv_home_campaign_row"
                 android:layout_width="match_parent"
                 android:layout_height="160dp"
                 android:src="@drawable/ic_launcher_background"
@@ -34,6 +35,7 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
                 <TextView
+                    android:id="@+id/tv_campaign_title_home_row"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     tools:text="Company Name"
@@ -42,6 +44,7 @@
                     android:textStyle="bold">
                 </TextView>
                 <ImageView
+                    android:visibility="gone"
                     android:layout_marginStart="90dp"
                     android:layout_width="20dp"
                     android:layout_height="20dp"
@@ -49,14 +52,16 @@
                     android:layout_gravity="center">
                 </ImageView>
                 <TextView
+                    android:visibility="gone"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    tools:text="Jul 23 - Jul 28"
+                    android:text="Jul 23 - Jul 28"
                     android:layout_gravity="center"
                     android:layout_marginStart="2dp">
                 </TextView>
             </LinearLayout>
             <TextView
+                android:id="@+id/tv_campaign_price_row"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 tools:text="$100"

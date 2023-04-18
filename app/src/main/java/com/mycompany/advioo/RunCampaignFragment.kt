@@ -29,16 +29,18 @@ import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.GeoPoint
 import com.mycompany.advioo.services.LocationTrackingService
+import com.mycompany.advioo.services.TripData
 
 private const val LOCATION_AND_NOTIFICATION_PERMISSION_REQUEST_CODE = 1
+private const val BATTERY_OPTIMIZATION_REQUEST_CODE = 2
+
 
 class RunCampaignFragment : Fragment() {
 
     private var _binding: FragmentRunCampaignBinding? = null
     private val binding get() = _binding!!
-
-
-
+    private lateinit var tripData: TripData
+    val userEmail = FirebaseAuth.getInstance().currentUser?.email
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -55,11 +57,9 @@ class RunCampaignFragment : Fragment() {
         binding.btnSaveTrip.visibility = View.GONE
         binding.btnStopTrip.visibility = View.GONE
 
-
-
-
         binding.btnStartTrip.setOnClickListener {
             requestLocationAndNotificationPermissions()
+            checkBatteryOptimizationPermission()
         }
 
         binding.btnStopTrip.setOnClickListener {
@@ -69,7 +69,44 @@ class RunCampaignFragment : Fragment() {
             binding.btnStopTrip.visibility = View.GONE
             binding.btnSaveTrip.visibility = View.GONE
         }
+
+        binding.btnSaveTrip.setOnClickListener {
+            println("trip data = "+tripData.locationPoints)
+            tripData.endTime = System.currentTimeMillis()
+            tripData.userEmail = userEmail
+            //println(tripData)
+            saveTripDataToFirestore(tripData)
+        }
     }
+
+    private fun saveTripDataToFirestore(tripData: TripData) {
+        val userId = FirebaseAuth.getInstance().currentUser?.uid
+        val db = FirebaseFirestore.getInstance()
+
+        if (userId != null) {
+            // Show ProgressBar
+            binding.progressBarRunCampaign.visibility = View.VISIBLE
+
+            db.collection("location_data")
+                .add(tripData)
+                .addOnSuccessListener {
+                    // Hide ProgressBar
+                    binding.progressBarRunCampaign.visibility = View.GONE
+
+                    Toast.makeText(requireContext(), "Trip data saved successfully", Toast.LENGTH_SHORT).show()
+                }
+                .addOnFailureListener { e ->
+                    // Hide ProgressBar
+                    binding.progressBarRunCampaign.visibility = View.GONE
+
+                    Toast.makeText(requireContext(), "Error saving trip data: ${e.message}", Toast.LENGTH_SHORT).show()
+                }
+        } else {
+            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+
 
 
     private fun startTracking() {
@@ -85,17 +122,10 @@ class RunCampaignFragment : Fragment() {
 
     private val locationUpdateReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
-            val distanceDriven = intent?.getDoubleExtra("distanceDriven", 0.0)
-            distanceDriven?.let {
-                binding.tvKMDriven.text = String.format("%.2f KM", it)
-            }
+            tripData = intent?.getParcelableExtra("tripData") ?: TripData()
+            binding.tvKMDriven.text = String.format("%.2f KM", tripData.distanceDriven)
         }
     }
-
-
-
-
-
 
     private fun stopTracking() {
         val stopIntent = Intent(requireContext(), LocationTrackingService::class.java).apply {
@@ -108,8 +138,6 @@ class RunCampaignFragment : Fragment() {
         binding.btnStopTrip.visibility = View.GONE
         binding.btnSaveTrip.visibility = View.GONE
     }
-
-
 
     override fun onResume() {
         super.onResume()
@@ -207,6 +235,45 @@ class RunCampaignFragment : Fragment() {
             .create()
             .show()
     }
+
+    private fun requestBatteryOptimizationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val powerManager = requireActivity().getSystemService(Context.POWER_SERVICE) as PowerManager
+            val packageName = requireActivity().packageName
+            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+                val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
+                    data = Uri.parse("package:$packageName")
+                }
+                startActivityForResult(intent, BATTERY_OPTIMIZATION_REQUEST_CODE)
+            } else {
+                startTracking()
+            }
+        } else {
+            startTracking()
+        }
+    }
+
+    private fun checkBatteryOptimizationPermission() {
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            val powerManager = requireActivity().getSystemService(Context.POWER_SERVICE) as PowerManager
+            val packageName = requireActivity().packageName
+            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
+                binding.btnStartTrip.isEnabled = false
+                requestBatteryOptimizationPermission()
+            } else {
+                binding.btnStartTrip.isEnabled = true
+            }
+        }
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == BATTERY_OPTIMIZATION_REQUEST_CODE) {
+            checkBatteryOptimizationPermission()
+        }
+    }
+
+
 
 
 

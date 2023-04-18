@@ -1,14 +1,18 @@
 package com.mycompany.advioo.models.campaign
 
 data class Campaign(
-    var id: String,
-    var title: String,
-    var lightPrice: String,
-    var advancedPrice: String,
-    var proPrice: String,
-    var dateRange: String,
-    var location: String,
-    var hotLocations: String,
-    var city: String,
-    var company: String,
+    var campaignId : String = "",
+    var campaignTitle : String = "",
+    var campaignImageURL : String = "",
+    var city : String = "",
+    var availableCampaignPlans : ArrayList<Int> = ArrayList(),
+    var campaignLightPaymentRange : String = "",
+    var campaignAdvancedPaymentRange : String = "",
+    var campaignProPaymentRange : String = "",
+    var mapImageURL : String = "",
+    var campaignLeftTopCoordinate : String = "",
+    var campaignRightTopCoordinate : String = "",
+    var campaignLeftBottomCoordinate : String = "",
+    var campaignRightBottomCoordinate : String = "",
+    var campaignPaymentPerKM: Int = 0,
 )

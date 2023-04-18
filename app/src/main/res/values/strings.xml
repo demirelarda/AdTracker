@@ -95,6 +95,7 @@
     <string name="location_updates_notification_title">Location Tracking</string>
     <string name="location_updates_notification_text">Tracking Location</string>
     <string name="location_updates_notification_ticker">Tracking Location</string>
+    <string name="home_feed_error">Couldn\'t get items!</string>
 
 
     <string-array name="car_conditions">

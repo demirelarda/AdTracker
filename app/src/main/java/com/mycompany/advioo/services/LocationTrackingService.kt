@@ -4,12 +4,12 @@ package com.mycompany.advioo.services
 import android.app.*
 import android.content.Context
 import android.content.Intent
-import android.os.Build
 import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
+import com.google.firebase.firestore.GeoPoint
 import com.mycompany.advioo.R
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -20,9 +20,6 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 class LocationTrackingService : Service() {
-
-
-
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var locationClient: LocationClient
@@ -66,30 +63,36 @@ class LocationTrackingService : Service() {
             .catch { e -> e.printStackTrace() }
             .onEach { location ->
                 val distance = locationClient.previousLocation?.distanceTo(location)?.div(1000.0)
+                val geoPoint = GeoPoint(location.latitude, location.longitude)
+                val currentTime = System.currentTimeMillis()
+
                 if (distance != null) {
                     tripData.distanceDriven += distance
                 }
                 locationClient.previousLocation = location
-                val lat = location.latitude.toString()
-                val long = location.longitude.toString()
+
+                tripData.accuracyList.add(Pair(location.accuracy, geoPoint))
+                tripData.locationPoints.add(geoPoint)
+                tripData.distancePoints.add(Triple(geoPoint, tripData.distanceDriven, currentTime))
+
+                if (tripData.startPoint == null) {
+                    tripData.startPoint = geoPoint
+                    tripData.startTime = currentTime
+                }
+                tripData.endPoint = geoPoint
+                val locationUpdateIntent = Intent(ACTION_LOCATION_UPDATE)
+                locationUpdateIntent.putExtra("tripData", tripData)
+                LocalBroadcastManager.getInstance(this).sendBroadcast(locationUpdateIntent)
                 val updatedNotification = notification.setContentText(
                     "Distance driven: ${String.format("%.2f", tripData.distanceDriven)} KM"
                 )
                 notificationManager.notify(1, updatedNotification.build())
-
-                // Broadcast location update
-                val locationUpdateIntent = Intent(ACTION_LOCATION_UPDATE)
-                locationUpdateIntent.putExtra("distanceDriven", tripData.distanceDriven)
-                LocalBroadcastManager.getInstance(this).sendBroadcast(locationUpdateIntent)
             }
 
             .launchIn(serviceScope)
 
         startForeground(1, notification.build())
     }
-
-
-
 
 
     private fun stop(){

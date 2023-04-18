@@ -1,19 +1,37 @@
 package com.mycompany.advioo.ui.fragments.campaigns
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.bumptech.glide.RequestManager
 import com.mycompany.advioo.R
+import com.mycompany.advioo.adapters.HomeFeedAdapter
+import com.mycompany.advioo.databinding.FragmentHomeBinding
+import com.mycompany.advioo.databinding.FragmentRunCampaignBinding
+import com.mycompany.advioo.ui.activities.AppAdActivity
+import com.mycompany.advioo.util.SnackbarHelper
+import com.mycompany.advioo.viewmodels.HomeViewModel
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
+@AndroidEntryPoint
+class HomeFragment : Fragment(R.layout.fragment_home) {
 
-class HomeFragment : Fragment() {
-
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+    private val homeViewModel : HomeViewModel by viewModels(ownerProducer = { this } )
+    @Inject
+    lateinit var glide: RequestManager
+    @Inject
+    lateinit var homeFeedAdapter: HomeFeedAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
     }
 
     override fun onCreateView(
@@ -21,7 +39,40 @@ class HomeFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_home, container, false)
+        _binding = FragmentHomeBinding.inflate(inflater, container, false)
+        return binding.root
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val binding = FragmentHomeBinding.bind(view)
+        homeFeedAdapter = HomeFeedAdapter(glide)
+        subscribeToObservers()
+
+        binding.rvHomeFeed.adapter = homeFeedAdapter
+        binding.rvHomeFeed.layoutManager = LinearLayoutManager(requireContext())
+    }
+
+
+    private fun subscribeToObservers() {
+        homeViewModel.loadingState.observe(viewLifecycleOwner) { isLoading ->
+            if (isLoading) {
+                binding.homeProgressBar.visibility = View.VISIBLE
+            } else {
+                binding.homeProgressBar.visibility = View.GONE
+            }
+        }
+
+        homeViewModel.failState.observe(viewLifecycleOwner) { isFail ->
+            if (isFail) {
+                SnackbarHelper.showErrorSnackBar(requireView(),getString(R.string.home_feed_error))
+            }
+        }
+
+        homeViewModel.campaigns.observe(viewLifecycleOwner) { campaigns ->
+            homeFeedAdapter.campaigns = campaigns
+        }
+
     }
 
 
