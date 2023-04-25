@@ -6,13 +6,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.mycompany.advioo.R
-import com.mycompany.advioo.RunCampaignFragment
-import com.mycompany.advioo.adapters.HomeFeedAdapter
 import com.mycompany.advioo.databinding.ActivityAppAdBinding
 import com.mycompany.advioo.di.AppModule
 import com.mycompany.advioo.ui.fragments.AppFragmentFactory
 import com.mycompany.advioo.ui.fragments.campaigns.HomeFragment
 import com.mycompany.advioo.ui.fragments.campaigns.UserSettingsFragment
+import com.mycompany.advioo.RunCampaignFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 

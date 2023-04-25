@@ -96,7 +96,13 @@
     <string name="location_updates_notification_text">Tracking Location</string>
     <string name="location_updates_notification_ticker">Tracking Location</string>
     <string name="home_feed_error">Couldn\'t get items!</string>
-
+    <string name="details">Details</string>
+    <string name="light">Light</string>
+    <string name="advanced">Advanced</string>
+    <string name="pro">Pro</string>
+    <string name="campaign_map">Campaign Map</string>
+    <string name="apply">Apply</string>
+    <string name="currency">$</string>
 
     <string-array name="car_conditions">
         <item>Like New</item>

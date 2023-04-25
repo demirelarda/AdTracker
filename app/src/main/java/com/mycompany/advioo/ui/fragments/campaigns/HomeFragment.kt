@@ -14,6 +14,7 @@ import com.mycompany.advioo.adapters.HomeFeedAdapter
 import com.mycompany.advioo.databinding.FragmentHomeBinding
 import com.mycompany.advioo.databinding.FragmentRunCampaignBinding
 import com.mycompany.advioo.ui.activities.AppAdActivity
+import com.mycompany.advioo.ui.activities.CampaignDetailsActivity
 import com.mycompany.advioo.util.SnackbarHelper
 import com.mycompany.advioo.viewmodels.HomeViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,7 +49,12 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         val binding = FragmentHomeBinding.bind(view)
         homeFeedAdapter = HomeFeedAdapter(glide)
         subscribeToObservers()
-
+        homeFeedAdapter.setOnItemClickListener {
+            val intent = Intent(requireContext(),CampaignDetailsActivity::class.java)
+            intent.putExtra("campaign",it)
+            intent.putExtra("toCampaignDetails",true)
+            startActivity(intent)
+        }
         binding.rvHomeFeed.adapter = homeFeedAdapter
         binding.rvHomeFeed.layoutManager = LinearLayoutManager(requireContext())
     }

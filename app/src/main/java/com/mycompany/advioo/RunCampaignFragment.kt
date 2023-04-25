@@ -6,18 +6,17 @@ import android.view.View
 import android.view.ViewGroup
 import com.mycompany.advioo.databinding.FragmentRunCampaignBinding
 import android.Manifest
-import android.annotation.SuppressLint
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.location.Location
+import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
+import android.preference.PreferenceManager
 import android.provider.Settings
-import android.util.Log
 import android.widget.Toast
 import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
@@ -27,12 +26,17 @@ import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.GeoPoint
 import com.mycompany.advioo.services.LocationTrackingService
 import com.mycompany.advioo.services.TripData
+import org.osmdroid.tileprovider.tilesource.TileSourceFactory
+import org.osmdroid.views.MapView
+import org.osmdroid.views.overlay.Polyline
 
 private const val LOCATION_AND_NOTIFICATION_PERMISSION_REQUEST_CODE = 1
 private const val BATTERY_OPTIMIZATION_REQUEST_CODE = 2
+private lateinit var mapView: MapView
+private lateinit var polyline: Polyline
+
 
 
 class RunCampaignFragment : Fragment() {
@@ -47,6 +51,12 @@ class RunCampaignFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRunCampaignBinding.inflate(inflater, container, false)
+        mapView = binding.mapView
+        mapView.setTileSource(TileSourceFactory.MAPNIK)
+
+        val osmConfig = org.osmdroid.config.Configuration.getInstance()
+        osmConfig.userAgentValue = "${BuildConfig.APPLICATION_ID}/${BuildConfig.VERSION_NAME}"
+        osmConfig.load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()))
         return binding.root
     }
 
@@ -56,6 +66,11 @@ class RunCampaignFragment : Fragment() {
 
         binding.btnSaveTrip.visibility = View.GONE
         binding.btnStopTrip.visibility = View.GONE
+
+        polyline = Polyline()
+        polyline.color = Color.RED
+        polyline.width = 8f
+        mapView.overlayManager.add(polyline)
 
         binding.btnStartTrip.setOnClickListener {
             requestLocationAndNotificationPermissions()

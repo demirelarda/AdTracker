@@ -20,6 +20,8 @@ class HomeFeedAdapter @Inject constructor(
 
     class CampaignViewHolder(itemView : View) : RecyclerView.ViewHolder(itemView)
 
+    private var onItemClickListener: ((Campaign) -> Unit)? = null
+
     private val diffUtil = object : DiffUtil.ItemCallback<Campaign>(){
         override fun areItemsTheSame(oldItem: Campaign, newItem: Campaign): Boolean {
             return oldItem == newItem
@@ -28,6 +30,10 @@ class HomeFeedAdapter @Inject constructor(
         override fun areContentsTheSame(oldItem: Campaign, newItem: Campaign): Boolean {
             return oldItem == newItem
         }
+    }
+
+    fun setOnItemClickListener(listener: (Campaign) -> Unit) {
+        onItemClickListener = listener
     }
 
     private val recyclerListDiffer = AsyncListDiffer(this,diffUtil)
@@ -55,6 +61,10 @@ class HomeFeedAdapter @Inject constructor(
 
         val campaignImage = holder.itemView.findViewById<ImageView>(R.id.iv_home_campaign_row)
         glide.load(model.campaignImageURL).into(campaignImage)
+
+        holder.itemView.setOnClickListener {
+            onItemClickListener!!.invoke(model)
+        }
     }
 
     override fun getItemCount(): Int {

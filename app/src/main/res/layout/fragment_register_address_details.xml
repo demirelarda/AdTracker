@@ -116,18 +116,16 @@
         <androidx.appcompat.widget.AppCompatButton
             android:id="@+id/btn_continue_user_work_details"
             android:layout_width="match_parent"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
             android:layout_height="55dp"
+            android:layout_marginStart="18dp"
             android:layout_marginTop="50dp"
+            android:layout_marginEnd="18dp"
+            android:background="@drawable/button_background_blue"
             android:text="@string/btn_continue"
             android:textAllCaps="false"
-            android:textSize="16sp"
             android:textColor="@color/white"
-            android:background="@drawable/button_background_blue"
-            >
+            android:textSize="16sp">
         </androidx.appcompat.widget.AppCompatButton>
-
 
 
     </LinearLayout>

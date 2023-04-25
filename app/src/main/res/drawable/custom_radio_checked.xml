@@ -1,0 +1,9 @@
+<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+    <item>
+        <shape android:shape="oval">
+            <solid android:color="@color/colorRadioButtonSelected" />
+        </shape>
+    </item>
+    <item android:drawable="@drawable/checked_icon"
+        android:gravity="center"/>
+</layer-list>
