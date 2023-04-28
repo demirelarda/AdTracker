@@ -9,6 +9,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.RequestManager
 import com.mycompany.advioo.BuildConfig
 import com.mycompany.advioo.R
@@ -16,6 +18,7 @@ import com.mycompany.advioo.databinding.FragmentCampaignDetailsBinding
 import com.mycompany.advioo.models.campaign.Campaign
 import com.mycompany.advioo.viewmodels.CampaignDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.launch
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -54,14 +57,24 @@ class CampaignDetailsFragment : Fragment() {
             binding.radioButtonPro.setOnClickListener { updatePriceTextColors() }
             updatePriceTextColors()
             binding.tvCityCampaignDetails.text = campaign.city
-            binding.tvLightPrice.text = resources.getString(R.string.currency)+campaign.campaignLightPaymentRange
-            binding.tvProPrice.text = resources.getString(R.string.currency)+campaign.campaignProPaymentRange
-            binding.tvAdvancedPrice.text = resources.getString(R.string.currency)+campaign.campaignAdvancedPaymentRange
+            binding.tvLightPrice.text = campaign.campaignLightPaymentRange
+            binding.tvProPrice.text = campaign.campaignProPaymentRange
+            binding.tvAdvancedPrice.text = campaign.campaignAdvPaymentRange
             binding.tvCampaignDetailsTitle.text = campaign.campaignTitle
             glide.load(campaign.campaignImageURL).into(binding.ivCampaignDetailsImage)
-            binding.tvCampaignMapGoToFullPage.setOnClickListener {
-
+            if(!(campaign.availableCampaignPlans.contains(0))){
+                binding.radioButtonLight.visibility = View.GONE
+                binding.tvLightPrice.visibility = View.GONE
             }
+            if(!(campaign.availableCampaignPlans.contains(1))){
+                binding.radioButtonAdvanced.visibility = View.GONE
+                binding.tvAdvancedPrice.visibility = View.GONE
+            }
+            if(!(campaign.availableCampaignPlans.contains(2))){
+                binding.radioButtonPro.visibility = View.GONE
+                binding.tvProPrice.visibility = View.GONE
+            }
+
         }
 
         setupMapView()

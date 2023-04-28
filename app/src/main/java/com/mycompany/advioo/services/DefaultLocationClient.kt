@@ -44,15 +44,17 @@ class DefaultLocationClient(
                 .setMaxUpdateDelayMillis(locationMaxWaitTime)
                 .build()
 
-            val locationCallback = object : LocationCallback(){
+            val locationCallback = object : LocationCallback() {
                 override fun onLocationResult(result: LocationResult) {
                     super.onLocationResult(result)
-                    result.locations.lastOrNull()?.let { location->
-                        launch { send(location) }
+                    result.locations.lastOrNull()?.let { location ->
+                        if (location.accuracy <= 12) {
+                            launch { send(location) }
+                        }
                     }
-
                 }
             }
+
 
             fusedLocationProviderClient.requestLocationUpdates(
                 locationRequest,

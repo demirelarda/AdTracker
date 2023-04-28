@@ -52,7 +52,7 @@ class HomeFeedAdapter @Inject constructor(
         val model = campaigns[position]
         val tvCampaignPrice = holder.itemView.findViewById<TextView>(R.id.tv_campaign_price_row)
         holder.itemView.apply {
-            tvCampaignPrice.text = model.campaignPaymentPerKM.toString()
+            tvCampaignPrice.text = model.totalPaymentRange
         }
         val tvCampaignTitle = holder.itemView.findViewById<TextView>(R.id.tv_campaign_title_home_row)
         holder.itemView.apply {

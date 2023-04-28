@@ -5,10 +5,17 @@ import android.app.NotificationChannel
 import android.app.NotificationManager
 import android.content.Context
 import android.os.Build
+import com.instacart.truetime.time.TrueTimeImpl
 import dagger.hilt.android.HiltAndroidApp
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 
 @HiltAndroidApp
 class AdviooApplication : Application(){
+
+    val trueTime = TrueTimeImpl()
+
 
     override fun onCreate() {
         super.onCreate()
@@ -21,6 +28,11 @@ class AdviooApplication : Application(){
             val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             notificationManager.createNotificationChannel(channel)
         }
+
+        trueTime.sync()
+
+
+
     }
 
 }

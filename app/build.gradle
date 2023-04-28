@@ -90,6 +90,12 @@ dependencies {
     //osm
     implementation 'org.osmdroid:osmdroid-android:6.1.16'
 
+    //true time
+    implementation 'com.github.instacart:truetime-android:4.0.0.alpha'
+
+    //MPCharts
+    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 
 }
 

@@ -9,12 +9,18 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.instacart.truetime.time.TrueTimeImpl
+import com.mycompany.advioo.AdviooApplication
 import com.mycompany.advioo.R
 import com.mycompany.advioo.api.CityAPI
+import com.mycompany.advioo.api.PinfoAPI
+import com.mycompany.advioo.api.TimeAPI
 import com.mycompany.advioo.models.user.User
 import com.mycompany.advioo.repo.*
 import com.mycompany.advioo.util.HaversineCalculateDistance
 import com.mycompany.advioo.util.Util.BASE_URL
+import com.mycompany.advioo.util.Util.PINFO_BASE_URL
+import com.mycompany.advioo.util.Util.TIME_API_BASE_URL
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -44,7 +50,36 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun providePinfoAPI() : PinfoAPI{
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(PINFO_BASE_URL)
+            .build()
+            .create(PinfoAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideTimeAPI() : TimeAPI{
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl(TIME_API_BASE_URL)
+            .build()
+            .create(TimeAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
     fun injectNormalCityRepo(api:CityAPI) = CityRepository(api) as CityRepositoryInterface
+
+
+    @Singleton
+    @Provides
+    fun injectNormalPinfoRepo(api:PinfoAPI) = PinfoRepository(api) as PinfoRepositoryInterface
+
+    @Singleton
+    @Provides
+    fun injectNormalTimeRepo(api:TimeAPI) = TimeRepository(api) as TimeRepositoryInterface
 
     @Singleton
     @Provides

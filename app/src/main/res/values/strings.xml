@@ -103,6 +103,11 @@
     <string name="campaign_map">Campaign Map</string>
     <string name="apply">Apply</string>
     <string name="currency">$</string>
+    <string name="an_error_occurred_network">An error occurred! Please check your network connection!</string>
+    <string name="payment">Payment: </string>
+    <string name="campaign_type">Campaign Type: </string>
+    <string name="multiplier">Multiplier: </string>
+    <string name="is_night">Night Time: </string>
 
     <string-array name="car_conditions">
         <item>Like New</item>

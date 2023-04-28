@@ -6,12 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import com.mycompany.advioo.databinding.FragmentRunCampaignBinding
 import android.Manifest
+import android.app.Application
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
-import android.graphics.Color
 import android.net.Uri
 import android.os.Build
 import android.os.PowerManager
@@ -22,20 +22,34 @@ import androidx.annotation.RequiresApi
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.instacart.truetime.time.TrueTimeImpl
+import com.mycompany.advioo.models.pinfo.Nredrate
+import com.mycompany.advioo.models.pinfo.Phour
+import com.mycompany.advioo.models.pinfo.Pinfo
 import com.mycompany.advioo.services.LocationTrackingService
 import com.mycompany.advioo.services.TripData
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.views.MapView
-import org.osmdroid.views.overlay.Polyline
+import com.mycompany.advioo.util.Status
+import com.mycompany.advioo.viewmodels.RunCampaignViewModel
+import java.time.Instant
+import java.time.LocalDateTime
+import java.time.ZoneId
+import java.time.ZonedDateTime
+import javax.inject.Inject
+
 
 private const val LOCATION_AND_NOTIFICATION_PERMISSION_REQUEST_CODE = 1
 private const val BATTERY_OPTIMIZATION_REQUEST_CODE = 2
-private lateinit var mapView: MapView
-private lateinit var polyline: Polyline
+private var pInfoList : ArrayList<Pinfo> = ArrayList()
+private var pHours : ArrayList<Phour> = ArrayList()
+private var nDownRate : ArrayList<Nredrate> = ArrayList()
+private var lastDistanceInKm : Double = 0.0
+
 
 
 
@@ -45,18 +59,22 @@ class RunCampaignFragment : Fragment() {
     private val binding get() = _binding!!
     private lateinit var tripData: TripData
     val userEmail = FirebaseAuth.getInstance().currentUser?.email
+    lateinit var runCampaignViewModel: RunCampaignViewModel
+
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentRunCampaignBinding.inflate(inflater, container, false)
-        mapView = binding.mapView
-        mapView.setTileSource(TileSourceFactory.MAPNIK)
 
-        val osmConfig = org.osmdroid.config.Configuration.getInstance()
-        osmConfig.userAgentValue = "${BuildConfig.APPLICATION_ID}/${BuildConfig.VERSION_NAME}"
-        osmConfig.load(requireContext(), PreferenceManager.getDefaultSharedPreferences(requireContext()))
+
+
         return binding.root
     }
 
@@ -66,11 +84,12 @@ class RunCampaignFragment : Fragment() {
 
         binding.btnSaveTrip.visibility = View.GONE
         binding.btnStopTrip.visibility = View.GONE
+        runCampaignViewModel = ViewModelProvider(requireActivity()).get(RunCampaignViewModel::class.java)
+        runCampaignViewModel.getPinfoFromApi()
+        runCampaignViewModel.getTimeFromApi("Vancouver")
+        subscribeToObservers()
 
-        polyline = Polyline()
-        polyline.color = Color.RED
-        polyline.width = 8f
-        mapView.overlayManager.add(polyline)
+
 
         binding.btnStartTrip.setOnClickListener {
             requestLocationAndNotificationPermissions()
@@ -83,14 +102,19 @@ class RunCampaignFragment : Fragment() {
             binding.btnStartTrip.visibility = View.VISIBLE
             binding.btnStopTrip.visibility = View.GONE
             binding.btnSaveTrip.visibility = View.GONE
+            lastDistanceInKm = 0.0
+            runCampaignViewModel.resetPayment()
+
         }
+
 
         binding.btnSaveTrip.setOnClickListener {
             println("trip data = "+tripData.locationPoints)
             tripData.endTime = System.currentTimeMillis()
             tripData.userEmail = userEmail
-            //println(tripData)
             saveTripDataToFirestore(tripData)
+            lastDistanceInKm = 0.0
+            runCampaignViewModel.resetPayment()
         }
     }
 
@@ -136,8 +160,33 @@ class RunCampaignFragment : Fragment() {
     }
 
     private val locationUpdateReceiver = object : BroadcastReceiver() {
+        @RequiresApi(Build.VERSION_CODES.O)
         override fun onReceive(context: Context?, intent: Intent?) {
             tripData = intent?.getParcelableExtra("tripData") ?: TripData()
+            val newDistanceInKm = tripData.distanceDriven
+            if (newDistanceInKm > lastDistanceInKm) {
+                val distanceDifference = newDistanceInKm- lastDistanceInKm
+                println("distance difference= "+distanceDifference)
+                val canadaTimeZones = listOf(
+                    "America/St_Johns",
+                    "America/Halifax",
+                    "America/Toronto",
+                    "America/Winnipeg",
+                    "America/Edmonton",
+                    "America/Vancouver"
+                )
+                val application : Application = AdviooApplication()
+                val currentTime = (application as AdviooApplication).trueTime.now()
+                val timeZone = canadaTimeZones[5]
+                val localTime = convertUtcToLocalTime(currentTime.toInstant(), timeZone)
+                println("Current Time ($timeZone): $localTime")
+                println("CURRENT TIME: ${currentTime}")
+                var isNight = false
+                isNight = localTime.hour !in 6..18
+                binding.tvCampaignNight.text = isNight.toString()
+                runCampaignViewModel.calculatePayment("L1",distanceDifference,isNight)
+                lastDistanceInKm = newDistanceInKm
+            }
             binding.tvKMDriven.text = String.format("%.2f KM", tripData.distanceDriven)
         }
     }
@@ -149,6 +198,8 @@ class RunCampaignFragment : Fragment() {
         requireContext().stopService(stopIntent)
 
         binding.tvKMDriven.text = "0.00 KM"
+        runCampaignViewModel.resetPayment()
+        binding.tvPayment.text = "$0.00"
         binding.btnStartTrip.visibility = View.VISIBLE
         binding.btnStopTrip.visibility = View.GONE
         binding.btnSaveTrip.visibility = View.GONE
@@ -170,6 +221,15 @@ class RunCampaignFragment : Fragment() {
         super.onDestroyView()
         _binding = null
 
+    }
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    fun convertUtcToLocalTime(utcTime: Instant, timeZone: String): ZonedDateTime {
+        val zoneId = ZoneId.of(timeZone)
+
+        val localTime = ZonedDateTime.ofInstant(utcTime, zoneId)
+
+        return localTime
     }
 
 
@@ -286,6 +346,50 @@ class RunCampaignFragment : Fragment() {
         if (requestCode == BATTERY_OPTIMIZATION_REQUEST_CODE) {
             checkBatteryOptimizationPermission()
         }
+    }
+
+
+    private fun subscribeToObservers(){
+        runCampaignViewModel.pInfo.observe(viewLifecycleOwner, Observer{
+            when(it.status){
+                Status.SUCCESS->{
+                    binding.progressBarRunCampaign.visibility = View.GONE
+                    it.data?.let { it1 -> pInfoList.addAll(it1.pinfos) }
+                    it.data?.let { it2 -> pHours.addAll(it2.phours) }
+                    it.data?.let { it3 -> nDownRate.addAll(it3.nredrate) }
+                    binding.rlRunCampaign.visibility = View.VISIBLE
+                    it.data?.let { it1 -> runCampaignViewModel.pInfoList.addAll(it1.pinfos) }
+                    it.data?.let { it2 -> runCampaignViewModel.pHours.addAll(it2.phours) }
+                    it.data?.let { it3 -> runCampaignViewModel.nDownRate.addAll(it3.nredrate) }
+                }
+                Status.ERROR->{
+                    Toast.makeText(requireContext(),getString(R.string.an_error_occurred_network),Toast.LENGTH_LONG).show()
+                    requireActivity().finish()
+                }
+                Status.LOADING->{
+                    binding.rlRunCampaign.visibility = View.GONE
+                    binding.progressBarRunCampaign.visibility = View.VISIBLE
+                }
+            }
+        })
+
+        runCampaignViewModel.payment.observe(viewLifecycleOwner, Observer {
+            println("PAYMENT = "+it.toString())
+            binding.tvPayment.text = String.format("$%.2f ", it)
+        })
+
+        runCampaignViewModel.multiplier.observe(viewLifecycleOwner, Observer {
+            binding.tvMultiplier.text =  String.format("x%.2f ", it)
+        })
+
+        runCampaignViewModel.campaignType.observe(viewLifecycleOwner, Observer {
+            binding.tvCampaignType.text = it.toString()
+        })
+
+
+
+
+
     }
 
 
