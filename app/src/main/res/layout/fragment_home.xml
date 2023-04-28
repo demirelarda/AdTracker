@@ -55,9 +55,12 @@
                 android:layout_marginStart="16dp"
                 android:layout_marginEnd="16dp"
                 android:layout_marginTop="10dp"
+                android:paddingBottom="?attr/actionBarSize"
+                android:clipToPadding="false"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
             </androidx.recyclerview.widget.RecyclerView>
         </ScrollView>
+
     </LinearLayout>
 </FrameLayout>
