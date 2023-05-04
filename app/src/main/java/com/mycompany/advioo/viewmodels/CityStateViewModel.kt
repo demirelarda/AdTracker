@@ -5,7 +5,6 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.mycompany.advioo.models.city.CityResponse
-import com.mycompany.advioo.repo.CityRepository
 import com.mycompany.advioo.repo.CityRepositoryInterface
 import com.mycompany.advioo.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -29,6 +28,7 @@ class CityStateViewModel @Inject constructor(
     val selectedUserState : LiveData<String>
         get() = selectedState
 
+
     private val selectedCity = MutableLiveData<String>()
     val selectedUserCity : LiveData<String>
         get() = selectedCity
@@ -36,6 +36,8 @@ class CityStateViewModel @Inject constructor(
     fun setSelectedCity(selected : String){
         selectedCity.postValue(selected)
     }
+
+
 
     fun setSelectedState(selected: String){
         selectedState.postValue(selected)

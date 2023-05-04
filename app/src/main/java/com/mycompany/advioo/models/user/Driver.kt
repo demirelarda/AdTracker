@@ -1,10 +1,11 @@
 package com.mycompany.advioo.models.user
 
+import android.os.Parcelable
 import com.google.firebase.Timestamp
-import com.google.type.Date
+import kotlinx.parcelize.Parcelize
 
-
-data class User(
+@Parcelize
+data class Driver(
     var id: String,
     val firstName: String,
     val lastName: String,
@@ -24,5 +25,6 @@ data class User(
     val workCity: String,
     val rideShareDriver: Boolean,
     val allowedContact: Boolean,
-)
+    val userCity: UserCity,
+):Parcelable
 

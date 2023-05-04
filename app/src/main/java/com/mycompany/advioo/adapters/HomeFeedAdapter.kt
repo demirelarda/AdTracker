@@ -60,7 +60,10 @@ class HomeFeedAdapter @Inject constructor(
         }
 
         val campaignImage = holder.itemView.findViewById<ImageView>(R.id.iv_home_campaign_row)
-        glide.load(model.campaignImageURL).into(campaignImage)
+
+        glide.load(model.campaignImageURL)
+            .override(1920, 1080)
+            .into(campaignImage)
 
         holder.itemView.setOnClickListener {
             onItemClickListener!!.invoke(model)

@@ -10,11 +10,8 @@ import android.view.ViewGroup
 import android.widget.ArrayAdapter
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.Observer
-import androidx.navigation.Navigation
 import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentRegisterUserWorkDetailsBinding
-import com.mycompany.advioo.models.user.User
 import com.mycompany.advioo.ui.activities.AppAdActivity
 import com.mycompany.advioo.util.SnackbarHelper
 import com.mycompany.advioo.viewmodels.RegisterUserWorkDetailsViewModel
@@ -62,7 +59,7 @@ class RegisterUserWorkDetailsFragment : Fragment() {
             val workCity = binding.tfWorkCity.text.toString().trim()
 
             if (userWorkDetailsViewModel.isInputDataValid(carBrand = carBrand, carModel = carModel, carYear = carYear,carCondition=carCondition, licensePlate = licensePlate, avgKmDriven = avgKmDriven, workCity = workCity, termsConditions = binding.cboxTermsConditions)) {
-                sharedRegisterViewModel.user.value
+                sharedRegisterViewModel.driver.value
                 sharedRegisterViewModel.setCarBrand(carBrand)
                 sharedRegisterViewModel.setCarModel(carModel)
                 sharedRegisterViewModel.setCarCondition(carCondition)
@@ -84,11 +81,11 @@ class RegisterUserWorkDetailsFragment : Fragment() {
                     sharedRegisterViewModel.setRideShare(false)
                 }
 
-                //register user
+                //register driver
                 //navigate to home screen
-                val email = sharedRegisterViewModel.user.value?.email!!
+                val email = sharedRegisterViewModel.driver.value?.email!!
                 val password = sharedRegisterViewModel.password.value.toString()
-                val userObject = sharedRegisterViewModel.user.value!!
+                val userObject = sharedRegisterViewModel.driver.value!!
                 userWorkDetailsViewModel.registerUser(email,password,userObject)
 
 

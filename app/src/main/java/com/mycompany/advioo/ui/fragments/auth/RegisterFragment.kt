@@ -9,11 +9,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
 import com.mycompany.advioo.databinding.FragmentRegisterBinding
-import com.mycompany.advioo.models.user.User
 import com.mycompany.advioo.util.SnackbarHelper
 import com.mycompany.advioo.viewmodels.RegisterViewModel
 import com.mycompany.advioo.viewmodels.SharedRegisterViewModel
-import javax.inject.Inject
 
 
 class RegisterFragment: Fragment() {
@@ -49,7 +47,7 @@ class RegisterFragment: Fragment() {
             val passwordAgain = binding.tfPasswordAgain.text.toString().trim()
 
             if (registerViewModel.isInputDataValid(firstName, lastName, email, password, passwordAgain)) {
-                sharedRegisterViewModel.user.value
+                sharedRegisterViewModel.driver.value
                 sharedRegisterViewModel.setFirstName(firstName)
                 sharedRegisterViewModel.setLastName(lastName)
                 sharedRegisterViewModel.setEmail(email)

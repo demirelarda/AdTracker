@@ -108,6 +108,16 @@
     <string name="campaign_type">Campaign Type: </string>
     <string name="multiplier">Multiplier: </string>
     <string name="is_night">Night Time: </string>
+    <string name="ending_date">Ending Date:</string>
+    <string name="installer_selection">Installer Selection</string>
+    <string name="you_selected">You\'ve selected: </string>
+    <string name="please_select_an_installer">Please select an installer and continue</string>
+    <string name="see_installers_on_map">See installers on map</string>
+    <string name="hyphen"> - </string>
+    <string name="or_select_from_list">Or select from list</string>
+    <string name="please_select_a_campaign_level">Please select a campaign level!</string>
+    <string name="failed_to_load_installers">Failed to load installers!</string>
+
 
     <string-array name="car_conditions">
         <item>Like New</item>

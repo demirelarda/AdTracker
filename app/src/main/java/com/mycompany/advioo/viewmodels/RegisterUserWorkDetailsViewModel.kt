@@ -7,11 +7,9 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
-import com.google.firebase.firestore.FirebaseFirestore
 import com.mycompany.advioo.R
 import com.mycompany.advioo.models.auth.RegisterResult
-import com.mycompany.advioo.models.user.User
-import com.mycompany.advioo.repo.UserRepository
+import com.mycompany.advioo.models.user.Driver
 import com.mycompany.advioo.repo.UserRepositoryInterface
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -37,8 +35,8 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
 
 
 
-    fun uploadUserData(user: User) {
-        repository.uploadUserData(user)
+    fun uploadUserData(driver: Driver) {
+        repository.uploadUserData(driver)
             .addOnSuccessListener {
                 _loadingState.postValue(false)
                 _successState.postValue(true)
@@ -55,20 +53,20 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
     private val _registerResult = MutableLiveData<RegisterResult>()
     val registerResult: LiveData<RegisterResult> = _registerResult
 
-    fun registerUser(email: String, password: String,user: User) {
+    fun registerUser(email: String, password: String, driver: Driver) {
         _loadingState.postValue(true)
         auth.createUserWithEmailAndPassword(email, password)
             .addOnCompleteListener { task ->
                 if (task.isSuccessful) {
-                    user.id = auth.uid.toString()
-                    val newDisplayName = user.firstName+" "+user.lastName
+                    driver.id = auth.uid.toString()
+                    val newDisplayName = driver.firstName+" "+driver.lastName
                     val profileUpdates = UserProfileChangeRequest.Builder()
                         .setDisplayName(newDisplayName)
                         .build()
                     auth.currentUser?.updateProfile(profileUpdates)
                         ?.addOnCompleteListener { task ->
                             if (task.isSuccessful) {
-                                uploadUserData(user)
+                                uploadUserData(driver)
                             }
                             else{
                                 _loadingState.postValue(false)
@@ -89,8 +87,8 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
     val uploadSuccess: LiveData<Boolean>
         get() = _uploadSuccess
 
-    fun saveUserData(user: User) {
-        repository.uploadUserData(user)
+    fun saveUserData(driver: Driver) {
+        repository.uploadUserData(driver)
             .addOnSuccessListener {
                 _uploadSuccess.postValue(true)
             }

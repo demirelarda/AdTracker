@@ -4,8 +4,7 @@ import android.os.Parcelable
 import kotlinx.parcelize.Parcelize
 
 @Parcelize
-data class Province(
+data class City(
     val id: String,
-    val stateName: String,
-    val cities: List<City>
+    val name: String
 ):Parcelable

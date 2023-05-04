@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.mycompany.advioo.R
+import com.mycompany.advioo.models.city.City
 import com.mycompany.advioo.models.city.Province
 import javax.inject.Inject
 
@@ -15,14 +16,14 @@ class CityListAdapter @Inject constructor() : RecyclerView.Adapter<CityListAdapt
 
     class CityHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
-    private var onItemClickListener: ((String) -> Unit)? = null
+    private var onItemClickListener: ((City) -> Unit)? = null
 
-    private val diffUtil = object : DiffUtil.ItemCallback<String>() {
-        override fun areItemsTheSame(oldItem: String, newItem: String): Boolean {
+    private val diffUtil = object : DiffUtil.ItemCallback<City>() {
+        override fun areItemsTheSame(oldItem: City, newItem: City): Boolean {
             return oldItem == newItem
         }
 
-        override fun areContentsTheSame(oldItem: String, newItem: String): Boolean {
+        override fun areContentsTheSame(oldItem: City, newItem: City): Boolean {
             return oldItem == newItem
         }
 
@@ -30,11 +31,11 @@ class CityListAdapter @Inject constructor() : RecyclerView.Adapter<CityListAdapt
 
     private val recyclerListDiffer = AsyncListDiffer(this, diffUtil)
 
-    var cities: List<String>
+    var cities: List<City>
         get() = recyclerListDiffer.currentList
         set(value) = recyclerListDiffer.submitList(value)
 
-    fun setOnItemClickListener(listener: (String) -> Unit) {
+    fun setOnItemClickListener(listener: (City) -> Unit) {
         onItemClickListener = listener
     }
 
@@ -48,7 +49,7 @@ class CityListAdapter @Inject constructor() : RecyclerView.Adapter<CityListAdapt
         val model = cities[position]
         val tvCity = holder.itemView.findViewById<TextView>(R.id.row_tv_cityName)
         holder.itemView.apply {
-            tvCity.text = model
+            tvCity.text = model.name
         }
         holder.itemView.setOnClickListener {
             onItemClickListener?.invoke(model)

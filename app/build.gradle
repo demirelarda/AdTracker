@@ -6,6 +6,7 @@ plugins {
     id 'com.google.gms.google-services'
     id 'androidx.navigation.safeargs.kotlin'
     id 'kotlin-parcelize'
+    id 'com.google.firebase.crashlytics'
 }
 
 
@@ -71,6 +72,11 @@ dependencies {
     implementation 'com.google.firebase:firebase-firestore-ktx'
     implementation 'com.google.firebase:firebase-storage-ktx'
 
+    //crashlytics
+    implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    implementation 'com.google.firebase:firebase-analytics-ktx'
+
+
     //Navigation
     implementation 'androidx.navigation:navigation-fragment-ktx:2.5.3'
     implementation 'androidx.navigation:navigation-ui-ktx:2.5.3'
@@ -93,8 +99,11 @@ dependencies {
     //true time
     implementation 'com.github.instacart:truetime-android:4.0.0.alpha'
 
+    //Viewpager2
+    implementation "androidx.viewpager2:viewpager2:1.0.0"
+
     //MPCharts
-    implementation 'com.github.PhilJay:MPAndroidChart:v3.1.0'
+
 
 
 }

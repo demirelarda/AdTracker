@@ -7,7 +7,6 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
 import androidx.navigation.Navigation
 import com.mycompany.advioo.databinding.FragmentRegisterAddressDetailsBinding
 import com.mycompany.advioo.util.SnackbarHelper
@@ -47,7 +46,7 @@ class RegisterAddressDetailsFragment : Fragment() {
 
 
         //viewModel = ViewModelProvider(requireActivity()).get(SharedRegisterViewModel::class.java)
-        binding.tfFullName.setText((sharedRegisterViewModel.user.value?.firstName.toString() ?: "") +" "+ (sharedRegisterViewModel.user.value?.lastName.toString() ?: ""))
+        binding.tfFullName.setText((sharedRegisterViewModel.driver.value?.firstName.toString() ?: "") +" "+ (sharedRegisterViewModel.driver.value?.lastName.toString() ?: ""))
         binding.tvSelectCity.setOnClickListener {
             val action = RegisterAddressDetailsFragmentDirections.actionRegisterAddressDetailsFragmentToStateListFragment()
             Navigation.findNavController(requireView()).navigate(action)

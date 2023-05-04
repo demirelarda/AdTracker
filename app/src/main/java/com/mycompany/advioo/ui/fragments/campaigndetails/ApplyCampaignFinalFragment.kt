@@ -6,14 +6,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mycompany.advioo.R
-import com.mycompany.advioo.databinding.FragmentCampaignDetailsBinding
 
 
-class FullMapFragment : Fragment() {
+class ApplyCampaignFinalFragment : Fragment() {
 
-
-    private var _binding: FragmentCampaignDetailsBinding? = null
-    private val binding get() = _binding!!
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -25,7 +21,7 @@ class FullMapFragment : Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_full_map, container, false)
+        return inflater.inflate(R.layout.fragment_apply_campaign_final, container, false)
     }
 
 

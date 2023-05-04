@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.ViewModelProvider
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
@@ -15,7 +16,9 @@ import com.mycompany.advioo.R
 import com.mycompany.advioo.adapters.CityListAdapter
 import com.mycompany.advioo.databinding.FragmentCityListBinding
 import com.mycompany.advioo.models.city.Province
+import com.mycompany.advioo.models.user.UserCity
 import com.mycompany.advioo.viewmodels.CityStateViewModel
+import com.mycompany.advioo.viewmodels.SharedRegisterViewModel
 import javax.inject.Inject
 
 
@@ -26,6 +29,7 @@ class CityListFragment @Inject constructor(
     private lateinit var provinceObject : Province
     private lateinit var viewModel : CityStateViewModel
     private var fragmentBinding : FragmentCityListBinding? = null
+    private val sharedRegisterViewModel : SharedRegisterViewModel by activityViewModels()
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -56,9 +60,13 @@ class CityListFragment @Inject constructor(
         }
 
         cityListAdapter.setOnItemClickListener {
-            val selectedLocation : String = viewModel.selectedUserState.value!!+","+it
+            val selectedLocation : String = viewModel.selectedUserState.value!!+","+it.name
             println("selected location = "+selectedLocation)
-            val selectedLocationArray = arrayOf(viewModel.selectedUserState.value!!,it)
+            val selectedLocationArray = arrayOf(viewModel.selectedUserState.value!!,it.name)
+
+            val userCity = UserCity(provinceObject.id,it.id,viewModel.selectedUserState.value!!,it.name)
+            println("driver city object = $userCity")
+            sharedRegisterViewModel.setCityObject(userCity)
             val action = CityListFragmentDirections.actionCityListFragmentToRegisterAddressDetailsFragment(selectedLocationArray)
             Navigation.findNavController(requireView()).navigate(action)
         }
@@ -81,10 +89,11 @@ class CityListFragment @Inject constructor(
 
     private fun filterCities(query: String) {
         val filteredCities = provinceObject.cities.filter { city ->
-            city.contains(query, ignoreCase = true)
+            city.name.contains(query, ignoreCase = true)
         }
         cityListAdapter.cities = filteredCities
     }
+
 
 
 }

@@ -2,20 +2,32 @@ package com.mycompany.advioo.ui.fragments.campaigndetails
 
 
 import android.annotation.SuppressLint
+import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioButton
+import android.widget.Toast
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.bumptech.glide.RequestManager
+import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.mycompany.advioo.BuildConfig
 import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentCampaignDetailsBinding
 import com.mycompany.advioo.models.campaign.Campaign
+import com.mycompany.advioo.models.campaignapplication.CampaignApplication
+import com.mycompany.advioo.models.installer.Installer
+import com.mycompany.advioo.ui.activities.AppAdActivity
+import com.mycompany.advioo.util.SnackbarHelper
+import com.mycompany.advioo.viewmodels.ApplyCampaignSharedViewModel
 import com.mycompany.advioo.viewmodels.CampaignDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.launch
@@ -34,7 +46,11 @@ class CampaignDetailsFragment : Fragment() {
     private var _binding: FragmentCampaignDetailsBinding? = null
     private val binding get() = _binding!!
     private val campaignDetailsViewModel: CampaignDetailsViewModel by viewModels(ownerProducer = { this })
+    private val campaignApplicationSharedViewModel: ApplyCampaignSharedViewModel by activityViewModels()
     private var campaign: Campaign = Campaign()
+    private val authInstance = FirebaseAuth.getInstance()
+    private lateinit var selectedCampaignLevel: String
+
     @Inject
     lateinit var glide: RequestManager
 
@@ -49,35 +65,88 @@ class CampaignDetailsFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        if (requireActivity().intent.hasExtra("campaign")) {
-            campaign = requireActivity().intent.getParcelableExtra("campaign")!!
+        campaign = if (requireActivity().intent.hasExtra("campaign")) {
+            requireActivity().intent.getParcelableExtra("campaign")!!
+        } else{
+            campaignApplicationSharedViewModel.campaignApplication.value?.selectedCampaign ?: Campaign()
+        }
 
-            binding.radioButtonLight.setOnClickListener { updatePriceTextColors() }
-            binding.radioButtonAdvanced.setOnClickListener { updatePriceTextColors() }
-            binding.radioButtonPro.setOnClickListener { updatePriceTextColors() }
-            updatePriceTextColors()
-            binding.tvCityCampaignDetails.text = campaign.city
-            binding.tvLightPrice.text = campaign.campaignLightPaymentRange
-            binding.tvProPrice.text = campaign.campaignProPaymentRange
-            binding.tvAdvancedPrice.text = campaign.campaignAdvPaymentRange
-            binding.tvCampaignDetailsTitle.text = campaign.campaignTitle
-            glide.load(campaign.campaignImageURL).into(binding.ivCampaignDetailsImage)
-            if(!(campaign.availableCampaignPlans.contains(0))){
-                binding.radioButtonLight.visibility = View.GONE
-                binding.tvLightPrice.visibility = View.GONE
-            }
-            if(!(campaign.availableCampaignPlans.contains(1))){
-                binding.radioButtonAdvanced.visibility = View.GONE
-                binding.tvAdvancedPrice.visibility = View.GONE
-            }
-            if(!(campaign.availableCampaignPlans.contains(2))){
-                binding.radioButtonPro.visibility = View.GONE
-                binding.tvProPrice.visibility = View.GONE
+        binding.radioButtonLight.setOnClickListener { updatePriceTextColors() }
+        binding.radioButtonAdvanced.setOnClickListener { updatePriceTextColors() }
+        binding.radioButtonPro.setOnClickListener { updatePriceTextColors() }
+        updatePriceTextColors()
+        //binding.tvCityCampaignDetails.text = campaign.city
+        binding.tvLightPrice.text = campaign.campaignLightPaymentRange
+        binding.tvProPrice.text = campaign.campaignProPaymentRange
+        binding.tvAdvancedPrice.text = campaign.campaignAdvPaymentRange
+        binding.tvCampaignDetailsTitle.text = campaign.campaignTitle
+        glide.load(campaign.campaignImageURL).into(binding.ivCampaignDetailsImage)
+        if (!(campaign.availableCampaignPlans.contains(0))) {
+            binding.radioButtonLight.visibility = View.GONE
+            binding.tvLightPrice.visibility = View.GONE
+        }
+        if (!(campaign.availableCampaignPlans.contains(1))) {
+            binding.radioButtonAdvanced.visibility = View.GONE
+            binding.tvAdvancedPrice.visibility = View.GONE
+        }
+        if (!(campaign.availableCampaignPlans.contains(2))) {
+            binding.radioButtonPro.visibility = View.GONE
+            binding.tvProPrice.visibility = View.GONE
+        }
+
+        binding.btnApplyCampaignDetails.setOnClickListener {
+            if (validateRadioGroup()) {
+                val campaignApplicationObject = CampaignApplication(
+                    applicationId = "",
+                    applicantId = authInstance.currentUser?.uid ?: "",
+                    applicantFullName = authInstance.currentUser?.displayName ?: "",
+                    applicationDate = Timestamp.now(),
+                    selectedInstaller = Installer(),
+                    selectedCampaign = campaign,
+                    selectedCampaignLevel = selectedCampaignLevel
+
+                )
+
+                campaignApplicationSharedViewModel.setSelectedCampaign(campaign)
+                campaignApplicationSharedViewModel.setSelectedCampaignLevel(selectedCampaignLevel)
+
+
+
+                val action =
+                    CampaignDetailsFragmentDirections.actionCampaignDetailsToAvailableInstallersFragment(
+                        campaignApplicationObject
+                    )
+                findNavController().navigate(action)
             }
 
         }
 
+        binding.ivBtnBackFromCampaignDetails.setOnClickListener {
+            val intent = Intent(requireContext(), AppAdActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
+        }
+
+
+
         setupMapView()
+    }
+
+
+    private fun validateRadioGroup(): Boolean {
+        return if (binding.radioGroup.checkedRadioButtonId == -1) {
+            SnackbarHelper.showErrorSnackBar(
+                requireView(),
+                getString(R.string.please_select_a_campaign_level)
+            )
+            false
+        } else {
+            val selectedRadioButtonId = binding.radioGroup.checkedRadioButtonId
+            val selectedRadioButton =
+                requireActivity().findViewById<RadioButton>(selectedRadioButtonId)
+            selectedCampaignLevel = selectedRadioButton.text.toString()
+            true
+        }
     }
 
     private fun setupMapView() {

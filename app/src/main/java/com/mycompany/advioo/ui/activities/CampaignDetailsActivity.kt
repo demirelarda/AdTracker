@@ -19,9 +19,15 @@ class CampaignDetailsActivity : AppCompatActivity() {
 
 
 
+        /*
         if(intent.hasExtra("toCampaignDetails")){
             replaceFragment(CampaignDetailsFragment())
         }
+
+         */
+
+
+
 
 
 

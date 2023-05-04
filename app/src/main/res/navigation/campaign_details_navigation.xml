@@ -9,5 +9,52 @@
         android:id="@+id/campaignDetails"
         android:name="com.mycompany.advioo.ui.fragments.campaigndetails.CampaignDetailsFragment"
         android:label="fragment_campaign_details"
-        tools:layout="@layout/fragment_campaign_details" />
+        tools:layout="@layout/fragment_campaign_details" >
+        <action
+            android:id="@+id/action_campaignDetails_to_availableInstallersFragment"
+            app:destination="@id/availableInstallersFragment" />
+        <action
+            android:id="@+id/action_campaignDetails_to_fullMapFragment"
+            app:destination="@id/fullMapFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/availableInstallersFragment"
+        android:name="com.mycompany.advioo.ui.fragments.campaigndetails.AvailableInstallersFragment"
+        android:label="fragment_available_installers"
+        tools:layout="@layout/fragment_available_installers" >
+        <action
+            android:id="@+id/action_availableInstallersFragment_to_campaignDetails"
+            app:destination="@id/campaignDetails" />
+        <action
+            android:id="@+id/action_availableInstallersFragment_to_fullMapFragment"
+            app:destination="@id/fullMapFragment" />
+        <argument
+            android:name="campaignApplicationObject"
+            app:argType="com.mycompany.advioo.models.campaignapplication.CampaignApplication"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_availableInstallersFragment_to_applyCampaignFinalFragment"
+            app:destination="@id/applyCampaignFinalFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/fullMapFragment"
+        android:name="com.mycompany.advioo.ui.fragments.campaigndetails.FullMapFragment"
+        android:label="fragment_full_map"
+        tools:layout="@layout/fragment_full_map" >
+        <argument
+            android:name="mapCoordinateList"
+            app:argType="com.mycompany.advioo.models.user.UserCity[]"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/applyCampaignFinalFragment"
+        android:name="com.mycompany.advioo.ui.fragments.campaigndetails.ApplyCampaignFinalFragment"
+        android:label="fragment_apply_campaign_final"
+        tools:layout="@layout/fragment_apply_campaign_final" >
+        <action
+            android:id="@+id/action_applyCampaignFinalFragment_to_availableInstallersFragment"
+            app:destination="@id/availableInstallersFragment" />
+    </fragment>
 </navigation>

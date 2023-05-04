@@ -2,20 +2,18 @@ package com.mycompany.advioo.di
 
 import android.app.Application
 import android.content.Context
-import android.location.LocationListener
 import android.location.LocationManager
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
-import com.instacart.truetime.time.TrueTimeImpl
-import com.mycompany.advioo.AdviooApplication
 import com.mycompany.advioo.R
 import com.mycompany.advioo.api.CityAPI
 import com.mycompany.advioo.api.PinfoAPI
 import com.mycompany.advioo.api.TimeAPI
-import com.mycompany.advioo.models.user.User
+import com.mycompany.advioo.models.user.Driver
+import com.mycompany.advioo.models.user.UserCity
 import com.mycompany.advioo.repo.*
 import com.mycompany.advioo.util.HaversineCalculateDistance
 import com.mycompany.advioo.util.Util.BASE_URL
@@ -108,6 +106,10 @@ object AppModule {
 
     @Singleton
     @Provides
+    fun provideNormalInstallerRepository(db: FirebaseFirestore) = InstallerRepository(db) as InstallerRepositoryInterface
+
+    @Singleton
+    @Provides
     fun provideHaversine() : HaversineCalculateDistance{
         return HaversineCalculateDistance()
     }
@@ -118,11 +120,22 @@ object AppModule {
         return context.getSystemService(Context.LOCATION_SERVICE) as LocationManager
     }
 
+    @Singleton
+    @Provides
+    fun provideUserCityObject() : UserCity{
+        return UserCity(
+            stateId = "",
+            cityId = "",
+            stateName = "",
+            cityName = "",
+        )
+    }
+
 
     @Singleton
     @Provides
-    fun provideUserObject(): User {
-        return User(
+    fun provideUserObject(userCity: UserCity): Driver {
+        return Driver(
             id = "",
             firstName = "",
             lastName = "",
@@ -141,7 +154,8 @@ object AppModule {
             licensePlate ="",
             allowedContact = false,
             avgKmDriven = "",
-            rideShareDriver = false
+            rideShareDriver = false,
+            userCity = userCity
         )
     }
 
