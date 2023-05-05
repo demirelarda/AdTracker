@@ -14,23 +14,24 @@ import javax.inject.Inject
 
 class CampaignRepository @Inject constructor(
     private val db: FirebaseFirestore
-) : CampaignRepositoryInterface{
+) : CampaignRepositoryInterface {
 
     private val campaignsCollection = db.collection("campaigns")
 
-    @ExperimentalCoroutinesApi
-    override fun getCampaigns(): Flow<List<Campaign>> = callbackFlow {
-        val listenerRegistration = campaignsCollection.addSnapshotListener { value, error ->
-            if (error != null) {
-                close(error)
-                return@addSnapshotListener
+    override fun getCampaigns(stateId: String): LiveData<List<Campaign>> {
+        val liveData = MutableLiveData<List<Campaign>>()
+
+        campaignsCollection.whereEqualTo("campaignStateId", stateId)
+            .addSnapshotListener { value, error ->
+                if (error != null) {
+                    liveData.value = emptyList()
+                    return@addSnapshotListener
+                }
+
+                liveData.value = value?.toCampaigns() ?: emptyList()
             }
 
-            val campaigns = value?.toCampaigns() ?: emptyList()
-            trySend(campaigns).isSuccess
-        }
-
-        awaitClose { listenerRegistration.remove() }
+        return liveData
     }
 
 

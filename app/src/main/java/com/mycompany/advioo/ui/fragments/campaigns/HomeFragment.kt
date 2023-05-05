@@ -71,15 +71,15 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
         homeViewModel.failState.observe(viewLifecycleOwner) { isFail ->
             if (isFail) {
-                SnackbarHelper.showErrorSnackBar(requireView(),getString(R.string.home_feed_error))
+                SnackbarHelper.showErrorSnackBar(requireView(), getString(R.string.home_feed_error))
             }
         }
 
         homeViewModel.campaigns.observe(viewLifecycleOwner) { campaigns ->
             homeFeedAdapter.campaigns = campaigns
         }
-
     }
+
 
 
 }
