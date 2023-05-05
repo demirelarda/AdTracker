@@ -14,6 +14,7 @@ import com.bumptech.glide.RequestManager
 import com.mycompany.advioo.R
 import com.mycompany.advioo.adapters.InstallerListAdapter
 import com.mycompany.advioo.databinding.FragmentAvailableInstallersBinding
+import com.mycompany.advioo.models.campaign.LatLngPoint
 import com.mycompany.advioo.models.campaignapplication.CampaignApplication
 import com.mycompany.advioo.models.installer.Installer
 import com.mycompany.advioo.models.user.UserCity
@@ -82,12 +83,8 @@ class AvailableInstallersFragment : Fragment() {
         }
 
         binding.tvSeeInstallersOnMap.setOnClickListener {
-            val mapCoordinateList : ArrayList<UserCity> = ArrayList()
-            for(installer in installerList){
-                mapCoordinateList.add(installer.installerLocation)
-            }
-            println("array = "+mapCoordinateList.toTypedArray())
-            val action = AvailableInstallersFragmentDirections.actionAvailableInstallersFragmentToFullMapFragment(mapCoordinateList.toTypedArray())
+
+            val action = AvailableInstallersFragmentDirections.actionAvailableInstallersFragmentToFullMapFragment(installerList.toTypedArray())
             Navigation.findNavController(requireView()).navigate(action)
         }
 
@@ -121,6 +118,9 @@ class AvailableInstallersFragment : Fragment() {
 
         availableInstallersViewModel.installerList.observe(viewLifecycleOwner){installers->
             installerListAdapter.installers = installers
+            if(installers.isEmpty()){
+                binding.tvSeeInstallersOnMap.isClickable = false
+            }
             installerList.addAll(installers)
         }
     }

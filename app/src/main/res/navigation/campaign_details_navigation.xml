@@ -43,8 +43,13 @@
         android:label="fragment_full_map"
         tools:layout="@layout/fragment_full_map" >
         <argument
-            android:name="mapCoordinateList"
-            app:argType="com.mycompany.advioo.models.user.UserCity[]"
+            android:name="installerListMap"
+            app:argType="com.mycompany.advioo.models.installer.Installer[]"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <argument
+            android:name="campaignBorderListFullMap"
+            app:argType="com.mycompany.advioo.models.campaign.LatLngPoint[]"
             app:nullable="true"
             android:defaultValue="@null" />
     </fragment>

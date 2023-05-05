@@ -78,7 +78,7 @@
                             android:layout_height="wrap_content"
                             android:textSize="16sp"
                             android:textStyle="bold"
-                            android:text="@string/ending_date"
+                            android:text="@string/duration"
                             android:layout_marginEnd="5dp">
                         </TextView>
 
@@ -89,7 +89,7 @@
                             android:textSize="16sp"
                             android:textStyle="bold"
                             android:textColor="@color/black"
-                            tools:text="03.05.2023">
+                            tools:text="8 Weeks">
                         </TextView>
 
                     </LinearLayout>
@@ -245,8 +245,9 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="30dp"
                     android:layout_marginEnd="16dp"
+                    android:layout_marginBottom="20dp"
                     android:background="@drawable/button_background_blue"
-                    android:text="@string/apply"
+                    android:text="@string/enroll"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
                     android:textSize="16sp">

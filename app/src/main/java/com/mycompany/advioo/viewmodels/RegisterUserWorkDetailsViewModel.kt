@@ -5,20 +5,28 @@ import android.widget.CheckBox
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.UserProfileChangeRequest
 import com.mycompany.advioo.R
 import com.mycompany.advioo.models.auth.RegisterResult
+import com.mycompany.advioo.models.localuser.LocalDriver
 import com.mycompany.advioo.models.user.Driver
 import com.mycompany.advioo.repo.UserRepositoryInterface
+import com.mycompany.advioo.repo.local.LocalDriverRepositoryInterface
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class RegisterUserWorkDetailsViewModel @Inject constructor(
     private val repository : UserRepositoryInterface,
     private val auth: FirebaseAuth,
+    private val localDriverRepository: LocalDriverRepositoryInterface
 )  : ViewModel() {
+
+
+    private val _driver = MutableLiveData<Driver>()
 
 
     private val _loadingState = MutableLiveData<Boolean>()
@@ -35,16 +43,36 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
 
 
 
-    fun uploadUserData(driver: Driver) {
+    private fun uploadUserData(driver: Driver) {
         repository.uploadUserData(driver)
             .addOnSuccessListener {
                 _loadingState.postValue(false)
                 _successState.postValue(true)
+                _driver.postValue(driver)
+                val localDriver = LocalDriver(
+                    id = driver.id,
+                    name = driver.firstName,
+                    surname = driver.lastName,
+                    email = driver.email,
+                    stateId = driver.userCity.stateId,
+                    stateName = driver.userCity.stateName,
+                    cityName = driver.userCity.cityName,
+                    cityId = driver.userCity.cityId)
+
+                viewModelScope.launch {
+                    saveDriverToRoom(localDriver)
+                }
+
             }
             .addOnFailureListener {
                 _loadingState.postValue(false)
                 _failState.postValue(false)
             }
+    }
+
+
+    private suspend fun saveDriverToRoom(localDriver: LocalDriver) {
+        localDriverRepository.saveDriver(localDriver)
     }
 
 

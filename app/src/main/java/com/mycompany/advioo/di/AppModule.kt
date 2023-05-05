@@ -12,9 +12,13 @@ import com.mycompany.advioo.R
 import com.mycompany.advioo.api.CityAPI
 import com.mycompany.advioo.api.PinfoAPI
 import com.mycompany.advioo.api.TimeAPI
+import com.mycompany.advioo.dao.DriverDao
+import com.mycompany.advioo.db.UserDatabase
 import com.mycompany.advioo.models.user.Driver
 import com.mycompany.advioo.models.user.UserCity
 import com.mycompany.advioo.repo.*
+import com.mycompany.advioo.repo.local.LocalDriverRepository
+import com.mycompany.advioo.repo.local.LocalDriverRepositoryInterface
 import com.mycompany.advioo.util.HaversineCalculateDistance
 import com.mycompany.advioo.util.Util.BASE_URL
 import com.mycompany.advioo.util.Util.PINFO_BASE_URL
@@ -107,6 +111,29 @@ object AppModule {
     @Singleton
     @Provides
     fun provideNormalInstallerRepository(db: FirebaseFirestore) = InstallerRepository(db) as InstallerRepositoryInterface
+
+
+
+    @Singleton
+    @Provides
+    fun provideAppDatabase(@ApplicationContext context: Context): UserDatabase {
+        return UserDatabase.getDatabase(context)
+    }
+
+    @Singleton
+    @Provides
+    fun provideLocalDriverDao(userDatabase: UserDatabase): DriverDao {
+        return userDatabase.driverDao()
+    }
+
+    @Singleton
+    @Provides
+    fun provideLocalDriverRepository(driverDao: DriverDao): LocalDriverRepositoryInterface {
+        return LocalDriverRepository(driverDao)
+    }
+
+
+
 
     @Singleton
     @Provides

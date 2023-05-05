@@ -67,31 +67,29 @@ class CampaignDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         campaign = if (requireActivity().intent.hasExtra("campaign")) {
             requireActivity().intent.getParcelableExtra("campaign")!!
-        } else{
-            campaignApplicationSharedViewModel.campaignApplication.value?.selectedCampaign ?: Campaign()
+        } else {
+            campaignApplicationSharedViewModel.campaignApplication.value?.selectedCampaign
+                ?: Campaign()
         }
 
-        binding.radioButtonLight.setOnClickListener { updatePriceTextColors() }
-        binding.radioButtonAdvanced.setOnClickListener { updatePriceTextColors() }
-        binding.radioButtonPro.setOnClickListener { updatePriceTextColors() }
-        updatePriceTextColors()
-        //binding.tvCityCampaignDetails.text = campaign.city
-        binding.tvLightPrice.text = campaign.campaignLightPaymentRange
-        binding.tvProPrice.text = campaign.campaignProPaymentRange
-        binding.tvAdvancedPrice.text = campaign.campaignAdvPaymentRange
-        binding.tvCampaignDetailsTitle.text = campaign.campaignTitle
-        glide.load(campaign.campaignImageURL).into(binding.ivCampaignDetailsImage)
-        if (!(campaign.availableCampaignPlans.contains(0))) {
-            binding.radioButtonLight.visibility = View.GONE
-            binding.tvLightPrice.visibility = View.GONE
+        setupOnClickListeners()
+        setupViews()
+        setupMapView()
+
+
+    }
+
+
+    private fun setupOnClickListeners() {
+        binding.ivBtnBackFromCampaignDetails.setOnClickListener {
+            val intent = Intent(requireContext(), AppAdActivity::class.java)
+            startActivity(intent)
+            requireActivity().finish()
         }
-        if (!(campaign.availableCampaignPlans.contains(1))) {
-            binding.radioButtonAdvanced.visibility = View.GONE
-            binding.tvAdvancedPrice.visibility = View.GONE
-        }
-        if (!(campaign.availableCampaignPlans.contains(2))) {
-            binding.radioButtonPro.visibility = View.GONE
-            binding.tvProPrice.visibility = View.GONE
+
+        binding.tvCampaignMapGoToFullPage.setOnClickListener {
+            val action = CampaignDetailsFragmentDirections.actionCampaignDetailsToFullMapFragment(null,campaign.mapBorderLocationList.toTypedArray())
+            Navigation.findNavController(requireView()).navigate(action)
         }
 
         binding.btnApplyCampaignDetails.setOnClickListener {
@@ -111,7 +109,6 @@ class CampaignDetailsFragment : Fragment() {
                 campaignApplicationSharedViewModel.setSelectedCampaignLevel(selectedCampaignLevel)
 
 
-
                 val action =
                     CampaignDetailsFragmentDirections.actionCampaignDetailsToAvailableInstallersFragment(
                         campaignApplicationObject
@@ -120,16 +117,31 @@ class CampaignDetailsFragment : Fragment() {
             }
 
         }
+    }
 
-        binding.ivBtnBackFromCampaignDetails.setOnClickListener {
-            val intent = Intent(requireContext(), AppAdActivity::class.java)
-            startActivity(intent)
-            requireActivity().finish()
+    private fun setupViews() {
+        glide.load(campaign.campaignImageURL).into(binding.ivCampaignDetailsImage)
+        if (!(campaign.availableCampaignPlans.contains(0))) {
+            binding.radioButtonLight.visibility = View.GONE
+            binding.tvLightPrice.visibility = View.GONE
         }
-
-
-
-        setupMapView()
+        if (!(campaign.availableCampaignPlans.contains(1))) {
+            binding.radioButtonAdvanced.visibility = View.GONE
+            binding.tvAdvancedPrice.visibility = View.GONE
+        }
+        if (!(campaign.availableCampaignPlans.contains(2))) {
+            binding.radioButtonPro.visibility = View.GONE
+            binding.tvProPrice.visibility = View.GONE
+        }
+        binding.radioButtonLight.setOnClickListener { updatePriceTextColors() }
+        binding.radioButtonAdvanced.setOnClickListener { updatePriceTextColors() }
+        binding.radioButtonPro.setOnClickListener { updatePriceTextColors() }
+        updatePriceTextColors()
+        //binding.tvCityCampaignDetails.text = campaign.city
+        binding.tvLightPrice.text = campaign.campaignLightPaymentRange
+        binding.tvProPrice.text = campaign.campaignProPaymentRange
+        binding.tvAdvancedPrice.text = campaign.campaignAdvPaymentRange
+        binding.tvCampaignDetailsTitle.text = campaign.campaignTitle
     }
 
 
