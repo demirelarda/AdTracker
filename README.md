@@ -9,6 +9,7 @@ Introducing our revolutionary new app that lets you turn your vehicle into a mov
 * Dagger-Hilt dependency injection
 * Retrofit2
 * Firebase
+* Room
 
 ## Copyright
 
