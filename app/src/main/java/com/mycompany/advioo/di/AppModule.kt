@@ -4,6 +4,7 @@ import android.app.Application
 import android.content.Context
 import android.location.LocationManager
 import com.bumptech.glide.Glide
+import com.bumptech.glide.RequestManager
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
@@ -85,11 +86,16 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun injectGlide(@ApplicationContext context: Context) = Glide.with(context)
-        .setDefaultRequestOptions(
-            RequestOptions().placeholder(R.drawable.car_icon_notification)
-                .error(R.drawable.car_icon_notification)
-        )
+    fun injectGlide(@ApplicationContext context: Context): RequestManager {
+        val requestOptions = RequestOptions()
+            .placeholder(android.R.drawable.progress_horizontal)
+            .error(R.drawable.iv_rounded_bg)
+
+        return Glide.with(context)
+            .setDefaultRequestOptions(requestOptions)
+    }
+
+
 
 
     @Singleton

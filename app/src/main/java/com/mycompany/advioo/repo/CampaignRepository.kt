@@ -25,6 +25,7 @@ class CampaignRepository @Inject constructor(
             .addSnapshotListener { value, error ->
                 if (error != null) {
                     liveData.value = emptyList()
+                    println("error while getting campaigns from firestore = "+error.localizedMessage)
                     return@addSnapshotListener
                 }
 

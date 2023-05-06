@@ -7,7 +7,10 @@ import com.mycompany.advioo.models.user.Driver
 interface UserRepositoryInterface {
 
     fun uploadUserData(driver: Driver) : Task<Void>
+
     fun uploadLocationData(userId: String,locationData: LocationSampleData) : Task<Void>
+
+    fun getDriver(uid: String): Task<Driver?>
 
 
 }

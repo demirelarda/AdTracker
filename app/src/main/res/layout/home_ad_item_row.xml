@@ -21,15 +21,28 @@
             android:layout_height="wrap_content"
             app:cardCornerRadius="10dp">
 
-            <ImageView
-                android:id="@+id/iv_home_campaign_row"
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
-                android:src="@drawable/ic_launcher_background"
-                android:scaleType="centerCrop"
-                android:layout_gravity="center">
-            </ImageView>
+                android:layout_height="wrap_content">
+
+                <ImageView
+                    android:id="@+id/iv_home_campaign_row"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:adjustViewBounds="true"
+                    android:src="@drawable/ic_launcher_background"
+                    android:scaleType="centerCrop"
+                    android:layout_gravity="center">
+                </ImageView>
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center" />
+
+            </FrameLayout>
+
 
         </androidx.cardview.widget.CardView>
 

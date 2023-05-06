@@ -88,6 +88,14 @@ class AvailableInstallersFragment : Fragment() {
             Navigation.findNavController(requireView()).navigate(action)
         }
 
+        installerListAdapter.setOnItemClickListener {installer->
+            campaignApplication.selectedInstaller = installer
+            campaignApplicationSharedViewModel.setSelectedInstaller(installer)
+            val action = AvailableInstallersFragmentDirections.actionAvailableInstallersFragmentToApplyCampaignFinalFragment()
+            Navigation.findNavController(requireView()).navigate(action)
+        }
+
+
     }
 
     private fun setupViews() {

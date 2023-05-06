@@ -118,6 +118,12 @@
     <string name="please_select_a_campaign_level">Please select a campaign level!</string>
     <string name="failed_to_load_installers">Failed to load installers!</string>
     <string name="available_installers">Available Installers</string>
+    <string name="complete_enrollment">Complete Enrollment</string>
+    <string name="installer_name">Installer Name</string>
+    <string name="installer_address">Installer Address</string>
+    <string name="get_directions_for_installer">Get directions for installer</string>
+    <string name="select_this_installer">Select this installer</string>
+    <string name="please_confirm_installer">Please confirm that you have selected this installer.</string>
 
 
     <string-array name="car_conditions">

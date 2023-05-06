@@ -105,6 +105,8 @@ class CampaignDetailsFragment : Fragment() {
 
                 )
 
+                campaignApplicationSharedViewModel.setApplicantId(authInstance.currentUser?.uid!!)
+                campaignApplicationSharedViewModel.setApplicantFullName(authInstance.currentUser?.displayName!!)
                 campaignApplicationSharedViewModel.setSelectedCampaign(campaign)
                 campaignApplicationSharedViewModel.setSelectedCampaignLevel(selectedCampaignLevel)
 

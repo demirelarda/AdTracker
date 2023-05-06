@@ -17,6 +17,6 @@ data class CampaignApplication(
     val applicationDate: Timestamp = Timestamp.now(),
     val selectedCampaign: Campaign = Campaign(),
     val selectedCampaignLevel: String = "",
-    val selectedInstaller: Installer = Installer(),
+    var selectedInstaller: Installer = Installer(),
 
     ) : Parcelable

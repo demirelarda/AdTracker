@@ -15,6 +15,7 @@
     <color name="off_white">#FAF9F6</color>
     <color name="light_gray2">#E5E4E2</color>
     <color name="colorBorder">#E8E6E6</color>
+    <color name="app_page_bg_color">#FAFAFA</color>
     <color name="gray_secondary">#989898</color>
     <color name="white_blue">#DEEDFF</color>
     <color name="colorSnackBarSuccess">#04acec</color>
