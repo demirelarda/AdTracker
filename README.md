@@ -10,4 +10,7 @@ Introducing our revolutionary new app that lets you turn your vehicle into a mov
 * Retrofit2
 * Firebase
 
-### Planned project completion time(Android+IOS): June 2023
+Copyright (c) 2023 Arda Demirel. All Rights Reserved.
+
+All source code and content of this project are copyrighted by the project owner, Arda Demirel. Unauthorized use, copying, modification, or distribution is prohibited. To obtain permission, you must contact the project owner.
+
