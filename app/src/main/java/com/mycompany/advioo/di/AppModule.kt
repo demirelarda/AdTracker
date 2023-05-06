@@ -118,6 +118,9 @@ object AppModule {
     @Provides
     fun provideNormalInstallerRepository(db: FirebaseFirestore) = InstallerRepository(db) as InstallerRepositoryInterface
 
+    @Singleton
+    @Provides
+    fun provideNormalCampaignEnrollmentRepository(db: FirebaseFirestore) = CampaignEnrollmentRepository(db) as CampaignEnrollmentRepositoryInterface
 
 
     @Singleton

@@ -88,7 +88,7 @@ class ApplyCampaignFinalFragment : Fragment() {
             val application : Application = AdviooApplication()
             val currentTime = (application as AdviooApplication).trueTime.now()
             campaignApplicationSharedViewModel.setApplicationDate(Timestamp(currentTime))
-            campaignApplicationSharedViewModel.enrollCampaign()
+            campaignApplicationSharedViewModel.uploadCampaignApplication()
         }
         else{
             SnackbarHelper.showErrorSnackBar(requireView(),getString(R.string.please_confirm_installer))

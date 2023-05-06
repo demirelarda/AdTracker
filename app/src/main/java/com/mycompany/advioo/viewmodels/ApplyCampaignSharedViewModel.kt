@@ -8,8 +8,14 @@ import com.mycompany.advioo.models.campaign.Campaign
 import com.mycompany.advioo.models.campaignapplication.CampaignApplication
 import com.mycompany.advioo.models.installer.Installer
 import com.mycompany.advioo.models.user.Driver
+import com.mycompany.advioo.repo.CampaignEnrollmentRepositoryInterface
+import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
 
-class ApplyCampaignSharedViewModel : ViewModel() {
+@HiltViewModel
+class ApplyCampaignSharedViewModel @Inject constructor(
+    private val repo: CampaignEnrollmentRepositoryInterface
+) : ViewModel() {
 
     private val _campaignApplication = MutableLiveData<CampaignApplication>(CampaignApplication())
     val campaignApplication: LiveData<CampaignApplication>
@@ -53,7 +59,7 @@ class ApplyCampaignSharedViewModel : ViewModel() {
     fun setApplicantId(applicantId: String){
         val currentCampaignApplicationObject = _campaignApplication.value
         currentCampaignApplicationObject?.let {
-            val updatedCampaignApplication = it.copy(applicationId = applicantId)
+            val updatedCampaignApplication = it.copy(applicantId = applicantId)
             _campaignApplication.value = updatedCampaignApplication
         }
     }
@@ -75,8 +81,8 @@ class ApplyCampaignSharedViewModel : ViewModel() {
     }
 
 
-    fun enrollCampaign(){
-
+    fun uploadCampaignApplication(){
+        repo.uploadCampaignApplication(_campaignApplication.value!!)
     }
 
 
