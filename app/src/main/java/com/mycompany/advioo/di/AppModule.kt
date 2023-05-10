@@ -13,6 +13,7 @@ import com.mycompany.advioo.R
 import com.mycompany.advioo.api.CityAPI
 import com.mycompany.advioo.api.PinfoAPI
 import com.mycompany.advioo.api.TimeAPI
+import com.mycompany.advioo.dao.CampaignApplicationDao
 import com.mycompany.advioo.dao.DriverDao
 import com.mycompany.advioo.db.UserDatabase
 import com.mycompany.advioo.models.user.Driver
@@ -96,8 +97,6 @@ object AppModule {
     }
 
 
-
-
     @Singleton
     @Provides
     fun provideFirebaseAuth(): FirebaseAuth = FirebaseAuth.getInstance()
@@ -122,6 +121,10 @@ object AppModule {
     @Provides
     fun provideNormalCampaignEnrollmentRepository(db: FirebaseFirestore) = CampaignEnrollmentRepository(db) as CampaignEnrollmentRepositoryInterface
 
+    @Singleton
+    @Provides
+    fun provideNormalCampaignApplicationRepository(db: FirebaseFirestore) = CampaignApplicationRepository(db) as CampaignApplicationRepositoryInterface
+
 
     @Singleton
     @Provides
@@ -137,10 +140,15 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideLocalDriverRepository(driverDao: DriverDao): LocalDriverRepositoryInterface {
-        return LocalDriverRepository(driverDao)
+    fun provideLocalCampaignApplicationDao(userDatabase: UserDatabase) : CampaignApplicationDao{
+        return  userDatabase.campaignApplicationDao()
     }
 
+    @Singleton
+    @Provides
+    fun provideLocalDriverRepository(driverDao: DriverDao,campaignApplicationDao: CampaignApplicationDao): LocalDriverRepositoryInterface {
+        return LocalDriverRepository(driverDao,campaignApplicationDao)
+    }
 
 
 
