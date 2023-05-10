@@ -6,6 +6,6 @@ import com.mycompany.advioo.models.campaignapplication.CampaignApplication
 
 interface CampaignApplicationRepositoryInterface {
 
-    fun getCampaignApplication(uid: String): Task<CampaignApplication>
+    fun getCampaignApplicationsByApplicantId(uid: String): Task<List<CampaignApplication>>
 
 }
