@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".MyCampaignsFragment"
+    android:background="@color/app_gray">
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="40dp">
+
+        <TextView
+            android:layout_marginStart="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/my_active_campaign"
+            android:textStyle="bold"
+            android:textSize="20sp">
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_campaign_name_my_campaigns"
+            android:layout_marginStart="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Campaign Name Test"
+            android:textSize="16sp">
+        </TextView>
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_marginTop="15dp"
+            android:layout_height="wrap_content"
+            tools:layout_height="210dp">
+            <ImageView
+                android:id="@+id/iv_campaign_image_my_campaigns"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@drawable/iv_rounded_bg"
+                android:clipToOutline="true"
+                android:contentDescription="@string/details"
+                android:scaleType="centerCrop"
+                tools:src="@drawable/ic_launcher_background">
+            </ImageView>
+
+        </FrameLayout>
+
+        <TextView
+            android:id="@+id/tv_see_campaign_details_my_campaigns"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/see_details"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="20dp"
+            android:padding="8dp"
+            android:background="@color/white"
+            app:drawableEndCompat="@drawable/baseline_info_24">
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_see_stats_my_campaigns"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/see_campaign_stats"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="22dp"
+            android:padding="8dp"
+            android:background="@color/white"
+            app:drawableEndCompat="@drawable/baseline_insert_chart_24">
+        </TextView>
+
+
+        <TextView
+            android:id="@+id/tv_start_resume_campaign_my_campaigns"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/start_campaign"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginStart="5dp"
+            android:layout_marginTop="22dp"
+            android:padding="8dp"
+            android:background="@color/white"
+            app:drawableEndCompat="@drawable/baseline_play_circle_24">
+        </TextView>
+
+    </LinearLayout>
+
+
+</FrameLayout>

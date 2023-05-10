@@ -5,6 +5,7 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
+import com.mycompany.advioo.MyCampaignsFragment
 import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.ActivityAppAdBinding
 import com.mycompany.advioo.di.AppModule
@@ -38,7 +39,7 @@ class AppAdActivity : AppCompatActivity() {
         binding.bottomNavView.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.home -> replaceFragment(HomeFragment())
-                R.id.myCampaigns -> replaceFragment(RunCampaignFragment())
+                R.id.myCampaigns -> replaceFragment(MyCampaignsFragment())
                 R.id.account -> replaceFragment(UserSettingsFragment())
                 else ->{
 

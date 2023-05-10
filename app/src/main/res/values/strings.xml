@@ -124,7 +124,11 @@
     <string name="get_directions_for_installer">Get directions for installer</string>
     <string name="select_this_installer">Select this installer</string>
     <string name="please_confirm_installer">Please confirm that you have selected this installer.</string>
-
+    <string name="my_active_campaign">My Active Campaign</string>
+    <string name="see_details">See Details</string>
+    <string name="start_campaign">Start Campaign</string>
+    <string name="resume_campaign">Resume Campaign</string>
+    <string name="see_campaign_stats">See Stats</string>
 
     <string-array name="car_conditions">
         <item>Like New</item>
