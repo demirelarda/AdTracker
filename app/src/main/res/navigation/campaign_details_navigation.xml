@@ -12,10 +12,18 @@
         tools:layout="@layout/fragment_campaign_details" >
         <action
             android:id="@+id/action_campaignDetails_to_availableInstallersFragment"
-            app:destination="@id/availableInstallersFragment" />
+            app:destination="@id/availableInstallersFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_campaignDetails_to_fullMapFragment"
-            app:destination="@id/fullMapFragment" />
+            app:destination="@id/fullMapFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"/>
     </fragment>
     <fragment
         android:id="@+id/availableInstallersFragment"
@@ -27,7 +35,11 @@
             app:destination="@id/campaignDetails" />
         <action
             android:id="@+id/action_availableInstallersFragment_to_fullMapFragment"
-            app:destination="@id/fullMapFragment" />
+            app:destination="@id/fullMapFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"/>
         <argument
             android:name="campaignApplicationObject"
             app:argType="com.mycompany.advioo.models.campaignapplication.CampaignApplication"
@@ -35,7 +47,11 @@
             android:defaultValue="@null" />
         <action
             android:id="@+id/action_availableInstallersFragment_to_applyCampaignFinalFragment"
-            app:destination="@id/applyCampaignFinalFragment" />
+            app:destination="@id/applyCampaignFinalFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
     </fragment>
     <fragment
         android:id="@+id/fullMapFragment"
