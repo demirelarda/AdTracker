@@ -35,7 +35,20 @@ class AppAdActivity : AppCompatActivity() {
         val view = binding.root
         setContentView(view)
         locationManager = AppModule.provideLocationManager(this)
-        replaceFragment(HomeFragment())
+
+        if(intent.hasExtra("toRunCampaign")){
+            if(intent.getBooleanExtra("toRunCampaign",false)){
+                replaceFragment(RunCampaignFragment())
+            }
+            else{
+                replaceFragment(HomeFragment())
+            }
+        }
+        else{
+            replaceFragment(HomeFragment())
+        }
+
+
         binding.bottomNavView.setOnItemSelectedListener {
             when(it.itemId){
                 R.id.home -> replaceFragment(HomeFragment())

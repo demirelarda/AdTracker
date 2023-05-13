@@ -8,13 +8,23 @@
     android:background="@color/app_gray">
 
 
+    <ProgressBar
+        android:id="@+id/progressbarMyCampaigns"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+    </ProgressBar>
+
+
     <LinearLayout
+        android:id="@+id/ll_my_campaigns"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:orientation="vertical"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginTop="40dp">
+
 
         <TextView
             android:layout_marginStart="5dp"
@@ -36,11 +46,11 @@
 
         <FrameLayout
             android:layout_width="match_parent"
-            android:layout_marginTop="15dp"
-            android:layout_height="wrap_content"
-            tools:layout_height="210dp">
+            android:layout_height="210dp"
+            android:layout_marginTop="15dp">
+
             <ImageView
-                android:id="@+id/iv_campaign_image_my_campaigns"
+                android:id="@+id/iv_my_campaigns_campaign"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@drawable/iv_rounded_bg"
@@ -49,6 +59,7 @@
                 android:scaleType="centerCrop"
                 tools:src="@drawable/ic_launcher_background">
             </ImageView>
+
 
         </FrameLayout>
 
@@ -59,9 +70,10 @@
             android:text="@string/see_details"
             android:textStyle="bold"
             android:textSize="16sp"
+            android:focusable="true"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
-            android:layout_marginTop="20dp"
+            android:layout_marginTop="30dp"
             android:padding="8dp"
             android:background="@color/white"
             app:drawableEndCompat="@drawable/baseline_info_24">
@@ -78,6 +90,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="22dp"
             android:padding="8dp"
+            android:focusable="true"
             android:background="@color/white"
             app:drawableEndCompat="@drawable/baseline_insert_chart_24">
         </TextView>
@@ -94,6 +107,7 @@
             android:layout_marginStart="5dp"
             android:layout_marginTop="22dp"
             android:padding="8dp"
+            android:focusable="true"
             android:background="@color/white"
             app:drawableEndCompat="@drawable/baseline_play_circle_24">
         </TextView>

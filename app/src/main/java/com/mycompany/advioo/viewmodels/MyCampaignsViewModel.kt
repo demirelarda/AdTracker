@@ -34,6 +34,9 @@ class MyCampaignsViewModel @Inject constructor(
     val campaignApplication : LiveData<LocalCampaignApplication>
         get() = _campaignApplication
 
+    val _campaignApplicationIsEmpty = MutableLiveData<Boolean>()
+
+
     private val _saveCampaignApplicationSuccess = MutableLiveData<Boolean>()
     val saveCampaignApplicationSuccess: LiveData<Boolean>
         get() = _saveCampaignApplicationSuccess
@@ -81,17 +84,23 @@ class MyCampaignsViewModel @Inject constructor(
         println("call from firestore to get campaign application object ")
         _loadingState.value = true
         campaignApplicationRepository.getCampaignApplicationsByApplicantId(auth.uid!!).addOnSuccessListener {campaignApplication->
-            val localCampaignApplication = LocalCampaignApplication(
-                applicationId = campaignApplication[0].applicationId,
-                applicantId = campaignApplication[0].applicantId,
-                applicantFullName = campaignApplication[0].applicantFullName,
-                applicationDate = campaignApplication[0].applicationDate.toDate().time,
-                selectedInstaller = campaignApplication[0].selectedInstaller,
-                selectedCampaign = campaignApplication[0].selectedCampaign,
-                selectedCampaignLevel = campaignApplication[0].selectedCampaignLevel
-            )
-            saveCampaignApplication(localCampaignApplication)
-            _campaignApplication.value = localCampaignApplication
+            if(campaignApplication.isNotEmpty()){
+                _campaignApplicationIsEmpty.value = false
+                val localCampaignApplication = LocalCampaignApplication(
+                    applicationId = campaignApplication[0].applicationId,
+                    applicantId = campaignApplication[0].applicantId,
+                    applicantFullName = campaignApplication[0].applicantFullName,
+                    applicationDate = campaignApplication[0].applicationDate.toDate().time,
+                    selectedInstaller = campaignApplication[0].selectedInstaller,
+                    selectedCampaign = campaignApplication[0].selectedCampaign,
+                    selectedCampaignLevel = campaignApplication[0].selectedCampaignLevel
+                )
+                saveCampaignApplication(localCampaignApplication)
+                _campaignApplication.value = localCampaignApplication
+            }
+            else{
+                _campaignApplicationIsEmpty.value = true
+            }
         }
 
     }
@@ -101,7 +110,13 @@ class MyCampaignsViewModel @Inject constructor(
         viewModelScope.launch {
             try {
                 val localCampaignApplication = localDriverRepository.getCampaignApplication(auth.uid!!)
-                _campaignApplication.value = localCampaignApplication!!
+                if(localCampaignApplication != null){
+                    _campaignApplicationIsEmpty.value = false
+                    _campaignApplication.value = localCampaignApplication!!
+                }
+                else{
+                    _campaignApplicationIsEmpty.value = true
+                }
                 println("local application")
             }
             catch (error:Throwable){
@@ -115,6 +130,7 @@ class MyCampaignsViewModel @Inject constructor(
     private fun saveCampaignApplication(localCampaignApplication: LocalCampaignApplication){
         viewModelScope.launch {
             try {
+                _loadingState.value = false
                 localDriverRepository.saveCampaignApplication(localCampaignApplication)
                 _saveCampaignApplicationSuccess.value = true
                 _saveCampaignApplicationFailure.value = null
