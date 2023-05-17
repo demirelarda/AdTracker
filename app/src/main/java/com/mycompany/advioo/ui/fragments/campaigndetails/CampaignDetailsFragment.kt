@@ -16,11 +16,13 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
+import androidx.viewpager2.widget.ViewPager2
 import com.bumptech.glide.RequestManager
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.mycompany.advioo.BuildConfig
 import com.mycompany.advioo.R
+import com.mycompany.advioo.adapters.CampaignImageAdapter
 import com.mycompany.advioo.databinding.FragmentCampaignDetailsBinding
 import com.mycompany.advioo.models.campaign.Campaign
 import com.mycompany.advioo.models.campaignapplication.CampaignApplication
@@ -45,11 +47,11 @@ class CampaignDetailsFragment : Fragment() {
 
     private var _binding: FragmentCampaignDetailsBinding? = null
     private val binding get() = _binding!!
-    private val campaignDetailsViewModel: CampaignDetailsViewModel by viewModels(ownerProducer = { this })
     private val campaignApplicationSharedViewModel: ApplyCampaignSharedViewModel by activityViewModels()
     private var campaign: Campaign = Campaign()
     private val authInstance = FirebaseAuth.getInstance()
     private lateinit var selectedCampaignLevel: String
+    private lateinit var campaignImageAdapter: CampaignImageAdapter
 
     @Inject
     lateinit var glide: RequestManager
@@ -75,9 +77,48 @@ class CampaignDetailsFragment : Fragment() {
         setupOnClickListeners()
         setupViews()
         setupMapView()
+        setupViewPager()
 
 
     }
+
+    private fun setupViewPager() {
+        val images = mutableListOf<Any>()
+
+
+
+        images.add(campaign.campaignImageURL)
+        images.add(R.drawable.light_car_image)
+        images.add(R.drawable.advanced_car_image)
+        images.add(R.drawable.pro_car_image)
+
+        campaignImageAdapter = CampaignImageAdapter(glide, images).also { adapter ->
+            adapter.onPageClick = { position ->
+                when (position) {
+                    0 -> binding.radioGroup.clearCheck()
+                    1 -> binding.radioButtonLight.isChecked = true
+                    2 -> binding.radioButtonAdvanced.isChecked = true
+                    3 -> binding.radioButtonPro.isChecked = true
+                }
+            }
+        }
+
+        binding.imageSliderCamaign.adapter = campaignImageAdapter
+
+        binding.imageSliderCamaign.registerOnPageChangeCallback(object : ViewPager2.OnPageChangeCallback() {
+            override fun onPageSelected(position: Int) {
+                super.onPageSelected(position)
+                when (position) {
+                    0 -> binding.radioGroup.clearCheck()
+                    1 -> binding.radioButtonLight.isChecked = true
+                    2 -> binding.radioButtonAdvanced.isChecked = true
+                    3 -> binding.radioButtonPro.isChecked = true
+                }
+            }
+        })
+    }
+
+
 
 
     private fun setupOnClickListeners() {
@@ -122,11 +163,7 @@ class CampaignDetailsFragment : Fragment() {
     }
 
     private fun setupViews() {
-        glide.load(campaign.campaignImageURL).into(binding.ivCampaignDetailsImage)
-        if (!(campaign.availableCampaignPlans.contains(0))) {
-            binding.radioButtonLight.visibility = View.GONE
-            binding.tvLightPrice.visibility = View.GONE
-        }
+
         if (!(campaign.availableCampaignPlans.contains(1))) {
             binding.radioButtonAdvanced.visibility = View.GONE
             binding.tvAdvancedPrice.visibility = View.GONE
@@ -225,6 +262,7 @@ class CampaignDetailsFragment : Fragment() {
         val normalBlack = Color.parseColor("#FF000000")
 
         if (binding.radioButtonLight.isChecked) {
+            binding.imageSliderCamaign.currentItem = 1
             binding.tvLightPrice.setTextColor(Color.BLACK)
             binding.tvAdvancedPrice.setTextColor(lightBlack)
             binding.tvProPrice.setTextColor(lightBlack)
@@ -232,6 +270,7 @@ class CampaignDetailsFragment : Fragment() {
             binding.radioButtonPro.setTextColor(lightBlack)
             binding.radioButtonLight.setTextColor(normalBlack)
         } else if (binding.radioButtonAdvanced.isChecked) {
+            binding.imageSliderCamaign.currentItem = 2
             binding.tvLightPrice.setTextColor(lightBlack)
             binding.tvAdvancedPrice.setTextColor(Color.BLACK)
             binding.tvProPrice.setTextColor(lightBlack)
@@ -239,6 +278,7 @@ class CampaignDetailsFragment : Fragment() {
             binding.radioButtonLight.setTextColor(lightBlack)
             binding.radioButtonAdvanced.setTextColor(normalBlack)
         } else if (binding.radioButtonPro.isChecked) {
+            binding.imageSliderCamaign.currentItem = 3
             binding.tvLightPrice.setTextColor(lightBlack)
             binding.tvAdvancedPrice.setTextColor(lightBlack)
             binding.tvProPrice.setTextColor(Color.BLACK)
