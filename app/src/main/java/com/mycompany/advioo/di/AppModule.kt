@@ -13,7 +13,6 @@ import com.mycompany.advioo.R
 import com.mycompany.advioo.api.CityAPI
 import com.mycompany.advioo.api.PinfoAPI
 import com.mycompany.advioo.api.TimeAPI
-import com.mycompany.advioo.dao.CampaignApplicationDao
 import com.mycompany.advioo.dao.DriverDao
 import com.mycompany.advioo.db.UserDatabase
 import com.mycompany.advioo.models.user.Driver
@@ -138,16 +137,12 @@ object AppModule {
         return userDatabase.driverDao()
     }
 
-    @Singleton
-    @Provides
-    fun provideLocalCampaignApplicationDao(userDatabase: UserDatabase) : CampaignApplicationDao{
-        return  userDatabase.campaignApplicationDao()
-    }
+
 
     @Singleton
     @Provides
-    fun provideLocalDriverRepository(driverDao: DriverDao,campaignApplicationDao: CampaignApplicationDao): LocalDriverRepositoryInterface {
-        return LocalDriverRepository(driverDao,campaignApplicationDao)
+    fun provideLocalDriverRepository(driverDao: DriverDao): LocalDriverRepositoryInterface {
+        return LocalDriverRepository(driverDao)
     }
 
 
