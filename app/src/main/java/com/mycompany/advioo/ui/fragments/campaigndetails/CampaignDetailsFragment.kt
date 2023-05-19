@@ -10,10 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioButton
-import android.widget.Toast
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import androidx.viewpager2.widget.ViewPager2
@@ -30,9 +29,7 @@ import com.mycompany.advioo.models.installer.Installer
 import com.mycompany.advioo.ui.activities.AppAdActivity
 import com.mycompany.advioo.util.SnackbarHelper
 import com.mycompany.advioo.viewmodels.ApplyCampaignSharedViewModel
-import com.mycompany.advioo.viewmodels.CampaignDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.launch
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
@@ -52,9 +49,12 @@ class CampaignDetailsFragment : Fragment() {
     private val authInstance = FirebaseAuth.getInstance()
     private lateinit var selectedCampaignLevel: String
     private lateinit var campaignImageAdapter: CampaignImageAdapter
+    private lateinit var enrolledCampaign : String
 
     @Inject
     lateinit var glide: RequestManager
+
+
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -73,6 +73,35 @@ class CampaignDetailsFragment : Fragment() {
             campaignApplicationSharedViewModel.campaignApplication.value?.selectedCampaign
                 ?: Campaign()
         }
+
+        if(requireActivity().intent.hasExtra("enrolledCampaignId")){
+            enrolledCampaign = requireActivity().intent.getStringExtra("enrolledCampaignId")!!
+        }
+
+
+        println("enrolled campaign id = $enrolledCampaign")
+        println("campaign id = "+campaign.campaignId)
+
+        if(enrolledCampaign.isNotEmpty()){
+            if(campaign.campaignId == enrolledCampaign){
+                //enrolled campaign
+                //binding.btnApplyCampaignDetails.isEnabled = false
+                val drawable = ResourcesCompat.getDrawable(resources, R.drawable.disabled_button_background_gray, context?.theme)
+                if (drawable != null) {
+                    binding.btnApplyCampaignDetails.background = drawable
+                }
+            }
+            else{
+                //not enrolled campaign but disable buttons etc.
+                //binding.btnApplyCampaignDetails.isEnabled = false
+                val drawable = ResourcesCompat.getDrawable(resources, R.drawable.disabled_button_background_gray, context?.theme)
+                if (drawable != null) {
+                    binding.btnApplyCampaignDetails.background = drawable
+                }
+            }
+        }
+
+
 
         setupOnClickListeners()
         setupViews()

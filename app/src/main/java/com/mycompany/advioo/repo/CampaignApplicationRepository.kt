@@ -15,6 +15,7 @@ class CampaignApplicationRepository @Inject constructor(
         return campaignApplicationCollection.whereEqualTo("applicantId", uid).get()
             .continueWith { task ->
                 if (task.isSuccessful) {
+                    println("task result isStarted= "+ task.result?.documents?.get(0)!!.toObject(CampaignApplication::class.java)!!.started)
                     task.result?.documents?.mapNotNull { it.toObject(CampaignApplication::class.java) }
                 } else {
                     null

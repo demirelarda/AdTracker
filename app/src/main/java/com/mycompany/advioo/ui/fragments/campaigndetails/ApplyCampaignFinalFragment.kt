@@ -10,6 +10,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
+import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
 import com.google.firebase.Timestamp
 import com.mycompany.advioo.AdviooApplication
@@ -34,6 +35,7 @@ class ApplyCampaignFinalFragment : Fragment() {
     private val binding get() = _binding!!
     private val campaignApplicationSharedViewModel: ApplyCampaignSharedViewModel by activityViewModels()
     private var campaignApplication = CampaignApplication()
+    private var installerDetails: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,16 +53,32 @@ class ApplyCampaignFinalFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        campaignApplication = campaignApplicationSharedViewModel.campaignApplication.value!!
-        setupViews()
+        subscribeToObservers()
+        val bundle = arguments
+        bundle?.let {
+            val args = ApplyCampaignFinalFragmentArgs.fromBundle(it)
+            if(args.campaignApplicationObject != null){
+                campaignApplication = args.campaignApplicationObject!!
+                installerDetails = true
+            }
+            else{
+                campaignApplication = campaignApplicationSharedViewModel.campaignApplication.value!!
+                installerDetails = false
+            }
+
+        }
+        setupViews(installerDetails)
         setupOnClickListeners()
         setupMapView()
-
     }
 
 
 
-    private fun setupViews(){
+    private fun setupViews(installerDetails: Boolean){
+        if(installerDetails){
+            binding.btnEnrollCampaignFinal.visibility = View.GONE
+            binding.cboxSelectThisInstallerLast.visibility = View.GONE
+        }
         binding.tvInstallerNameLastEnroll.text = campaignApplication.selectedInstaller.installerName
         binding.tvInstallerAddress.text = campaignApplication.selectedInstaller.installerAddress
         binding.tvInstallerPhoneNumber.text = campaignApplication.selectedInstaller.installerPhoneNumber
@@ -139,6 +157,37 @@ class ApplyCampaignFinalFragment : Fragment() {
         marker.title = campaignApplication.selectedInstaller.installerName + "\n" + campaignApplication.selectedInstaller.installerAddress
         binding.mapViewLastEnrollment.overlays.add(marker)
 
+    }
+
+    private fun subscribeToObservers(){
+        campaignApplicationSharedViewModel.loadingState.observe(viewLifecycleOwner){loading->
+            if(loading){
+                binding.scrollViewCampaignApplication.visibility = View.GONE
+                binding.progressBarApplyCampaign.visibility = View.VISIBLE
+                binding.btnEnrollCampaignFinal.isEnabled = false
+            }
+            else{
+                binding.scrollViewCampaignApplication.visibility = View.VISIBLE
+                binding.progressBarApplyCampaign.visibility = View.GONE
+                binding.btnEnrollCampaignFinal.isEnabled = true
+            }
+        }
+
+        campaignApplicationSharedViewModel.failState.observe(viewLifecycleOwner){fail->
+            if(fail){
+                SnackbarHelper.showErrorSnackBar(requireView(),getString(R.string.an_error_occurred_network))
+                binding.btnEnrollCampaignFinal.isEnabled = true
+            }
+        }
+
+        campaignApplicationSharedViewModel.successState.observe(viewLifecycleOwner){success->
+            if(success){
+                if(!installerDetails){
+                    val action = ApplyCampaignFinalFragmentDirections.actionApplyCampaignFinalFragmentToApplyCampaignSucessFragment(campaignApplication)
+                    Navigation.findNavController(requireView()).navigate(action)
+                }
+            }
+        }
     }
 
 

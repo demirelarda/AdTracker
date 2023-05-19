@@ -194,7 +194,8 @@ object AppModule {
             allowedContact = false,
             avgKmDriven = "",
             rideShareDriver = false,
-            userCity = userCity
+            userCity = userCity,
+            currentEnrolledCampaign = ""
         )
     }
 

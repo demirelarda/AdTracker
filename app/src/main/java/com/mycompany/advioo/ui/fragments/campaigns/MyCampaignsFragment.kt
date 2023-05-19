@@ -1,4 +1,4 @@
-package com.mycompany.advioo
+package com.mycompany.advioo.ui.fragments.campaigns
 
 
 import android.os.Bundle
@@ -8,8 +8,9 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import com.bumptech.glide.RequestManager
+import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentMyCampaignsBinding
-import com.mycompany.advioo.util.SnackbarHelper
+import com.mycompany.advioo.models.campaignapplication.CampaignApplication
 import com.mycompany.advioo.viewmodels.MyCampaignsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -20,6 +21,7 @@ class MyCampaignsFragment : Fragment() {
     private var _binding: FragmentMyCampaignsBinding? = null
     private val binding get() = _binding!!
     private val myCampaignsViewModel : MyCampaignsViewModel by viewModels(ownerProducer = { this } )
+    private var campaignApplication : CampaignApplication = CampaignApplication()
 
     @Inject
     lateinit var glide: RequestManager
@@ -40,13 +42,38 @@ class MyCampaignsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        myCampaignsViewModel.getCampaignApplication()
         subscribeToObservers()
         setupOnClickListeners()
 
     }
 
     private fun setupViews(){
-
+        binding.tvCampaignNameMyCampaigns.text = campaignApplication.selectedCampaign.campaignTitle
+        binding.llMyCampaigns.visibility = View.VISIBLE
+        binding.tvErrorHaveNotEnrolledCampaign.visibility = View.GONE
+        binding.tvCampaignLevelMyCampaigns.text = campaignApplication.selectedCampaignLevel
+        if(campaignApplication.started){
+            binding.tvStartResumeCampaignMyCampaigns.text = getString(R.string.resume_campaign)
+        }
+        if(campaignApplication.status == 0){
+            binding.tvStartResumeCampaignMyCampaigns.visibility = View.GONE
+            binding.tvCampaignApplicationStatus.text = getString(R.string.waiting_for_installment)
+            binding.tvCampaignApplicationStatus.setTextColor(resources.getColor(R.color.colorSnackBarError))
+        }
+        else{
+            if(campaignApplication.status == 1){
+                binding.tvStartResumeCampaignMyCampaigns.visibility = View.VISIBLE
+                binding.tvCampaignApplicationStatus.text = getString(R.string.ready_to_start)
+                binding.tvCampaignApplicationStatus.setTextColor(resources.getColor(R.color.app_blue))
+            }
+            if(campaignApplication.status == 1 && campaignApplication.started){
+                binding.tvStartResumeCampaignMyCampaigns.visibility = View.VISIBLE
+                binding.tvCampaignApplicationStatus.text = getString(R.string.in_progress)
+                binding.tvCampaignApplicationStatus.setTextColor(resources.getColor(R.color.app_green))
+            }
+        }
+        glide.load(campaignApplication.selectedCampaign.campaignImageURL).into(binding.ivMyCampaignsCampaign)
     }
 
     private fun setupOnClickListeners(){
@@ -57,7 +84,8 @@ class MyCampaignsFragment : Fragment() {
 
     private fun subscribeToObservers(){
         myCampaignsViewModel.campaignApplication.observe(viewLifecycleOwner){
-
+            campaignApplication = it
+            setupViews()
         }
 
         myCampaignsViewModel.loadingState.observe(viewLifecycleOwner){loading->
@@ -75,7 +103,6 @@ class MyCampaignsFragment : Fragment() {
             if(fail){
                 binding.llMyCampaigns.visibility = View.GONE
                 binding.progressbarMyCampaigns.visibility = View.GONE
-                SnackbarHelper.showErrorSnackBar(requireView(),getString(R.string.an_error_occurred_network))
             }
         }
 

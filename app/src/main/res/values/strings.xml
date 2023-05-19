@@ -129,6 +129,21 @@
     <string name="start_campaign">Start Campaign</string>
     <string name="resume_campaign">Resume Campaign</string>
     <string name="see_campaign_stats">See Stats</string>
+    <string name="have_not_enrolled_campaign">You haven\'t enrolled a campaign yet.</string>
+    <string name="enroll_now">Enroll Now!</string>
+    <string name="campaign_ended">This campaign has ended</string>
+    <string name="must_install_campaign">You must install the campaign first!</string>
+    <string name="status">Status: </string>
+    <string name="waiting_for_installment">Waiting For Installment</string>
+    <string name="ready_to_start">Ready to start</string>
+    <string name="in_progress">In progress</string>
+    <string name="apply_campaign_success">Successfully enrolled to campaign</string>
+    <string name="enrolled_successfully">Successfully Enrolled!</string>
+    <string name="installer_will_contact_soon">Your installer will contact you soon.</string>
+    <string name="installer_details">Installer Details</string>
+    <string name="campaign_details">Campaign Details</string>
+    <string name="back_to_home">Go back to home</string>
+
 
     <string-array name="car_conditions">
         <item>Like New</item>

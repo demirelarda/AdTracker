@@ -5,7 +5,7 @@ import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
-import com.mycompany.advioo.MyCampaignsFragment
+import com.mycompany.advioo.ui.fragments.campaigns.MyCampaignsFragment
 import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.ActivityAppAdBinding
 import com.mycompany.advioo.di.AppModule

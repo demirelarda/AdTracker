@@ -13,4 +13,5 @@ data class LocalDriver(
     val cityId: String,
     val stateName: String,
     val cityName: String,
+    val currentEnrolledCampaign: String
 )

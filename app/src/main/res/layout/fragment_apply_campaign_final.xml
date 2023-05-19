@@ -7,7 +7,16 @@
     android:background="@color/app_page_bg_color"
     tools:context=".ui.fragments.campaigndetails.ApplyCampaignFinalFragment">
 
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressBarApplyCampaign"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center">
+    </ProgressBar>
+
     <ScrollView
+        android:id="@+id/scrollViewCampaignApplication"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">

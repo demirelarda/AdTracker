@@ -4,19 +4,34 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".MyCampaignsFragment"
-    android:background="@color/app_gray">
+    tools:context=".ui.fragments.campaigns.MyCampaignsFragment"
+    android:background="@color/app_gray"
+    android:id="@+id/fl_my_campaigns">
 
 
     <ProgressBar
+        android:visibility="gone"
         android:id="@+id/progressbarMyCampaigns"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center">
     </ProgressBar>
 
+    <TextView
+        android:id="@+id/tv_error_have_not_enrolled_campaign"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/have_not_enrolled_campaign"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:visibility="gone"
+        android:textStyle="bold">
+    </TextView>
 
     <LinearLayout
+        android:visibility="gone"
+        tools:visibility="visible"
         android:id="@+id/ll_my_campaigns"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
@@ -35,14 +50,37 @@
             android:textSize="20sp">
         </TextView>
 
-        <TextView
-            android:id="@+id/tv_campaign_name_my_campaigns"
-            android:layout_marginStart="5dp"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            tools:text="Campaign Name Test"
-            android:textSize="16sp">
-        </TextView>
+            android:orientation="horizontal"
+            android:layout_marginStart="5dp">
+            <TextView
+                android:id="@+id/tv_campaign_name_my_campaigns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Campaign Name Test"
+                android:textSize="16sp">
+            </TextView>
+            <TextView
+                android:layout_marginStart="5dp"
+                android:layout_marginEnd="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:text="@string/hyphen"
+                android:textSize="16sp"
+                android:textStyle="bold">
+            </TextView>
+            <TextView
+                android:id="@+id/tv_campaign_level_my_campaigns"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Light"
+                android:textColor="@color/app_blue"
+                android:textSize="16sp">
+            </TextView>
+        </LinearLayout>
+
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -63,6 +101,34 @@
 
         </FrameLayout>
 
+        <LinearLayout
+            android:layout_marginTop="5dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginStart="5dp">
+            <TextView
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/status"
+                android:textStyle="bold"
+                android:textSize="16sp">
+            </TextView>
+            <TextView
+                android:layout_gravity="center"
+                android:gravity="center"
+                android:layout_marginStart="5dp"
+                android:id="@+id/tv_campaign_application_status"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                tools:text="Waiting for installment"
+                android:textColor="@color/colorSnackBarError"
+                android:textSize="16sp">
+            </TextView>
+        </LinearLayout>
+
         <TextView
             android:id="@+id/tv_see_campaign_details_my_campaigns"
             android:layout_width="match_parent"
@@ -74,8 +140,8 @@
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginTop="30dp"
-            android:padding="8dp"
-            android:background="@color/white"
+            android:padding="15dp"
+            android:background="@drawable/tv_background_shape"
             app:drawableEndCompat="@drawable/baseline_info_24">
         </TextView>
 
@@ -89,9 +155,9 @@
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="22dp"
-            android:padding="8dp"
             android:focusable="true"
-            android:background="@color/white"
+            android:padding="15dp"
+            android:background="@drawable/tv_background_shape"
             app:drawableEndCompat="@drawable/baseline_insert_chart_24">
         </TextView>
 
@@ -106,9 +172,9 @@
             android:layout_marginEnd="5dp"
             android:layout_marginStart="5dp"
             android:layout_marginTop="22dp"
-            android:padding="8dp"
             android:focusable="true"
-            android:background="@color/white"
+            android:padding="15dp"
+            android:background="@drawable/tv_background_shape"
             app:drawableEndCompat="@drawable/baseline_play_circle_24">
         </TextView>
 

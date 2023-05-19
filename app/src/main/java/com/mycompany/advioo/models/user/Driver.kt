@@ -26,5 +26,6 @@ data class Driver(
     val rideShareDriver: Boolean = false,
     val allowedContact: Boolean = false,
     val userCity: UserCity = UserCity(),
+    val currentEnrolledCampaign : String = ""
 ):Parcelable
 

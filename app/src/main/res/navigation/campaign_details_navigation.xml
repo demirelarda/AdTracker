@@ -77,5 +77,27 @@
         <action
             android:id="@+id/action_applyCampaignFinalFragment_to_availableInstallersFragment"
             app:destination="@id/availableInstallersFragment" />
+        <action
+            android:id="@+id/action_applyCampaignFinalFragment_to_applyCampaignSucessFragment"
+            app:destination="@id/applyCampaignSucessFragment" />
+        <argument
+            android:name="campaignApplicationObject"
+            app:argType="com.mycompany.advioo.models.campaignapplication.CampaignApplication"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/applyCampaignSucessFragment"
+        android:name="com.mycompany.advioo.ui.fragments.campaigndetails.ApplyCampaignSuccessFragment"
+        android:label="fragment_apply_campaign_sucess"
+        tools:layout="@layout/fragment_apply_campaign_sucess" >
+        <argument
+            android:name="campaignApplication"
+            app:argType="com.mycompany.advioo.models.campaignapplication.CampaignApplication"
+            app:nullable="true"
+            android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_applyCampaignSucessFragment_to_applyCampaignFinalFragment"
+            app:destination="@id/applyCampaignFinalFragment" />
     </fragment>
 </navigation>

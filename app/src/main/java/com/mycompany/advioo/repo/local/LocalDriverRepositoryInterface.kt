@@ -9,6 +9,6 @@ interface LocalDriverRepositoryInterface {
 
     suspend fun getDriver(driverId: String): LocalDriver?
 
-
+    suspend fun updateDriverEnrolledCampaign(driverId: String,campaignId: String)
 
 }

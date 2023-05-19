@@ -13,6 +13,7 @@ import com.mycompany.advioo.R
 import com.mycompany.advioo.adapters.HomeFeedAdapter
 import com.mycompany.advioo.databinding.FragmentHomeBinding
 import com.mycompany.advioo.databinding.FragmentRunCampaignBinding
+import com.mycompany.advioo.models.localuser.LocalDriver
 import com.mycompany.advioo.ui.activities.AppAdActivity
 import com.mycompany.advioo.ui.activities.CampaignDetailsActivity
 import com.mycompany.advioo.util.SnackbarHelper
@@ -26,6 +27,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val homeViewModel : HomeViewModel by viewModels(ownerProducer = { this } )
+    private lateinit var localDriver: LocalDriver
     @Inject
     lateinit var glide: RequestManager
     @Inject
@@ -53,6 +55,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
             val intent = Intent(requireContext(),CampaignDetailsActivity::class.java)
             intent.putExtra("campaign",it)
             intent.putExtra("toCampaignDetails",true)
+            intent.putExtra("enrolledCampaignId",localDriver.currentEnrolledCampaign)
             startActivity(intent)
         }
         binding.rvHomeFeed.adapter = homeFeedAdapter
@@ -72,11 +75,18 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         homeViewModel.failState.observe(viewLifecycleOwner) { isFail ->
             if (isFail) {
                 SnackbarHelper.showErrorSnackBar(requireView(), getString(R.string.home_feed_error))
+                binding.flHomeFragment.visibility = View.GONE
             }
         }
 
         homeViewModel.campaigns.observe(viewLifecycleOwner) { campaigns ->
             homeFeedAdapter.campaigns = campaigns
+        }
+
+        homeViewModel.userObject.observe(viewLifecycleOwner){localUser->
+            if(localUser != null){
+                localDriver = localUser
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import androidx.lifecycle.*
 import com.google.firebase.auth.FirebaseAuth
 import com.mycompany.advioo.models.campaign.Campaign
 import com.mycompany.advioo.models.localuser.LocalDriver
+import com.mycompany.advioo.models.user.Driver
 import com.mycompany.advioo.repo.CampaignRepositoryInterface
 import com.mycompany.advioo.repo.UserRepositoryInterface
 import com.mycompany.advioo.repo.local.LocalDriverRepositoryInterface
@@ -38,14 +39,20 @@ class HomeViewModel @Inject constructor(
 
     private val _triggerCampaigns = MutableLiveData<Unit>()
 
+    private val _userObject = MutableLiveData<LocalDriver?>()
+    val userObject : LiveData<LocalDriver?>
+        get() = _userObject
+
     val campaigns: LiveData<List<Campaign>> = _triggerCampaigns.switchMap {
         liveData {
             _loadingState.value = true
-            val stateId = localDriverRepository.getDriver(auth.uid!!)?.stateId
-            if (stateId != null) {
+            val localUser = localDriverRepository.getDriver(auth.uid!!)
+            val stateId = localUser?.stateId
+            if (localUser != null) {
                 println("used local database for user")
                 println("state id = $stateId")
-                emitSource(repository.getCampaigns(stateId))
+                _userObject.value = localUser
+                emitSource(repository.getCampaigns(localUser.stateId))
             } else {
                 //_failState.value = true
                 getUserFromFirestore()
@@ -71,9 +78,12 @@ class HomeViewModel @Inject constructor(
                     stateId = driver.userCity.stateId,
                     cityId = driver.userCity.cityId,
                     stateName = driver.userCity.stateName,
-                    cityName = driver.userCity.cityName
+                    cityName = driver.userCity.cityName,
+                    currentEnrolledCampaign = driver.currentEnrolledCampaign
                 )
+                _userObject.value = localDriver
                 saveDriver(localDriver)
+
             }
             .addOnFailureListener {
                 println("error getting user data = "+it.localizedMessage)
@@ -95,6 +105,7 @@ class HomeViewModel @Inject constructor(
 
             } catch (error: Throwable) {
                 println("error saving local data")
+                _failState.value = true
                 _saveDriverSuccess.value = false
                 _saveDriverFailure.value = error
                 _loadingState.value = false

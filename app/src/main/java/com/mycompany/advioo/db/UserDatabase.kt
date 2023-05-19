@@ -4,14 +4,15 @@ import android.content.Context
 import androidx.room.Database
 import androidx.room.Room
 import androidx.room.RoomDatabase
-import androidx.room.TypeConverters
 import com.mycompany.advioo.dao.DriverDao
 import com.mycompany.advioo.models.localuser.LocalDriver
-import com.mycompany.advioo.util.DataTypeConverters
 
+
+import androidx.room.TypeConverters
+import com.mycompany.advioo.util.DataConverter
 
 @Database(entities = [LocalDriver::class], version = 1, exportSchema = false)
-@TypeConverters(DataTypeConverters::class)
+@TypeConverters(DataConverter::class)
 abstract class UserDatabase : RoomDatabase(){
 
     abstract fun driverDao(): DriverDao
@@ -33,6 +34,4 @@ abstract class UserDatabase : RoomDatabase(){
             }
         }
     }
-
-
 }

@@ -16,5 +16,8 @@ class LocalDriverRepository @Inject constructor(
         return driverDao.getLocalDriver(driverId)
     }
 
+    override suspend fun updateDriverEnrolledCampaign(driverId: String, campaignId: String) {
+        driverDao.updateEnrolledCampaigns(driverId,campaignId)
+    }
 
 }

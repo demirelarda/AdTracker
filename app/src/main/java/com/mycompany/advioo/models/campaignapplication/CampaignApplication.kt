@@ -11,12 +11,14 @@ import kotlinx.parcelize.Parcelize
 data class CampaignApplication(
 
     val applicationId : String = "",
-    //val applicant: Driver,
     val applicantId : String = "",
     val applicantFullName: String = "",
     val applicationDate: Timestamp = Timestamp.now(),
     val selectedCampaign: Campaign = Campaign(),
     val selectedCampaignLevel: String = "",
     var selectedInstaller: Installer = Installer(),
-
+    val startDate: Timestamp = Timestamp.now(),
+    val started: Boolean = false,
+    val ended: Boolean = false,
+    val status: Int = 0,
     ) : Parcelable

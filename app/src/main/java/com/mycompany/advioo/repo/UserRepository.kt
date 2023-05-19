@@ -31,6 +31,15 @@ class UserRepository @Inject constructor(
             }
     }
 
+    override fun updateDriverCampaignStatus(
+        userId: String,
+        enrolledCampaignId: String
+    ): Task<Void> {
+        return usersCollection
+            .document(userId)
+            .update("currentEnrolledCampaign",enrolledCampaignId)
+    }
+
 
     override fun uploadLocationData(userId: String, locationData: LocationSampleData): Task<Void> {
         return db.collection("location_data")

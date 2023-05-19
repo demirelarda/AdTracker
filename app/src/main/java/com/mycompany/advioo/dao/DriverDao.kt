@@ -15,4 +15,7 @@ interface DriverDao {
     @Query("SELECT * FROM drivers WHERE id = :driverId")
     suspend fun getLocalDriver(driverId: String): LocalDriver?
 
+    @Query("UPDATE drivers SET currentEnrolledCampaign = :campaignId WHERE id = :driverId")
+    suspend fun updateEnrolledCampaigns(driverId: String, campaignId: String)
+
 }

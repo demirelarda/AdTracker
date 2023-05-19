@@ -57,7 +57,9 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
                     stateId = driver.userCity.stateId,
                     stateName = driver.userCity.stateName,
                     cityName = driver.userCity.cityName,
-                    cityId = driver.userCity.cityId)
+                    cityId = driver.userCity.cityId,
+                    currentEnrolledCampaign = driver.currentEnrolledCampaign
+                )
 
                 viewModelScope.launch {
                     saveDriverToRoom(localDriver)

@@ -12,5 +12,7 @@ interface UserRepositoryInterface {
 
     fun getDriver(uid: String): Task<Driver?>
 
+    fun updateDriverCampaignStatus(userId: String, enrolledCampaignId: String) : Task<Void>
+
 
 }
