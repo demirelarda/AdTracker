@@ -84,6 +84,13 @@ class MyCampaignsFragment : Fragment() {
             intent.putExtra("toInstallerDetails",campaignApplication)
             startActivity(intent)
         }
+        binding.tvSeeCampaignDetailsMyCampaigns.setOnClickListener {
+            val intent = Intent(requireContext(),CampaignDetailsActivity::class.java)
+            intent.putExtra("campaign",campaignApplication.selectedCampaign)
+            intent.putExtra("toCampaignDetails",true)
+            intent.putExtra("enrolledCampaignId",campaignApplication.selectedCampaign.campaignId)
+            startActivity(intent)
+        }
     }
 
 
