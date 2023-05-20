@@ -9,12 +9,17 @@ import android.view.ViewGroup
 import com.google.firebase.auth.FirebaseAuth
 import com.mycompany.advioo.databinding.FragmentUserSettingsBinding
 import com.mycompany.advioo.ui.activities.MainActivity
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
-
+@AndroidEntryPoint
 class UserSettingsFragment : Fragment() {
 
     private var _binding: FragmentUserSettingsBinding? = null
     private val binding get() = _binding!!
+
+    @Inject
+    lateinit var firebaseAuth: FirebaseAuth
 
     private val auth = FirebaseAuth.getInstance()
 
@@ -35,7 +40,19 @@ class UserSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnSignOut.setOnClickListener {
+        setupViews()
+        setupOnClickListeners()
+
+
+    }
+
+
+    private fun setupViews(){
+        binding.tvUserName.text = firebaseAuth.currentUser?.displayName ?: ""
+    }
+
+    private fun setupOnClickListeners(){
+        binding.tvBtnSignOut.setOnClickListener {
             auth.signOut()
             val intent = Intent(requireContext(),MainActivity::class.java)
             startActivity(intent)

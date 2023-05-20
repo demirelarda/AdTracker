@@ -3,19 +3,121 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     tools:context=".ui.fragments.campaigns.UserSettingsFragment">
 
 
-    <Button
-        android:layout_gravity="center"
-        android:id="@+id/btn_sign_out"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="80dp"
-        android:text="SIGN OUT"
-        android:layout_marginStart="16dp"
-        android:layout_marginEnd="16dp">
+        android:layout_height="match_parent"
+        android:orientation="vertical">
 
-    </Button>
+        <de.hdodenhof.circleimageview.CircleImageView
+            android:layout_gravity="center"
+            android:id="@+id/profile_image"
+            android:layout_width="150dp"
+            android:layout_height="150dp"
+            android:src="@drawable/account_icon"
+            android:layout_marginTop="50dp"
+            app:civ_border_width="2dp"
+            app:civ_border_color="@color/light_gray"/>
+
+        <TextView
+            android:id="@+id/tv_user_name"
+            android:layout_marginTop="12dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Test User"
+            android:textStyle="bold"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="24sp">
+        </TextView>
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginTop="40dp">
+
+            <TextView
+                android:id="@+id/tv_btn_edit_personal_information"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_personal_information"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/gray_secondary"
+                android:focusable="true"
+                android:drawablePadding="8dp"
+                android:padding="18dp"
+                android:background="@drawable/tv_background_shape"
+                app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_24"
+                app:drawableStartCompat="@drawable/account_icon"
+                app:drawableTint="@color/app_blue">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_btn_edit_driving_info"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/edit_car_driving_info"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/gray_secondary"
+                android:layout_marginTop="22dp"
+                android:focusable="true"
+                android:drawablePadding="8dp"
+                android:padding="18dp"
+                android:background="@drawable/tv_background_shape"
+                app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_24"
+                app:drawableStartCompat="@drawable/extra_details_icon"
+                app:drawableTint="@color/app_blue">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_btn_campaign_history"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/campaign_history"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:layout_marginTop="22dp"
+                android:textColor="@color/gray_secondary"
+                android:focusable="true"
+                android:drawablePadding="8dp"
+                android:padding="18dp"
+                android:background="@drawable/tv_background_shape"
+                app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_24"
+                app:drawableStartCompat="@drawable/extra_details_icon"
+                app:drawableTint="@color/app_blue">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_btn_sign_out"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/sign_out"
+                android:textStyle="bold"
+                android:textColor="@color/gray_secondary"
+                android:textSize="16sp"
+                android:layout_marginTop="22dp"
+                android:focusable="true"
+                android:drawablePadding="8dp"
+                android:padding="18dp"
+                android:background="@drawable/tv_background_shape"
+                app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_24"
+                app:drawableStartCompat="@drawable/sign_out_icon"
+                app:drawableTint="@color/app_blue">
+            </TextView>
+
+        </LinearLayout>
+
+    </LinearLayout>
+
 
 
 

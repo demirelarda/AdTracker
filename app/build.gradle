@@ -73,8 +73,8 @@ dependencies {
     implementation 'com.google.firebase:firebase-storage-ktx'
 
     //crashlytics
-    implementation 'com.google.firebase:firebase-crashlytics-ktx'
-    implementation 'com.google.firebase:firebase-analytics-ktx'
+    //implementation 'com.google.firebase:firebase-crashlytics-ktx'
+    //implementation 'com.google.firebase:firebase-analytics-ktx'
 
     //gson
     implementation 'com.google.code.gson:gson:2.10.1'
@@ -110,6 +110,10 @@ dependencies {
     kapt "androidx.room:room-compiler:2.5.1"
 
     //MPCharts
+
+    //CircleImageView
+    implementation 'de.hdodenhof:circleimageview:3.1.0'
+
 
 
 
