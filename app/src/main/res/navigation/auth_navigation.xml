@@ -12,7 +12,12 @@
         tools:layout="@layout/fragment_login" >
         <action
             android:id="@+id/action_loginFragment_to_registerFragment"
-            app:destination="@id/registerFragment" />
+            app:destination="@id/registerFragment"
+            app:enterAnim="@anim/slide_in_bottom"
+            app:exitAnim="@anim/slide_out_top"
+            app:popEnterAnim="@anim/slide_in_top"
+            app:popExitAnim="@anim/slide_out_bottom"
+            />
         <action
             android:id="@+id/action_loginFragment_to_forgotPasswordFragment"
             app:destination="@id/forgotPasswordFragment" />
@@ -24,7 +29,11 @@
         tools:layout="@layout/fragment_register" >
         <action
             android:id="@+id/action_registerFragment_to_registerAddressDetailsFragment"
-            app:destination="@id/registerAddressDetailsFragment" />
+            app:destination="@id/registerAddressDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
@@ -39,10 +48,19 @@
             app:destination="@id/registerFragment" />
         <action
             android:id="@+id/action_registerAddressDetailsFragment_to_stateListFragment"
-            app:destination="@id/stateListFragment" />
+            app:destination="@id/stateListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_registerAddressDetailsFragment_to_registerUserWorkDetailsFragment"
-            app:destination="@id/registerUserWorkDetailsFragment" />
+            app:destination="@id/registerUserWorkDetailsFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"
+            />
         <argument
             android:name="selectedLocationArray"
             app:argType="string[]"
@@ -71,7 +89,11 @@
         tools:layout="@layout/fragment_state_list" >
         <action
             android:id="@+id/action_stateListFragment_to_cityListFragment"
-            app:destination="@id/cityListFragment" />
+            app:destination="@id/cityListFragment"
+            app:enterAnim="@anim/slide_in_right"
+            app:exitAnim="@anim/slide_out_left"
+            app:popEnterAnim="@anim/slide_in_left"
+            app:popExitAnim="@anim/slide_out_right"/>
         <action
             android:id="@+id/action_stateListFragment_to_registerAddressDetailsFragment"
             app:destination="@id/registerAddressDetailsFragment" />
