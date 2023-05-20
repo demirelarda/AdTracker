@@ -137,12 +137,15 @@
             android:textStyle="bold"
             android:textSize="16sp"
             android:focusable="true"
+            android:drawablePadding="8dp"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
             android:layout_marginTop="30dp"
             android:padding="15dp"
             android:background="@drawable/tv_background_shape"
-            app:drawableEndCompat="@drawable/baseline_info_24">
+            app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_24"
+            app:drawableStartCompat="@drawable/baseline_info_24"
+            app:drawableTint="@color/app_blue">
         </TextView>
 
         <TextView
@@ -155,10 +158,13 @@
             android:focusable="true"
             android:layout_marginStart="5dp"
             android:layout_marginEnd="5dp"
-            android:layout_marginTop="30dp"
+            android:layout_marginTop="22dp"
             android:padding="15dp"
+            android:drawablePadding="8dp"
             android:background="@drawable/tv_background_shape"
-            app:drawableEndCompat="@drawable/baseline_format_paint_24">
+            app:drawableStartCompat="@drawable/baseline_format_paint_24"
+            app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_24"
+            app:drawableTint="@color/app_blue">
         </TextView>
 
         <TextView
@@ -173,8 +179,11 @@
             android:layout_marginTop="22dp"
             android:focusable="true"
             android:padding="15dp"
+            android:drawablePadding="8dp"
             android:background="@drawable/tv_background_shape"
-            app:drawableEndCompat="@drawable/baseline_insert_chart_24">
+            app:drawableStartCompat="@drawable/baseline_insert_chart_24"
+            app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_24"
+            app:drawableTint="@color/app_blue">
         </TextView>
 
 
@@ -191,7 +200,8 @@
             android:focusable="true"
             android:padding="15dp"
             android:background="@drawable/tv_background_shape"
-            app:drawableEndCompat="@drawable/baseline_play_circle_24">
+            app:drawableEndCompat="@drawable/baseline_play_circle_24"
+            app:drawableTint="@color/app_blue">
         </TextView>
 
     </LinearLayout>
