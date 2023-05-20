@@ -1,6 +1,7 @@
 package com.mycompany.advioo.ui.fragments.campaigns
 
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -11,6 +12,7 @@ import com.bumptech.glide.RequestManager
 import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentMyCampaignsBinding
 import com.mycompany.advioo.models.campaignapplication.CampaignApplication
+import com.mycompany.advioo.ui.activities.CampaignDetailsActivity
 import com.mycompany.advioo.viewmodels.MyCampaignsViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
@@ -77,8 +79,11 @@ class MyCampaignsFragment : Fragment() {
     }
 
     private fun setupOnClickListeners(){
-
-
+        binding.tvSeeInstallersDetailsMyCampaigns.setOnClickListener {
+            val intent = Intent(requireContext(),CampaignDetailsActivity::class.java)
+            intent.putExtra("toInstallerDetails",campaignApplication)
+            startActivity(intent)
+        }
     }
 
 

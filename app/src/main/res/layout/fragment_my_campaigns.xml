@@ -133,7 +133,7 @@
             android:id="@+id/tv_see_campaign_details_my_campaigns"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/see_details"
+            android:text="@string/see_campaign_details"
             android:textStyle="bold"
             android:textSize="16sp"
             android:focusable="true"
@@ -143,6 +143,22 @@
             android:padding="15dp"
             android:background="@drawable/tv_background_shape"
             app:drawableEndCompat="@drawable/baseline_info_24">
+        </TextView>
+
+        <TextView
+            android:id="@+id/tv_see_installers_details_my_campaigns"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/see_installer_details"
+            android:textStyle="bold"
+            android:textSize="16sp"
+            android:focusable="true"
+            android:layout_marginStart="5dp"
+            android:layout_marginEnd="5dp"
+            android:layout_marginTop="30dp"
+            android:padding="15dp"
+            android:background="@drawable/tv_background_shape"
+            app:drawableEndCompat="@drawable/baseline_format_paint_24">
         </TextView>
 
         <TextView

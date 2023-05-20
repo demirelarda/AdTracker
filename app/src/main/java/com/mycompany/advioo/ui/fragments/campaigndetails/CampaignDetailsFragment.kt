@@ -78,6 +78,13 @@ class CampaignDetailsFragment : Fragment() {
             enrolledCampaign = requireActivity().intent.getStringExtra("enrolledCampaignId")!!
         }
 
+        if(requireActivity().intent.hasExtra("toInstallerDetails")){
+            val campaignApplicationFromMyCampaigns : CampaignApplication = requireActivity().intent.getParcelableExtra("toInstallerDetails")!!
+            campaign = campaignApplicationFromMyCampaigns.selectedCampaign
+            enrolledCampaign = campaignApplicationFromMyCampaigns.selectedCampaign.campaignId
+            val action = CampaignDetailsFragmentDirections.actionCampaignDetailsToApplyCampaignFinalFragment(campaignApplicationFromMyCampaigns,true)
+            Navigation.findNavController(requireView()).navigate(action)
+        }
 
         println("enrolled campaign id = $enrolledCampaign")
         println("campaign id = "+campaign.campaignId)
@@ -85,7 +92,7 @@ class CampaignDetailsFragment : Fragment() {
         if(enrolledCampaign.isNotEmpty()){
             if(campaign.campaignId == enrolledCampaign){
                 //enrolled campaign
-                //binding.btnApplyCampaignDetails.isEnabled = false
+                binding.btnApplyCampaignDetails.isEnabled = false
                 val drawable = ResourcesCompat.getDrawable(resources, R.drawable.disabled_button_background_gray, context?.theme)
                 if (drawable != null) {
                     binding.btnApplyCampaignDetails.background = drawable
@@ -93,7 +100,7 @@ class CampaignDetailsFragment : Fragment() {
             }
             else{
                 //not enrolled campaign but disable buttons etc.
-                //binding.btnApplyCampaignDetails.isEnabled = false
+                binding.btnApplyCampaignDetails.isEnabled = false
                 val drawable = ResourcesCompat.getDrawable(resources, R.drawable.disabled_button_background_gray, context?.theme)
                 if (drawable != null) {
                     binding.btnApplyCampaignDetails.background = drawable

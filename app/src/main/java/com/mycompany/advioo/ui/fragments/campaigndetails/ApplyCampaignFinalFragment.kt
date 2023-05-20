@@ -9,6 +9,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.Navigation
 import androidx.navigation.fragment.findNavController
@@ -18,6 +19,7 @@ import com.mycompany.advioo.BuildConfig
 import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentApplyCampaignFinalBinding
 import com.mycompany.advioo.models.campaignapplication.CampaignApplication
+import com.mycompany.advioo.ui.activities.AppAdActivity
 import com.mycompany.advioo.util.SnackbarHelper
 import com.mycompany.advioo.viewmodels.ApplyCampaignSharedViewModel
 import org.osmdroid.config.Configuration
@@ -36,6 +38,8 @@ class ApplyCampaignFinalFragment : Fragment() {
     private val campaignApplicationSharedViewModel: ApplyCampaignSharedViewModel by activityViewModels()
     private var campaignApplication = CampaignApplication()
     private var installerDetails: Boolean = false
+    private var myCampaignsInstallerDetails : Boolean = false
+    private var showInstallerDetails: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -57,25 +61,53 @@ class ApplyCampaignFinalFragment : Fragment() {
         val bundle = arguments
         bundle?.let {
             val args = ApplyCampaignFinalFragmentArgs.fromBundle(it)
-            if(args.campaignApplicationObject != null){
-                campaignApplication = args.campaignApplicationObject!!
+            if(args.campaignApplicationObject != null && !args.fromMyCampaigns){
+                campaignApplication = args.campaignApplicationObject
                 installerDetails = true
+                showInstallerDetails = true
             }
             else{
-                campaignApplication = campaignApplicationSharedViewModel.campaignApplication.value!!
-                installerDetails = false
+                if(args.fromMyCampaigns){
+                    myCampaignsInstallerDetails = true
+                    campaignApplication = args.campaignApplicationObject!!
+                    showInstallerDetails = true
+                }
+                else{
+                    campaignApplication = campaignApplicationSharedViewModel.campaignApplication.value!!
+                    installerDetails = false
+                    showInstallerDetails = false
+                }
+
             }
 
         }
-        setupViews(installerDetails)
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if(myCampaignsInstallerDetails){
+                    val intent = Intent(requireContext(),AppAdActivity::class.java)
+                    intent.putExtra("toMyCampaigns",true)
+                    startActivity(intent)
+                    requireActivity().finish()
+                }
+                else{
+                    findNavController().popBackStack()
+                }
+
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
+        setupViews(showInstallerDetails)
         setupOnClickListeners()
         setupMapView()
     }
 
 
 
-    private fun setupViews(installerDetails: Boolean){
-        if(installerDetails){
+    private fun setupViews(showInstallerDetails: Boolean){
+        if(showInstallerDetails){
+            binding.tvSelectThisInstaller.visibility = View.GONE
             binding.btnEnrollCampaignFinal.visibility = View.GONE
             binding.cboxSelectThisInstallerLast.visibility = View.GONE
         }
@@ -90,7 +122,16 @@ class ApplyCampaignFinalFragment : Fragment() {
         }
 
         binding.ivBtnBackFromCompleteEnrollment.setOnClickListener {
-            findNavController().popBackStack()
+            if(myCampaignsInstallerDetails){
+                val intent = Intent(requireContext(),AppAdActivity::class.java)
+                intent.putExtra("toMyCampaigns",true)
+                startActivity(intent)
+                requireActivity().finish()
+            }
+            else{
+                findNavController().popBackStack()
+            }
+
         }
 
         binding.btnEnrollCampaignFinal.setOnClickListener {

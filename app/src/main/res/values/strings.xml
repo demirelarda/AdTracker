@@ -143,6 +143,8 @@
     <string name="installer_details">Installer Details</string>
     <string name="campaign_details">Campaign Details</string>
     <string name="back_to_home">Go back to home</string>
+    <string name="see_campaign_details">See Campaign Details</string>
+    <string name="see_installer_details">See Installer Details</string>
 
 
     <string-array name="car_conditions">

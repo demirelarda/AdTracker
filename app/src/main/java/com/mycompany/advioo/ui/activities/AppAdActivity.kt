@@ -48,6 +48,19 @@ class AppAdActivity : AppCompatActivity() {
             replaceFragment(HomeFragment())
         }
 
+        if(intent.hasExtra("toMyCampaigns")){
+            if(intent.getBooleanExtra("toMyCampaigns",false)){
+                replaceFragment(MyCampaignsFragment())
+                binding.bottomNavView.selectedItemId = R.id.myCampaigns
+            }
+            else{
+                replaceFragment(HomeFragment())
+            }
+        }
+        else{
+            replaceFragment(HomeFragment())
+        }
+
 
         binding.bottomNavView.setOnItemSelectedListener {
             when(it.itemId){

@@ -24,6 +24,9 @@
             app:exitAnim="@anim/slide_out_top"
             app:popEnterAnim="@anim/slide_in_top"
             app:popExitAnim="@anim/slide_out_bottom"/>
+        <action
+            android:id="@+id/action_campaignDetails_to_applyCampaignFinalFragment"
+            app:destination="@id/applyCampaignFinalFragment" />
     </fragment>
     <fragment
         android:id="@+id/availableInstallersFragment"
@@ -85,6 +88,10 @@
             app:argType="com.mycompany.advioo.models.campaignapplication.CampaignApplication"
             app:nullable="true"
             android:defaultValue="@null" />
+        <argument
+            android:name="fromMyCampaigns"
+            app:argType="boolean"
+            android:defaultValue="false" />
     </fragment>
     <fragment
         android:id="@+id/applyCampaignSucessFragment"
