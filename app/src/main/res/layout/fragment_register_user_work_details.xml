@@ -47,8 +47,9 @@
                 android:src="@drawable/back_button_icon">
             </ImageView>
             <TextView
-                android:layout_marginStart="110dp"
-                android:layout_width="wrap_content"
+                android:layout_weight="1"
+                android:id="@+id/tv_title_car_details"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:text="@string/car_details"
                 android:textStyle="bold"
@@ -222,6 +223,7 @@
             android:orientation="horizontal">
 
             <TextView
+                android:id="@+id/tv_terms_conditions_text"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="@string/terms_conditions"

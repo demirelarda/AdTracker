@@ -61,6 +61,24 @@
             </TextView>
 
             <TextView
+                android:id="@+id/tv_btn_edit_address_information"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="22dp"
+                android:text="@string/edit_address_information"
+                android:textStyle="bold"
+                android:textSize="16sp"
+                android:textColor="@color/gray_secondary"
+                android:focusable="true"
+                android:drawablePadding="8dp"
+                android:padding="18dp"
+                android:background="@drawable/tv_background_shape"
+                app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_24"
+                app:drawableStartCompat="@drawable/location_icon"
+                app:drawableTint="@color/app_blue">
+            </TextView>
+
+            <TextView
                 android:id="@+id/tv_btn_edit_driving_info"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

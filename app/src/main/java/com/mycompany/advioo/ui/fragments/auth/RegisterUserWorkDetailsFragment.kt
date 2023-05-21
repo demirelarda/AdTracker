@@ -1,6 +1,7 @@
 package com.mycompany.advioo.ui.fragments.auth
 
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -14,6 +15,7 @@ import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentRegisterUserWorkDetailsBinding
 import com.mycompany.advioo.ui.activities.AppAdActivity
 import com.mycompany.advioo.util.SnackbarHelper
+import com.mycompany.advioo.util.Util
 import com.mycompany.advioo.viewmodels.RegisterUserWorkDetailsViewModel
 import com.mycompany.advioo.viewmodels.SharedRegisterViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -44,9 +46,39 @@ class RegisterUserWorkDetailsFragment : Fragment() {
         return view
     }
 
+
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val bundle = arguments
+        if(bundle != null){
+            val args = RegisterFragmentArgs.fromBundle(bundle)
+            if(args.registeringUser == Util.REGISTER_STRING){
+                setupNormalViews()
+            }
+            else{
+                setupEditUserView()
+            }
+        }
+        else{
+            setupEditUserView()
+        }
+
+
+    }
+
+
+    private fun setupEditUserView(){
+        sharedRegisterViewModel.getLocalDriver()
+        observeLocalDriver()
+        binding.cboxTermsConditions.visibility = View.GONE
+        binding.tvTermsConditionsText.visibility = View.GONE
+        binding.tvTitleCarDetails.text = getString(R.string.edit_car_driving_info)
+        binding.btnSignUp.text = getString(R.string.save_changes)
+    }
+
+    private fun setupNormalViews(){
         subscribeToObservers()
 
         binding.btnSignUp.setOnClickListener {
@@ -94,16 +126,40 @@ class RegisterUserWorkDetailsFragment : Fragment() {
                 SnackbarHelper.showErrorSnackBar(requireView(),errorMessage)
             }
         }
-
-
-
     }
+
+
+
 
     override fun onResume() {
         super.onResume()
         val carConditions = resources.getStringArray(R.array.car_conditions)
         val arrayAdapter = ArrayAdapter(requireContext(),R.layout.dropdown_item,carConditions)
         binding.carConditionDropDown.setAdapter(arrayAdapter)
+    }
+
+
+    @SuppressLint("SetTextI18n")
+    private fun observeLocalDriver(){
+        sharedRegisterViewModel.localDriver.observe(viewLifecycleOwner){localDriver->
+            binding.tfCarBrand.setText(localDriver.carBrand)
+            binding.tfCarModel.setText(localDriver.carModel)
+            binding.tfWorkCity.setText(localDriver.workCity)
+            binding.tfLicensePlate.setText(localDriver.licensePlate)
+            binding.tfAvgKmDrivenPerMonth.setText(localDriver.avgKmDriven)
+            binding.tfCarYear.setText(localDriver.carYear)
+            binding.carConditionDropDown.setText(localDriver.carCondition)
+            val carConditions = resources.getStringArray(R.array.car_conditions)
+            val arrayAdapter = ArrayAdapter(requireContext(),R.layout.dropdown_item,carConditions)
+            binding.carConditionDropDown.setAdapter(arrayAdapter)
+            binding.carConditionDropDown.setText(localDriver.carCondition,false)
+            if(localDriver.allowedContact){
+                binding.cboxAllowMailPhone.isChecked = true
+            }
+            if(localDriver.rideShareDriver){
+                binding.cboxRideshare.isChecked = true
+            }
+        }
     }
 
     private fun subscribeToObservers() {

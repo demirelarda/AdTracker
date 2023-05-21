@@ -147,8 +147,10 @@
     <string name="see_installer_details">See Installer Details</string>
     <string name="edit_personal_information">Edit Personal Information</string>
     <string name="edit_car_driving_info">Edit Car &amp; Driving Info</string>
+    <string name="edit_address_information">Edit Address Information</string>
     <string name="campaign_history">Campaign History</string>
     <string name="sign_out">Sign Out</string>
+    <string name="save_changes">Save Changes</string>
 
 
     <string-array name="car_conditions">

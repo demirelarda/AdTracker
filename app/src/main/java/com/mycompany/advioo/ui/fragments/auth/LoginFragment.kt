@@ -9,6 +9,7 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.Navigation
+import androidx.navigation.fragment.findNavController
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.ktx.auth
 import com.google.firebase.ktx.Firebase
@@ -16,6 +17,7 @@ import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentLoginBinding
 import com.mycompany.advioo.ui.activities.AppAdActivity
 import com.mycompany.advioo.util.SnackbarHelper
+import com.mycompany.advioo.util.Util.REGISTER_STRING
 import com.mycompany.advioo.viewmodels.LoginViewModel
 import com.mycompany.advioo.viewmodels.RegisterUserWorkDetailsViewModel
 import dagger.hilt.android.AndroidEntryPoint
@@ -29,7 +31,7 @@ class LoginFragment : Fragment() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        if(loginViewModel.isUserAlreadyLoggedIn()){
+        if(loginViewModel.isUserAlreadyLoggedIn() && !(requireActivity().intent.hasExtra("editInfo"))){
             val intent = Intent(requireContext(),AppAdActivity::class.java)
             startActivity(intent)
             requireActivity().finish()
@@ -57,8 +59,8 @@ class LoginFragment : Fragment() {
             Navigation.findNavController(requireView()).navigate(action)
         }
         binding.tvSignUp.setOnClickListener {
-            val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment()
-            Navigation.findNavController(requireView()).navigate(action)
+            val action = LoginFragmentDirections.actionLoginFragmentToRegisterFragment(REGISTER_STRING)
+            findNavController().navigate(action)
         }
 
         binding.btnLogin.setOnClickListener {

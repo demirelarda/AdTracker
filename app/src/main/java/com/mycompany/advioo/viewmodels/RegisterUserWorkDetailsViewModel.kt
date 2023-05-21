@@ -58,7 +58,20 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
                     stateName = driver.userCity.stateName,
                     cityName = driver.userCity.cityName,
                     cityId = driver.userCity.cityId,
-                    currentEnrolledCampaign = driver.currentEnrolledCampaign
+                    currentEnrolledCampaign = driver.currentEnrolledCampaign,
+                    city = driver.city,
+                    addressRow1 = driver.addressRow1,
+                    addressRow2 = driver.addressRow2,
+                    carModel = driver.carModel,
+                    carCondition = driver.carCondition,
+                    carYear = driver.carYear,
+                    licensePlate = driver.licensePlate,
+                    avgKmDriven = driver.avgKmDriven,
+                    workCity = driver.workCity,
+                    rideShareDriver = driver.rideShareDriver,
+                    allowedContact = driver.allowedContact,
+                    zipCode = driver.zipCode,
+                    carBrand = driver.carBrand
                 )
 
                 viewModelScope.launch {

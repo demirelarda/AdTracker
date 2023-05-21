@@ -37,6 +37,10 @@
         <action
             android:id="@+id/action_registerFragment_to_loginFragment"
             app:destination="@id/loginFragment" />
+        <argument
+            android:name="registeringUser"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/registerAddressDetailsFragment"
@@ -66,6 +70,10 @@
             app:argType="string[]"
             app:nullable="true"
             android:defaultValue="@null" />
+        <argument
+            android:name="registeringUser"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
     <fragment
         android:id="@+id/cityListFragment"
@@ -115,5 +123,9 @@
         <action
             android:id="@+id/action_registerUserWorkDetailsFragment_to_registerAddressDetailsFragment"
             app:destination="@id/registerAddressDetailsFragment" />
+        <argument
+            android:name="registeringUser"
+            app:argType="string"
+            app:nullable="true" />
     </fragment>
 </navigation>

@@ -58,6 +58,29 @@ class UserSettingsFragment : Fragment() {
             startActivity(intent)
             requireActivity().finish()
         }
+
+        binding.tvBtnEditPersonalInformation.setOnClickListener {
+            val intent = Intent(requireContext(),MainActivity::class.java)
+            intent.putExtra("personalInfo",true)
+            intent.putExtra("editInfo",true)
+            startActivity(intent)
+        }
+
+        binding.tvBtnEditDrivingInfo.setOnClickListener {
+            val intent = Intent(requireContext(),MainActivity::class.java)
+            intent.putExtra("drivingInfo",true)
+            intent.putExtra("editInfo",true)
+            startActivity(intent)
+        }
+
+        binding.tvBtnEditAddressInformation.setOnClickListener {
+            val intent = Intent(requireContext(),MainActivity::class.java)
+            intent.putExtra("addressInfo",true)
+            intent.putExtra("editInfo",true)
+            startActivity(intent)
+        }
+
+
     }
 
 

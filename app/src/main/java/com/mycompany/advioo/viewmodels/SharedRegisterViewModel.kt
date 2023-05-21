@@ -4,22 +4,31 @@ package com.mycompany.advioo.viewmodels
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.google.firebase.auth.FirebaseAuth
+import com.mycompany.advioo.models.localuser.LocalDriver
 import com.mycompany.advioo.models.user.Driver
 import com.mycompany.advioo.models.user.UserCity
+import com.mycompany.advioo.repo.local.LocalDriverRepositoryInterface
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class SharedRegisterViewModel @Inject constructor(
     private val auth: FirebaseAuth,
     private val driverData:Driver,
+    private val repository: LocalDriverRepositoryInterface,
 ): ViewModel(){
 
 
     private val _driver = MutableLiveData<Driver>(driverData)
     val driver: LiveData<Driver>
         get() = _driver
+
+    private val _localDriver = MutableLiveData<LocalDriver>()
+    val localDriver: LiveData<LocalDriver>
+        get() = _localDriver
 
     fun setFirstName(firstName: String) {
         val currentUserObject = _driver.value
@@ -173,6 +182,21 @@ class SharedRegisterViewModel @Inject constructor(
 
     fun setPassword(password: String) {
         _password.postValue(password)
+    }
+
+    fun getLocalDriver() {
+        viewModelScope.launch {
+            try {
+                val driver = repository.getDriver(auth.uid!!)
+                if (driver != null) {
+                    _localDriver.value = driver!!
+                } else {
+                    //TODO: get driver from firestore
+                }
+            } catch (e: Exception) {
+                //TODO: handle error, get driver from firestore
+            }
+        }
     }
 
 

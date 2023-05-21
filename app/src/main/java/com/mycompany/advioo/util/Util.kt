@@ -10,6 +10,9 @@ object Util {
     const val TIME_API_BASE_URL = "http://worldtimeapi.org/"
     const val TIME_API_AMERICA = "api/timezone/America/"
 
+    const val REGISTER_STRING = "register"
+    const val EDIT_STRING = "edit"
+
 
 
 }
