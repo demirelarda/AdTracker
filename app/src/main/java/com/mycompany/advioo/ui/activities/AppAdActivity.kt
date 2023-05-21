@@ -1,6 +1,7 @@
 package com.mycompany.advioo.ui.activities
 
 
+import android.content.Intent
 import android.location.LocationManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -36,30 +37,8 @@ class AppAdActivity : AppCompatActivity() {
         setContentView(view)
         locationManager = AppModule.provideLocationManager(this)
 
-        if(intent.hasExtra("toRunCampaign")){
-            if(intent.getBooleanExtra("toRunCampaign",false)){
-                replaceFragment(RunCampaignFragment())
-            }
-            else{
-                replaceFragment(HomeFragment())
-            }
-        }
-        else{
-            replaceFragment(HomeFragment())
-        }
+        intentHandler(intent)
 
-        if(intent.hasExtra("toMyCampaigns")){
-            if(intent.getBooleanExtra("toMyCampaigns",false)){
-                replaceFragment(MyCampaignsFragment())
-                binding.bottomNavView.selectedItemId = R.id.myCampaigns
-            }
-            else{
-                replaceFragment(HomeFragment())
-            }
-        }
-        else{
-            replaceFragment(HomeFragment())
-        }
 
 
         binding.bottomNavView.setOnItemSelectedListener {
@@ -83,6 +62,45 @@ class AppAdActivity : AppCompatActivity() {
         fragmentTransaction.replace(R.id.mainFrameLayout,fragment)
         fragmentTransaction.commit()
     }
+
+    private fun intentHandler(intent: Intent) {
+        when {
+            intent.getBooleanExtra("toRunCampaign", false) -> {
+                if(intent.getBooleanExtra("toRunCampaign",false)){
+                    //replaceFragment(RunCampaignFragment())
+                }
+                else{
+                    replaceFragment(HomeFragment())
+                    binding.bottomNavView.selectedItemId = R.id.home
+                }
+            }
+            intent.getBooleanExtra("toMyCampaigns", false) -> {
+                if(intent.getBooleanExtra("toMyCampaigns",false)){
+                    replaceFragment(MyCampaignsFragment())
+                    binding.bottomNavView.selectedItemId = R.id.myCampaigns
+                }
+                else{
+                    replaceFragment(HomeFragment())
+                    binding.bottomNavView.selectedItemId = R.id.home
+                }
+            }
+            intent.getBooleanExtra("toAccountSettings", false) -> {
+                if(intent.getBooleanExtra("toAccountSettings",false)){
+                    replaceFragment(UserSettingsFragment())
+                    binding.bottomNavView.selectedItemId = R.id.account
+                }
+                else{
+                    replaceFragment(HomeFragment())
+                    binding.bottomNavView.selectedItemId = R.id.home
+                }
+            }
+            else -> {
+                replaceFragment(HomeFragment())
+                binding.bottomNavView.selectedItemId = R.id.home
+            }
+        }
+    }
+
 
 
 

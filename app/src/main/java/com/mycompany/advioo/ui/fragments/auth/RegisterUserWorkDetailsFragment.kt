@@ -9,8 +9,10 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ArrayAdapter
+import androidx.activity.OnBackPressedCallback
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentRegisterUserWorkDetailsBinding
 import com.mycompany.advioo.ui.activities.AppAdActivity
@@ -27,6 +29,7 @@ class RegisterUserWorkDetailsFragment : Fragment() {
     private val binding get() = _binding!!
     private val sharedRegisterViewModel : SharedRegisterViewModel by activityViewModels()
     private val userWorkDetailsViewModel : RegisterUserWorkDetailsViewModel by viewModels(ownerProducer = { this } )
+    private var isInEditMode = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +54,8 @@ class RegisterUserWorkDetailsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+
+
         val bundle = arguments
         if(bundle != null){
             val args = RegisterFragmentArgs.fromBundle(bundle)
@@ -59,10 +64,38 @@ class RegisterUserWorkDetailsFragment : Fragment() {
             }
             else{
                 setupEditUserView()
+                isInEditMode = true
             }
         }
         else{
             setupEditUserView()
+            isInEditMode = true
+        }
+
+        val callback = object : OnBackPressedCallback(true) {
+            override fun handleOnBackPressed() {
+                if (isInEditMode) {
+                    val intent = Intent(activity, AppAdActivity::class.java)
+                    intent.putExtra("toAccountSettings", true)
+                    startActivity(intent)
+                    requireActivity().finish()
+                } else {
+                    findNavController().popBackStack()
+                }
+            }
+        }
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, callback)
+
+        binding.ivBtnBackFromUserWorkDetails.setOnClickListener {
+            if(isInEditMode){
+                val intent = Intent(activity, AppAdActivity::class.java)
+                intent.putExtra("toAccountSettings", true)
+                startActivity(intent)
+                requireActivity().finish()
+            }
+            else{
+                findNavController().popBackStack()
+            }
         }
 
 
