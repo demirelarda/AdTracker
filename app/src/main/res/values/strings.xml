@@ -151,6 +151,8 @@
     <string name="campaign_history">Campaign History</string>
     <string name="sign_out">Sign Out</string>
     <string name="save_changes">Save Changes</string>
+    <string name="error_while_updating_user_details">Error while updating your data!</string>
+    <string name="update_successful">Profile updated successfully!</string>
 
 
     <string-array name="car_conditions">

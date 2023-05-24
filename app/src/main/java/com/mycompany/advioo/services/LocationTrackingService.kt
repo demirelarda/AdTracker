@@ -37,6 +37,17 @@ class LocationTrackingService : Service() {
         )
     }
 
+    private fun updateIntervalBasedOnSpeed(speed: Float): Long {
+        return when {
+            speed < 10 -> 10_000L
+            speed < 30 -> 10_000L
+            speed < 60 -> 10_000L
+            speed < 90 -> 5_000L
+            else -> 3_000L
+        }
+    }
+
+
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         when(intent?.action){
             ACTION_START -> start()
@@ -58,37 +69,55 @@ class LocationTrackingService : Service() {
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
+        var lastUpdateTime = System.currentTimeMillis()
+
         locationClient
             .getLocationUpdates(1000L)
             .catch { e -> e.printStackTrace() }
             .onEach { location ->
-                val distance = locationClient.previousLocation?.distanceTo(location)?.div(1000.0)
-                val geoPoint = GeoPoint(location.latitude, location.longitude)
                 val currentTime = System.currentTimeMillis()
+                val timeSinceLastUpdate = currentTime - lastUpdateTime
+                val updateInterval = updateIntervalBasedOnSpeed(location.speed)
 
-                if (distance != null) {
-                    tripData.distanceDriven += distance
+                val speedKmh = location.speed * 3.6f // Convert from m/s to km/h
+                println("Current speed: $speedKmh KM/h")
+                tripData.speed = speedKmh
+                val speedUpdateIntent = Intent(ACTION_SPEED_UPDATE)
+                speedUpdateIntent.putExtra("currentSpeed", speedKmh)
+                LocalBroadcastManager.getInstance(this).sendBroadcast(speedUpdateIntent)
+
+                if (timeSinceLastUpdate >= updateInterval && speedKmh >= 7) {
+                    // Update distance and lastUpdateTime
+                    val distance = locationClient.previousLocation?.distanceTo(location)?.div(1000.0)
+                    val geoPoint = GeoPoint(location.latitude, location.longitude)
+
+                    if (distance != null) {
+                        tripData.distanceDriven += distance
+                    }
+                    locationClient.previousLocation = location
+
+                    tripData.accuracyList.add(Pair(location.accuracy, geoPoint))
+                    tripData.locationPoints.add(geoPoint)
+                    tripData.distancePoints.add(Triple(geoPoint, tripData.distanceDriven, currentTime))
+
+                    if (tripData.startPoint == null) {
+                        tripData.startPoint = geoPoint
+                        tripData.startTime = currentTime
+                    }
+                    tripData.endPoint = geoPoint
+                    tripData.speed = speedKmh
+                    tripData.speedList.add(Triple(speedKmh,geoPoint,System.currentTimeMillis()))
+                    val locationUpdateIntent = Intent(ACTION_LOCATION_UPDATE)
+                    locationUpdateIntent.putExtra("tripData", tripData)
+                    LocalBroadcastManager.getInstance(this).sendBroadcast(locationUpdateIntent)
+                    val updatedNotification = notification.setContentText(
+                        "Distance driven: ${String.format("%.2f", tripData.distanceDriven)} KM"
+                    )
+                    notificationManager.notify(1, updatedNotification.build())
+
+                    lastUpdateTime = currentTime
                 }
-                locationClient.previousLocation = location
-
-                tripData.accuracyList.add(Pair(location.accuracy, geoPoint))
-                tripData.locationPoints.add(geoPoint)
-                tripData.distancePoints.add(Triple(geoPoint, tripData.distanceDriven, currentTime))
-
-                if (tripData.startPoint == null) {
-                    tripData.startPoint = geoPoint
-                    tripData.startTime = currentTime
-                }
-                tripData.endPoint = geoPoint
-                val locationUpdateIntent = Intent(ACTION_LOCATION_UPDATE)
-                locationUpdateIntent.putExtra("tripData", tripData)
-                LocalBroadcastManager.getInstance(this).sendBroadcast(locationUpdateIntent)
-                val updatedNotification = notification.setContentText(
-                    "Distance driven: ${String.format("%.2f", tripData.distanceDriven)} KM"
-                )
-                notificationManager.notify(1, updatedNotification.build())
             }
-
             .launchIn(serviceScope)
 
         startForeground(1, notification.build())
@@ -115,5 +144,6 @@ class LocationTrackingService : Service() {
         const val ACTION_START = "ACTION_START"
         const val ACTION_STOP = "ACTION_STOP"
         const val ACTION_LOCATION_UPDATE = "ACTION_LOCATION_UPDATE"
+        const val ACTION_SPEED_UPDATE = "ACTION_SPEED_UPDATE"
     }
 }

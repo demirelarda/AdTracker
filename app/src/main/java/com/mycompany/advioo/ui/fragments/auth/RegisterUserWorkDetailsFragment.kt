@@ -109,6 +109,29 @@ class RegisterUserWorkDetailsFragment : Fragment() {
         binding.tvTermsConditionsText.visibility = View.GONE
         binding.tvTitleCarDetails.text = getString(R.string.edit_car_driving_info)
         binding.btnSignUp.text = getString(R.string.save_changes)
+
+        binding.btnSignUp.setOnClickListener {
+            val carBrand = binding.tfCarBrand.text.toString().trim()
+            val carModel = binding.tfCarModel.text.toString().trim()
+            val carYear = binding.tfCarYear.text.toString().trim()
+            val carCondition = binding.carConditionDropDown.text.toString().trim()
+            val licensePlate = binding.tfLicensePlate.text.toString().trim()
+            val avgKmDriven = binding.tfAvgKmDrivenPerMonth.text.toString().trim()
+            val workCity = binding.tfWorkCity.text.toString().trim()
+            var allowContact = false
+            var rideShare = false
+            allowContact = binding.cboxAllowMailPhone.isChecked
+            rideShare = binding.cboxRideshare.isChecked
+            println("car brand first = $carBrand")
+            if(userWorkDetailsViewModel.isInputDataValid(carBrand = carBrand, carModel = carModel, carYear = carYear,carCondition=carCondition, licensePlate = licensePlate, avgKmDriven = avgKmDriven, workCity = workCity, termsConditions = binding.cboxTermsConditions, isUpdating = true)){
+                println("car brand second = $carBrand")
+                sharedRegisterViewModel.updateWorkDetails(carBrand,carModel,carYear,carCondition,licensePlate,avgKmDriven,workCity,rideShare,allowContact)
+            }
+            else{
+                val errorMessage: String = resources.getString(userWorkDetailsViewModel.errorList[0])
+                SnackbarHelper.showErrorSnackBar(requireView(),errorMessage)
+            }
+        }
     }
 
     private fun setupNormalViews(){
@@ -123,7 +146,7 @@ class RegisterUserWorkDetailsFragment : Fragment() {
             val avgKmDriven = binding.tfAvgKmDrivenPerMonth.text.toString().trim()
             val workCity = binding.tfWorkCity.text.toString().trim()
 
-            if (userWorkDetailsViewModel.isInputDataValid(carBrand = carBrand, carModel = carModel, carYear = carYear,carCondition=carCondition, licensePlate = licensePlate, avgKmDriven = avgKmDriven, workCity = workCity, termsConditions = binding.cboxTermsConditions)) {
+            if (userWorkDetailsViewModel.isInputDataValid(carBrand = carBrand, carModel = carModel, carYear = carYear,carCondition=carCondition, licensePlate = licensePlate, avgKmDriven = avgKmDriven, workCity = workCity, termsConditions = binding.cboxTermsConditions, isUpdating = false)) {
                 sharedRegisterViewModel.driver.value
                 sharedRegisterViewModel.setCarBrand(carBrand)
                 sharedRegisterViewModel.setCarModel(carModel)
@@ -191,6 +214,27 @@ class RegisterUserWorkDetailsFragment : Fragment() {
             }
             if(localDriver.rideShareDriver){
                 binding.cboxRideshare.isChecked = true
+            }
+        }
+
+        sharedRegisterViewModel.loadingState.observe(viewLifecycleOwner){loading->
+            if(loading){
+                binding.progressBarRegisterFinal.visibility = View.VISIBLE
+                binding.btnSignUp.visibility = View.GONE
+            }
+            else{
+                binding.progressBarRegisterFinal.visibility = View.GONE
+                binding.btnSignUp.visibility = View.VISIBLE
+            }
+        }
+
+        sharedRegisterViewModel.errorMessage.observe(viewLifecycleOwner){errorMessage->
+            SnackbarHelper.showErrorSnackBar(requireView(),errorMessage)
+        }
+
+        sharedRegisterViewModel.successState.observe(viewLifecycleOwner){success->
+            if(success){
+                SnackbarHelper.showSuccessSnackBar(requireView(),getString(R.string.update_successful))
             }
         }
     }

@@ -19,6 +19,12 @@ class UserRepository @Inject constructor(
             .set(driver, SetOptions.merge())
     }
 
+    override fun updateDriverData(driverId: String, updates: Map<String, Any>): Task<Void> {
+        return usersCollection
+            .document(driverId)
+            .update(updates)
+    }
+
 
     override fun getDriver(uid: String): Task<Driver?> {
         return usersCollection.document(uid).get()

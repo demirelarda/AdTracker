@@ -16,6 +16,7 @@ import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentRegisterAddressDetailsBinding
 import com.mycompany.advioo.ui.activities.AppAdActivity
 import com.mycompany.advioo.util.SnackbarHelper
+import com.mycompany.advioo.util.Util.EDIT_STRING
 import com.mycompany.advioo.util.Util.REGISTER_STRING
 import com.mycompany.advioo.viewmodels.RegisterAddressDetailsViewModel
 import com.mycompany.advioo.viewmodels.SharedRegisterViewModel
@@ -53,27 +54,35 @@ class RegisterAddressDetailsFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
 
         val bundle = arguments
-        if(bundle!=null){
-            val args = RegisterAddressDetailsFragmentArgs.fromBundle(bundle)
-            if(args.registeringUser == REGISTER_STRING){
-                val state = args.selectedLocationArray?.get(0) ?: ""
-                val city = args.selectedLocationArray?.get(1) ?: ""
-                if(state!=""||city!=""){
-                    binding.tvSelectCity.text = "$city, $state"
-                    observeLocalDriver(true)
-                }
-                setupNormalViews()
+        val args = RegisterAddressDetailsFragmentArgs.fromBundle(bundle!!)
+        if(args.registeringUser == REGISTER_STRING){
+            setupNormalViews()
+            sharedRegisterViewModel.setEditMode(false)
+            if(args.selectedLocationArray != null){
+                val state = args.selectedLocationArray[0]
+                val city = args.selectedLocationArray[1]
+                binding.tvSelectCity.text = "$state, $city"
             }
-            else{
-                setupEditUserView()
-                isInEditMode = true
-            }
-
         }
         else{
-            setupEditUserView()
-            isInEditMode = true
+            if(args.registeringUser == EDIT_STRING){
+                setupEditUserView()
+                if(args.selectedLocationArray == null){
+                    observeLocalDriver(false)
+                }
+                else{
+                    observeLocalDriver(true)
+                }
+                sharedRegisterViewModel.setEditMode(true)
+                if(args.selectedLocationArray != null){
+                    observeLocalDriver(true)
+                    val state = args.selectedLocationArray[0]
+                    val city = args.selectedLocationArray[1]
+                    binding.tvSelectCity.text = "$state, $city"
+                }
+            }
         }
+
 
 
         binding.ivBtnBackFromAddressDetails.setOnClickListener {
@@ -110,12 +119,22 @@ class RegisterAddressDetailsFragment : Fragment() {
 
     private fun setupEditUserView(){
         sharedRegisterViewModel.getLocalDriver()
-        observeLocalDriver(false)
         binding.tvTitleAddressDetails.text = getString(R.string.edit_address_information)
         binding.btnContinueUserWorkDetails.text = getString(R.string.save_changes)
         binding.tvSelectCity.setOnClickListener {
+            sharedRegisterViewModel.setEditMode(true)
             val action = RegisterAddressDetailsFragmentDirections.actionRegisterAddressDetailsFragmentToStateListFragment()
             findNavController().navigate(action)
+        }
+        binding.btnContinueUserWorkDetails.setOnClickListener {
+            val fullName = binding.tfFullName.text.toString().trim()
+            val city= binding.tvSelectCity.text.toString().trim()
+            val address1 = binding.tfAddressRow1.text.toString().trim()
+            val address2 = binding.tfAddressRow2.text.toString().trim()
+            val zipCode = binding.tfPostalCode.text.toString().trim()
+            if(registerAddressDetailsViewModel.isInputDataValid(fullName = fullName, city = city, addressRow1 = address1, zipCode = zipCode)){
+                sharedRegisterViewModel.updateDriverAddressData(fullName,city,address1,address2,zipCode)
+            }
         }
     }
 
@@ -124,6 +143,7 @@ class RegisterAddressDetailsFragment : Fragment() {
         //viewModel = ViewModelProvider(requireActivity()).get(SharedRegisterViewModel::class.java)
         binding.tfFullName.setText((sharedRegisterViewModel.driver.value?.firstName.toString() ?: "") +" "+ (sharedRegisterViewModel.driver.value?.lastName.toString() ?: ""))
         binding.tvSelectCity.setOnClickListener {
+            sharedRegisterViewModel.setEditMode(false)
             val action = RegisterAddressDetailsFragmentDirections.actionRegisterAddressDetailsFragmentToStateListFragment()
             Navigation.findNavController(requireView()).navigate(action)
         }
@@ -154,6 +174,8 @@ class RegisterAddressDetailsFragment : Fragment() {
     }
 
 
+
+
     @SuppressLint("SetTextI18n")
     private fun observeLocalDriver(editedCity: Boolean){
         sharedRegisterViewModel.localDriver.observe(viewLifecycleOwner){localDriver->
@@ -166,6 +188,25 @@ class RegisterAddressDetailsFragment : Fragment() {
             if(localDriver.addressRow2 != ""){
                 binding.tfAddressRow2.setText(localDriver.addressRow2)
             }
+        }
+
+        sharedRegisterViewModel.successState.observe(viewLifecycleOwner){success->
+            if(success){
+                SnackbarHelper.showSuccessSnackBar(requireView(),getString(R.string.update_successful))
+            }
+        }
+        sharedRegisterViewModel.loadingState.observe(viewLifecycleOwner){loading->
+            if(loading){
+                binding.progressBarAddressDetails.visibility = View.VISIBLE
+                binding.btnContinueUserWorkDetails.visibility = View.GONE
+            }
+            else{
+                binding.progressBarAddressDetails.visibility = View.GONE
+                binding.btnContinueUserWorkDetails.visibility = View.VISIBLE
+            }
+        }
+        sharedRegisterViewModel.errorMessage.observe(viewLifecycleOwner){errorMessage->
+            SnackbarHelper.showErrorSnackBar(requireView(),errorMessage)
         }
     }
 

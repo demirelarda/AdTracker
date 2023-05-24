@@ -12,121 +12,161 @@
         android:layout_marginTop="20dp"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_title_address_details"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/address_details"
-            android:textStyle="bold"
-            android:textColor="@color/black"
-            android:textSize="24sp"
-            android:gravity="center"
-            android:layout_gravity="center">
-        </TextView>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="@string/full_name"
-            style="@style/TfCustomLayout"
-            app:startIconDrawable="@drawable/user_icon"
-            >
-            <EditText
-                android:id="@+id/tf_full_name"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"/>
-        </com.google.android.material.textfield.TextInputLayout>
-
-        <TextView
-            android:id="@+id/tv_select_city"
-            android:textColor="@color/black"
-            android:hint="@string/city"
+        <LinearLayout
+            android:layout_marginStart="25dp"
+            android:layout_marginEnd="25dp"
             android:layout_gravity="center"
-            android:gravity="center_vertical"
-            android:layout_width="match_parent"
-            android:layout_height="58dp"
-            android:layout_marginTop="18dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:drawablePadding="16dp"
-            android:background="@drawable/tv_background_shape"
-            android:textSize="16sp"
-            android:paddingStart="12dp"
-            android:paddingEnd="12dp"
-            android:clickable="true"
-            app:drawableStartCompat="@drawable/city_location_icon"
-            app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_24"
-            android:focusable="true" />
-
-        <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="@string/address_row"
-            style="@style/TfCustomLayout"
-            app:startIconDrawable="@drawable/location_icon"
-            >
-            <EditText
-                android:id="@+id/tf_address_row1"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"/>
-        </com.google.android.material.textfield.TextInputLayout>
+            android:orientation="horizontal">
 
-        <com.google.android.material.textfield.TextInputLayout
+            <ImageView
+                android:id="@+id/iv_btn_back_from_address_details"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/back_button_icon">
+            </ImageView>
+
+            <TextView
+                android:layout_weight="1"
+                android:id="@+id/tv_title_address_details"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:text="@string/address_details"
+                android:textStyle="bold"
+                android:textColor="@color/black"
+                android:textSize="24sp"
+                android:gravity="center"
+                android:layout_gravity="center">
+            </TextView>
+
+        </LinearLayout>
+
+
+
+
+        <LinearLayout
+            android:id="@+id/ll_form_address"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="@string/address_row2"
-            style="@style/TfCustomLayout"
-            app:startIconDrawable="@drawable/location_icon"
-            >
+            android:layout_height="match_parent"
+            android:orientation="vertical">
 
-            <EditText
-                android:id="@+id/tf_address_row2"
+            <ProgressBar
+                android:visibility="gone"
+                android:layout_gravity="center"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/progressBarAddressDetails">
+            </ProgressBar>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="@string/full_name"
+                style="@style/TfCustomLayout"
+                app:startIconDrawable="@drawable/user_icon"
+                >
+                <EditText
+                    android:id="@+id/tf_full_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="@string/postal_code"
-            style="@style/TfCustomLayout"
-            app:startIconDrawable="@drawable/postal_code_icon"
-            >
-            <EditText
-                android:id="@+id/tf_postal_code"
+            <TextView
+                android:id="@+id/tv_select_city"
+                android:textColor="@color/black"
+                android:hint="@string/city"
+                android:layout_gravity="center"
+                android:gravity="center_vertical"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="58dp"
+                android:layout_marginTop="18dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:drawablePadding="16dp"
+                android:background="@drawable/tv_background_shape"
+                android:textSize="16sp"
+                android:paddingStart="12dp"
+                android:paddingEnd="12dp"
+                android:clickable="true"
+                app:drawableStartCompat="@drawable/city_location_icon"
+                app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_24"
+                android:focusable="true" />
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_continue_user_work_details"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="18dp"
-            android:background="@drawable/button_background_blue"
-            android:text="@string/btn_continue"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp">
-        </androidx.appcompat.widget.AppCompatButton>
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="@string/address_row"
+                style="@style/TfCustomLayout"
+                app:startIconDrawable="@drawable/location_icon"
+                >
+                <EditText
+                    android:id="@+id/tf_address_row1"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="@string/address_row2"
+                style="@style/TfCustomLayout"
+                app:startIconDrawable="@drawable/location_icon"
+                >
+
+                <EditText
+                    android:id="@+id/tf_address_row2"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="@string/postal_code"
+                style="@style/TfCustomLayout"
+                app:startIconDrawable="@drawable/postal_code_icon"
+                >
+                <EditText
+                    android:id="@+id/tf_postal_code"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_continue_user_work_details"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginTop="50dp"
+                android:layout_marginEnd="18dp"
+                android:background="@drawable/button_background_blue"
+                android:text="@string/btn_continue"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp">
+            </androidx.appcompat.widget.AppCompatButton>
+
+        </LinearLayout>
+
 
 
     </LinearLayout>

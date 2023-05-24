@@ -17,6 +17,7 @@ import com.mycompany.advioo.adapters.CityListAdapter
 import com.mycompany.advioo.databinding.FragmentCityListBinding
 import com.mycompany.advioo.models.city.Province
 import com.mycompany.advioo.models.user.UserCity
+import com.mycompany.advioo.util.Util.EDIT_STRING
 import com.mycompany.advioo.util.Util.REGISTER_STRING
 import com.mycompany.advioo.viewmodels.CityStateViewModel
 import com.mycompany.advioo.viewmodels.SharedRegisterViewModel
@@ -68,7 +69,11 @@ class CityListFragment @Inject constructor(
             val userCity = UserCity(provinceObject.id,it.id,viewModel.selectedUserState.value!!,it.name)
             println("driver city object = $userCity")
             sharedRegisterViewModel.setCityObject(userCity)
-            val action = CityListFragmentDirections.actionCityListFragmentToRegisterAddressDetailsFragment(REGISTER_STRING,selectedLocationArray)
+            var actionString = REGISTER_STRING
+            if(sharedRegisterViewModel.editMode.value!!){
+                actionString = EDIT_STRING
+            }
+            val action = CityListFragmentDirections.actionCityListFragmentToRegisterAddressDetailsFragment(actionString,selectedLocationArray)
             Navigation.findNavController(requireView()).navigate(action)
         }
 

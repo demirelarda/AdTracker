@@ -157,6 +157,7 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
     val errorList : ArrayList<Int> = ArrayList()
 
     fun isInputDataValid(
+        isUpdating: Boolean,
         carBrand: String,
         carModel: String,
         carYear: String,
@@ -167,7 +168,7 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
         termsConditions: CheckBox,
     ): Boolean {
         var isValid = true
-
+        println("car brand third vm = $carBrand")
         errorList.clear()
 
         if (carBrand.isEmpty()) {
@@ -213,7 +214,8 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
             isValid = false
         }
 
-        if(!(termsConditions.isChecked)){
+        if( !(isUpdating) && !(termsConditions.isChecked)){
+            println("entered terms")
             _errorLiveData.value = R.string.terms_conditions_error
             errorList.add(_errorLiveData.value!!)
             isValid = false

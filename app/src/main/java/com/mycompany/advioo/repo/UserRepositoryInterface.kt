@@ -8,11 +8,11 @@ interface UserRepositoryInterface {
 
     fun uploadUserData(driver: Driver) : Task<Void>
 
+    fun updateDriverData(driverId: String, updates: Map<String, Any>) : Task<Void>
+
     fun uploadLocationData(userId: String,locationData: LocationSampleData) : Task<Void>
 
     fun getDriver(uid: String): Task<Driver?>
 
     fun updateDriverCampaignStatus(userId: String, enrolledCampaignId: String) : Task<Void>
-
-
 }

@@ -21,6 +21,7 @@ class RegisterViewModel : ViewModel(){
         email: String,
         password: String,
         confirmPassword: String,
+        editMode: Boolean
     ): Boolean {
         var isValid = true
 
@@ -48,17 +49,17 @@ class RegisterViewModel : ViewModel(){
             isValid = false
         }
 
-        if (password.isEmpty()) {
+        if (!(editMode) && password.isEmpty()) {
             _errorLiveData.value = R.string.password_empty_error
             errorList.add(_errorLiveData.value!!)
             isValid = false
-        } else if (password.length < 8) {
+        } else if ( !(editMode) && password.length < 8) {
             _errorLiveData.value = R.string.password_length_error
             errorList.add(_errorLiveData.value!!)
             isValid = false
         }
 
-        if (confirmPassword.isEmpty()) {
+        if (!(editMode) && confirmPassword.isEmpty()) {
             _errorLiveData.value = R.string.password_confirm_empty_error
             errorList.add(_errorLiveData.value!!)
             isValid = false
@@ -68,7 +69,7 @@ class RegisterViewModel : ViewModel(){
             return false
         }
 
-        if (password != confirmPassword) {
+        if (!(editMode) && password != confirmPassword) {
             _errorLiveData.value = R.string.password_confirm_not_match
             errorList.add(_errorLiveData.value!!)
             isValid = false

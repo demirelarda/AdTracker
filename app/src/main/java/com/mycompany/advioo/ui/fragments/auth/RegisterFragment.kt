@@ -100,6 +100,23 @@ class RegisterFragment: Fragment() {
         binding.tfPasswordAgain.visibility = View.GONE
         binding.tilPasswordRegister.visibility = View.GONE
         binding.tilPasswordAgainRegister.visibility = View.GONE
+        binding.btnContinueRegisterFirst.setOnClickListener {
+                println("button clicked")
+                val firstName = binding.tfFirstName.text.toString().trim()
+                val lastName = binding.tfLastName.text.toString().trim()
+                val email = binding.tfEmailSignup.text.toString().trim()
+
+                if (registerViewModel.isInputDataValid(firstName, lastName, email,"","",true)) {
+                    sharedRegisterViewModel.driver.value
+                    sharedRegisterViewModel.setFirstName(firstName)
+                    sharedRegisterViewModel.setLastName(lastName)
+                    sharedRegisterViewModel.setEmail(email)
+                    sharedRegisterViewModel.updateUserPersonalDetails(email,firstName,lastName)
+                } else {
+                    val errorMessage: String = resources.getString(registerViewModel.errorList[0]) //list contains all the errors, get the first error message.
+                    SnackbarHelper.showErrorSnackBar(requireView(),errorMessage)
+                }
+        }
     }
 
     private fun setupNormalViews(){
@@ -110,7 +127,7 @@ class RegisterFragment: Fragment() {
             val password = binding.tfPassword.text.toString().trim()
             val passwordAgain = binding.tfPasswordAgain.text.toString().trim()
 
-            if (registerViewModel.isInputDataValid(firstName, lastName, email, password, passwordAgain)) {
+            if (registerViewModel.isInputDataValid(firstName, lastName, email, password, passwordAgain,false)) {
                 sharedRegisterViewModel.driver.value
                 sharedRegisterViewModel.setFirstName(firstName)
                 sharedRegisterViewModel.setLastName(lastName)
@@ -132,6 +149,28 @@ class RegisterFragment: Fragment() {
             binding.tfLastName.setText(localDriver.surname)
             binding.tfEmailSignup.setText(localDriver.email)
         }
+
+        sharedRegisterViewModel.errorMessage.observe(viewLifecycleOwner){errorMessage->
+            SnackbarHelper.showErrorSnackBar(requireView(),errorMessage)
+        }
+
+        sharedRegisterViewModel.successState.observe(viewLifecycleOwner){success->
+            if(success){
+                SnackbarHelper.showSuccessSnackBar(requireView(),getString(R.string.update_successful))
+            }
+        }
+        sharedRegisterViewModel.loadingState.observe(viewLifecycleOwner){loading->
+            if(loading){
+                binding.llFormHolderRegister.visibility = View.GONE
+                binding.progressBarRegister.visibility = View.VISIBLE
+            }
+            else{
+                binding.llFormHolderRegister.visibility = View.VISIBLE
+                binding.progressBarRegister.visibility = View.GONE
+            }
+        }
+
+
     }
 
 
