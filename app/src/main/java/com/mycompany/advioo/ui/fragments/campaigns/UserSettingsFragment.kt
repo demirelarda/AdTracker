@@ -12,6 +12,8 @@ import com.mycompany.advioo.ui.activities.MainActivity
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
+//TODO: ADD A SYNC WITH SERVER OPTION
+
 @AndroidEntryPoint
 class UserSettingsFragment : Fragment() {
 

@@ -41,6 +41,10 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
     val failState: LiveData<Boolean>
         get() = _failState
 
+    private val _errorMessage = MutableLiveData<String>()
+    val errorMessage: LiveData<String>
+        get() = _errorMessage
+
 
 
     private fun uploadUserData(driver: Driver) {
@@ -99,28 +103,27 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
     fun registerUser(email: String, password: String, driver: Driver) {
         _loadingState.postValue(true)
         auth.createUserWithEmailAndPassword(email, password)
-            .addOnCompleteListener { task ->
-                if (task.isSuccessful) {
+            .addOnSuccessListener{
                     driver.id = auth.uid.toString()
                     val newDisplayName = driver.firstName+" "+driver.lastName
                     val profileUpdates = UserProfileChangeRequest.Builder()
                         .setDisplayName(newDisplayName)
                         .build()
                     auth.currentUser?.updateProfile(profileUpdates)
-                        ?.addOnCompleteListener { task ->
-                            if (task.isSuccessful) {
-                                uploadUserData(driver)
-                            }
-                            else{
-                                _loadingState.postValue(false)
-                                _failState.postValue(true)
-                            }
+                        ?.addOnSuccessListener {
+                            uploadUserData(driver)
+                        }
+                        ?.addOnFailureListener {
+                            _failState.value = true
+                            _loadingState.value = false
+                            _errorMessage.value = it.localizedMessage
                         }
 
-                } else {
-                    _loadingState.postValue(false)
-                    _failState.postValue(true)
-                }
+            }
+            .addOnFailureListener {
+                _failState.value = true
+                _loadingState.value = false
+                _errorMessage.value = it.localizedMessage
             }
     }
 

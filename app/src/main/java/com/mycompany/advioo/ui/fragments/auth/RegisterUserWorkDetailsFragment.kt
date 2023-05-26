@@ -263,6 +263,10 @@ class RegisterUserWorkDetailsFragment : Fragment() {
             }
         }
 
+        userWorkDetailsViewModel.errorMessage.observe(viewLifecycleOwner){errorMessage->
+            SnackbarHelper.showErrorSnackBar(requireView(),errorMessage)
+        }
+
     }
 
 

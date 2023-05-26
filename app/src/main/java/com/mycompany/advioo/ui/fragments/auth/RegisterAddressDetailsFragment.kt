@@ -22,6 +22,10 @@ import com.mycompany.advioo.viewmodels.RegisterAddressDetailsViewModel
 import com.mycompany.advioo.viewmodels.SharedRegisterViewModel
 
 
+//TODO: FIX THE SUCCESS BAR SHOWING UP BUG
+//TODO: REFRESH THE VIEWMODEL VALUES AFTER EDITING IS DONE
+//TODO: FOR REGISTER: ADD SPESIFIC ERRORS
+
 class RegisterAddressDetailsFragment : Fragment() {
 
     private var _binding: FragmentRegisterAddressDetailsBinding? = null
