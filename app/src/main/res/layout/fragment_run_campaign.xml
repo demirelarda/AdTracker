@@ -1,249 +1,98 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
+
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".RunCampaignFragment">
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:context=".RunCampaignFragment"
+    android:id="@+id/rl_run_campaign"
+    android:background="@drawable/mapsimage">
 
     <ProgressBar
-        android:id="@+id/progressBarRunCampaign"
+        android:visibility="gone"
+        android:id="@+id/progress_bar_run_campaign"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_marginTop="15dp"
-        android:visibility="gone"
-        tools:visibility="visible" />
+        android:layout_centerInParent="true">
+    </ProgressBar>
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    <FrameLayout
+        android:id="@+id/circle_layout_run_campaign"
+        android:layout_width="350dp"
+        android:layout_height="350dp"
+        android:layout_marginTop="70dp"
+        android:layout_centerInParent="true"
+        android:layout_alignParentTop="true"
+        android:background="@drawable/circle_shape">
 
-        <LinearLayout
-            android:id="@+id/rl_run_campaign"
+        <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:layout_marginTop="60dp">
+            android:layout_marginStart="70dp"
+            android:layout_marginEnd="70dp"
+            android:layout_marginTop="70dp"
+            android:text="@string/current_trip"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="24sp"
+            android:textStyle="bold">
+        </TextView>
 
-            <LinearLayout
-                android:id="@+id/distanceLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
+        <TextView
+            android:id="@+id/tv_payment_run_campaign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="70dp"
+            android:layout_marginEnd="70dp"
+            android:layout_marginTop="130dp"
+            tools:text="$12.80"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="48sp"
+            android:textStyle="bold">
+        </TextView>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/total_km_driven"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+        <TextView
+            android:id="@+id/tv_distance_driven_run_campaign"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="70dp"
+            android:layout_marginEnd="70dp"
+            android:layout_marginTop="230dp"
+            tools:text="80 KM"
+            android:gravity="center"
+            android:textColor="@color/white"
+            android:textSize="26sp"
+            android:textStyle="bold">
+        </TextView>
 
-                <TextView
-                    android:id="@+id/tvKMDriven"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    tools:text="25.2KM" />
-            </LinearLayout>
+    </FrameLayout>
 
-            <LinearLayout
-                android:id="@+id/speedLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
+    <LinearLayout
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/speed"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:layout_below="@id/circle_layout_run_campaign">
 
-                <TextView
-                    android:id="@+id/tvSpeed"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    tools:text="89 KM/H" />
-            </LinearLayout>
+        <androidx.appcompat.widget.AppCompatButton
+            android:id="@+id/btn_end_trip_run_campaign"
+            android:layout_width="match_parent"
+            android:layout_height="55dp"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="280dp"
+            android:layout_marginEnd="20dp"
+            android:background="@drawable/button_background_red"
+            android:text="@string/end_trip"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            android:textSize="18sp">
+        </androidx.appcompat.widget.AppCompatButton>
 
-            <LinearLayout
-                android:id="@+id/paymentLayout"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
+    </LinearLayout>
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/payment"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvPayment"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textColor="@color/app_green"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    tools:text="$0.00" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:id="@+id/infoLayout1"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/campaign_type"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvCampaignType"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    tools:text="Light-1" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/is_night"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvCampaignNight"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    tools:text="FALSE" />
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="16dp"
-                android:orientation="horizontal"
-                android:layout_gravity="center">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:text="@string/multiplier"
-                    android:textSize="25sp"
-                    android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tvMultiplier"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:gravity="center"
-                    android:textColor="@color/black"
-                    android:textSize="25sp"
-                    android:textStyle="bold"
-                    tools:text="0.8" />
-            </LinearLayout>
+</RelativeLayout>
 
 
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnStartTrip"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_below="@+id/distanceLayout"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="100dp"
-                android:layout_marginEnd="18dp"
-                android:background="@drawable/button_background_blue"
-                android:text="@string/start_trip"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnStopTrip"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_below="@+id/btnStartTrip"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="30dp"
-                android:layout_marginEnd="18dp"
-                android:background="@drawable/button_background_blue"
-                android:text="@string/stop_trip"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-            <androidx.appcompat.widget.AppCompatButton
-                android:id="@+id/btnSaveTrip"
-                android:layout_width="match_parent"
-                android:layout_height="55dp"
-                android:layout_below="@+id/btnStopTrip"
-                android:layout_marginStart="18dp"
-                android:layout_marginTop="70dp"
-                android:layout_marginEnd="18dp"
-                android:background="@color/purple_700"
-                android:text="@string/save_trip"
-                android:textAllCaps="false"
-                android:textColor="@color/white"
-                android:textSize="16sp" />
-
-        </LinearLayout>
-
-    </ScrollView>
-
-</FrameLayout>
 

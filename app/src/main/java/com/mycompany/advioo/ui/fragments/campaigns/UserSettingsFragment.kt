@@ -6,9 +6,13 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
+import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentUserSettingsBinding
 import com.mycompany.advioo.ui.activities.MainActivity
+import com.mycompany.advioo.ui.fragments.ContactUsFragment
+import com.mycompany.advioo.ui.fragments.ReceivePaymentFragment
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -41,7 +45,7 @@ class UserSettingsFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavView).visibility = View.VISIBLE
         setupViews()
         setupOnClickListeners()
 
@@ -80,6 +84,22 @@ class UserSettingsFragment : Fragment() {
             intent.putExtra("addressInfo",true)
             intent.putExtra("editInfo",true)
             startActivity(intent)
+        }
+
+        binding.tvBtnContactUs.setOnClickListener {
+            val fragment = ContactUsFragment()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.mainFrameLayout, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
+        }
+
+        binding.tvBtnGetPayment.setOnClickListener {
+            val fragment = ReceivePaymentFragment()
+            val transaction = requireActivity().supportFragmentManager.beginTransaction()
+            transaction.replace(R.id.mainFrameLayout, fragment)
+            transaction.addToBackStack(null)
+            transaction.commit()
         }
 
 

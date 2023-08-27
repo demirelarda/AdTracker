@@ -7,5 +7,6 @@ import kotlinx.parcelize.Parcelize
 data class Province(
     val id: String,
     val stateName: String,
-    val cities: List<City>
+    val cities: List<City>,
+    val timezone: String
 ):Parcelable
