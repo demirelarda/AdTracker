@@ -24,6 +24,10 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class HomeFragment : Fragment(R.layout.fragment_home) {
 
+
+    //TODO: USE USERID TO CREATE TRIPDATA DOCUMENTS ON FIRESTORE
+
+
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
     private val homeViewModel : HomeViewModel by viewModels(ownerProducer = { this } )
@@ -49,6 +53,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val binding = FragmentHomeBinding.bind(view)
+        homeViewModel.getAllTripDataFromLocal()
         homeFeedAdapter = HomeFeedAdapter(glide)
         subscribeToObservers()
         homeFeedAdapter.setOnItemClickListener {
