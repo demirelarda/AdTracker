@@ -3,13 +3,16 @@
     android:shape="oval">
     <gradient
 
-        android:startColor="@color/app_blue"
-        android:endColor="@color/app_button_bg_color"
+        android:startColor="#3E3E3E"
+        android:endColor="#5C5C5C"
         android:angle="90"/>
     <size
         android:width="120dp"
         android:height="120dp"/>
+
     <stroke
-        android:width="4dp"
-        android:color="@color/app_green"/>
+        android:width="6dp"
+        android:color="@color/app_green">
+    </stroke>
+
 </shape>

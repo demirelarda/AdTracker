@@ -5,16 +5,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.AsyncListDiffer
+import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import androidx.viewpager2.adapter.FragmentStateAdapter
 import com.mycompany.advioo.R
-import com.mycompany.advioo.models.CampaignStats
-import com.mycompany.advioo.ui.fragments.CampaignStatsFragment
+import javax.inject.Inject
 
-class CampaignStatsAdapter(
-    private val campaignHistoryList: ArrayList<Triple<String,String,String>>
-) : RecyclerView.Adapter<CampaignStatsAdapter.CampaignStatsViewHolder>(){
+class CampaignStatsAdapter @Inject constructor() : RecyclerView.Adapter<CampaignStatsAdapter.CampaignStatsViewHolder>(){
 
     inner class CampaignStatsViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView)
 
@@ -22,6 +19,26 @@ class CampaignStatsAdapter(
         val view = LayoutInflater.from(parent.context).inflate(R.layout.view_pager_item_campaign_stats,parent,false)
         return CampaignStatsViewHolder(view)
     }
+
+    private val diffUtil = object : DiffUtil.ItemCallback<Triple<String,String,String>>(){
+        override fun areItemsTheSame(oldItem: Triple<String,String,String>, newItem: Triple<String,String,String>): Boolean {
+            return oldItem == newItem
+        }
+
+        override fun areContentsTheSame(oldItem: Triple<String,String,String>, newItem: Triple<String,String,String>): Boolean {
+            return oldItem == newItem
+        }
+    }
+
+    private val recyclerListDiffer = AsyncListDiffer(this,diffUtil)
+
+    var campaignHistoryList: List<Triple<String,String,String>>
+        get() = recyclerListDiffer.currentList
+        set(value) {
+            recyclerListDiffer.submitList(value)
+            notifyDataSetChanged()
+        }
+
 
     override fun getItemCount(): Int {
         return campaignHistoryList.size

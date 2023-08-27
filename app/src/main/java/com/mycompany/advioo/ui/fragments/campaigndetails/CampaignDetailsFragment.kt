@@ -158,6 +158,21 @@ class CampaignDetailsFragment : Fragment() {
 
 
     private fun setupOnClickListeners() {
+
+        binding.fabScrollDown.setOnClickListener {
+            binding.campaignDetailsNestedScrollView.fullScroll(View.FOCUS_DOWN)
+        }
+
+        /*      //TODO: FIX HERE
+        binding.campaignDetailsNestedScrollView.viewTreeObserver.addOnScrollChangedListener {
+            if (binding.campaignDetailsNestedScrollView.getChildAt(0).bottom <= (binding.campaignDetailsNestedScrollView.height + binding.campaignDetailsNestedScrollView.scrollY)) {
+                binding.fabScrollDown.hide()
+            } else {
+                binding.fabScrollDown.show()
+            }
+        }
+         */
+
         binding.ivBtnBackFromCampaignDetails.setOnClickListener {
             val intent = Intent(requireContext(), AppAdActivity::class.java)
             startActivity(intent)
