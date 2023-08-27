@@ -10,6 +10,8 @@ Introducing our revolutionary new app that lets you turn your vehicle into a mov
 * Retrofit2
 * Firebase
 * Room
+* Foreground Service
+* Location Tracking
 
 ## Copyright
 
