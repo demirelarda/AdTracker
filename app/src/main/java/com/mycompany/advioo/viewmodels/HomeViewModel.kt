@@ -1,15 +1,23 @@
 package com.mycompany.advioo.viewmodels
 
+import android.widget.Toast
 import androidx.lifecycle.*
+import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
+import com.google.type.DateTime
 import com.mycompany.advioo.models.campaign.Campaign
 import com.mycompany.advioo.models.localuser.LocalDriver
+import com.mycompany.advioo.models.tripdata.TotalTripData
+import com.mycompany.advioo.models.tripdata.UserTripData
 import com.mycompany.advioo.models.user.Driver
 import com.mycompany.advioo.repo.CampaignRepositoryInterface
 import com.mycompany.advioo.repo.UserRepositoryInterface
 import com.mycompany.advioo.repo.local.LocalDriverRepositoryInterface
+import com.mycompany.advioo.services.TripData
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
+import java.util.Date
 import javax.inject.Inject
 
 
@@ -40,8 +48,10 @@ class HomeViewModel @Inject constructor(
     private val _triggerCampaigns = MutableLiveData<Unit>()
 
     private val _userObject = MutableLiveData<LocalDriver?>()
-    val userObject : LiveData<LocalDriver?>
+    val userObject: LiveData<LocalDriver?>
         get() = _userObject
+
+    private val _tripDataList = MutableLiveData<List<UserTripData>>()
 
     val campaigns: LiveData<List<Campaign>> = _triggerCampaigns.switchMap {
         liveData {
@@ -99,10 +109,117 @@ class HomeViewModel @Inject constructor(
 
             }
             .addOnFailureListener {
-                println("error getting user data = "+it.localizedMessage)
+                println("error getting user data = " + it.localizedMessage)
                 _loadingState.value = false
                 _failState.value = true
             }
+    }
+
+
+    private fun uploadTripDataIfNecessary() {
+        println("uploading trip data")
+        if (_tripDataList.value != null) {
+            val tripDataList = _tripDataList.value!!
+            val newTripDataList = tripDataList.toMutableList()
+            for (data in tripDataList) {
+                if (data.isUploaded) {
+                    newTripDataList.remove(data)
+                }
+            }
+            val sortedTripDataList = newTripDataList.sortedByDescending { it.localSaveDate }
+            println("last local save date = " + sortedTripDataList[0])
+            if (isOneHourPassed(sortedTripDataList[0].localSaveDate)) {
+                println("one hour passed")
+                val newSortedTripDataList = sortedTripDataList.toMutableList()
+                for (data in sortedTripDataList) {
+                    if (!(data.isUploaded)) {
+                        data.isUploaded = true
+                        newTripDataList.add(data)
+                    }
+                }
+                newTripDataList.sortedByDescending { it.localSaveDate }
+                val totalTripData = TotalTripData(
+                    uploadDate = System.currentTimeMillis(),
+                    driverId = auth.uid!!,
+                    tripDataList = tripDataList
+                )
+                userRepository.uploadTripData(totalTripData).addOnSuccessListener {
+                    println("uploaded trip data successfuly")
+                    userRepository.getAllUserTripData(auth.uid!!).addOnSuccessListener {
+                        viewModelScope.launch {
+                            localDriverRepository.deleteTripData(auth.uid!!)
+                            for (tripData in it[0].tripDataList) {
+                                try {
+                                    localDriverRepository.saveLocalTripData(tripData)
+                                    _loadingState.value = false
+                                } catch (e: Exception) {
+                                    _loadingState.value = false
+                                    _failState.value = true
+                                }
+                            }
+                        }
+                    }.addOnFailureListener {
+                        println("error upload= " + it.localizedMessage)
+                        _loadingState.value = false
+                        _failState.value = true
+                    }
+                }
+
+
+            }
+        } else {
+            userRepository.getAllUserTripData(auth.uid!!).addOnSuccessListener {
+                val tripDataList = it[0].tripDataList
+                for (tripData in tripDataList) {
+                    viewModelScope.launch {
+                        localDriverRepository.saveLocalTripData(tripData)
+                    }
+                }
+            }.addOnFailureListener {
+                println("error = " + it.localizedMessage)
+                _loadingState.value = false
+                _failState.value = true
+            }
+        }
+    }
+
+    private fun isOneHourPassed(time: Long): Boolean {
+        println("one hour check function ran")
+        println("current time = " + System.currentTimeMillis())
+        println("other time = $time")
+        val oneHourInMillis = 0.2 * 60 * 1000 //2 minutes for now    normal: //60 * 60 * 1000
+        val currentTime = System.currentTimeMillis()
+        println(currentTime - time)
+        println("is passed " + ((currentTime - time) >= oneHourInMillis))
+        return (currentTime - time) >= oneHourInMillis
+    }
+
+
+    fun getAllTripDataFromLocal() {
+        _loadingState.value = true
+        viewModelScope.launch {
+            try {
+                _tripDataList.value = localDriverRepository.getAllTripDataByUserId(auth.uid!!)
+                _tripDataList.value?.let {
+                    uploadTripDataIfNecessary()
+                }
+            //TODO: CHECK HERE, MAYBE THIS RUNS BEFORE ASSIGNING TRIP DATA LIST VALUES
+            } catch (e: Exception) {
+                userRepository.getAllUserTripData(auth.uid!!).addOnSuccessListener {
+                    if (it.isNotEmpty()) {
+                        val tripDataList = it[0].tripDataList
+                        for (tripData in tripDataList) {
+                            viewModelScope.launch {
+                                localDriverRepository.saveLocalTripData(tripData)
+                            }
+                        }
+                    }
+                }.addOnFailureListener {
+                    _loadingState.value = false
+                    _failState.value = true
+                }
+            }
+        }
     }
 
     private fun saveDriver(localDriver: LocalDriver) {

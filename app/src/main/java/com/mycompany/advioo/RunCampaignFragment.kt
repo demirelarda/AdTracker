@@ -5,41 +5,34 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.mycompany.advioo.databinding.FragmentRunCampaignBinding
-import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Application
-import android.content.BroadcastReceiver
-import android.content.Context
 import android.content.Intent
-import android.content.IntentFilter
-import android.content.pm.PackageManager
-import android.net.Uri
 import android.os.Build
-import android.os.PowerManager
-import android.preference.PreferenceManager
-import android.provider.Settings
+import android.view.Gravity
+import android.widget.FrameLayout
 import android.widget.Toast
 import androidx.annotation.RequiresApi
-import androidx.appcompat.app.AlertDialog
-import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.google.android.gms.location.*
+import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.firestore.FirebaseFirestore
-import com.instacart.truetime.time.TrueTimeImpl
+import com.mycompany.advioo.models.MyPair
+import com.mycompany.advioo.models.campaignapplication.CampaignApplication
 import com.mycompany.advioo.models.pinfo.Nredrate
 import com.mycompany.advioo.models.pinfo.Phour
 import com.mycompany.advioo.models.pinfo.Pinfo
+import com.mycompany.advioo.models.tripdata.UserTripData
 import com.mycompany.advioo.services.LocationTrackingService
 import com.mycompany.advioo.services.TripData
 import com.mycompany.advioo.util.Status
 import com.mycompany.advioo.viewmodels.RunCampaignViewModel
 import java.time.Instant
-import java.time.LocalDateTime
 import java.time.ZoneId
 import java.time.ZonedDateTime
+import java.util.UUID
 import javax.inject.Inject
 
 
@@ -49,8 +42,11 @@ private var pInfoList : ArrayList<Pinfo> = ArrayList()
 private var pHours : ArrayList<Phour> = ArrayList()
 private var nDownRate : ArrayList<Nredrate> = ArrayList()
 private var lastDistanceInKm : Double = 0.0
+private var lastPayment: Double = 0.0
+private var campaignApplication = CampaignApplication()
+private lateinit var snackbar: Snackbar
 
-
+//TODO: REFRESH (REMOVE) KM AFTER BACK BUTTON PRESSED (OR FRAGMENT DESTROYED -> NOT SURE. THIS MIGHT EFFECT RE-ENTERING AFTER TURNING OFF THE SCREEN)
 
 
 class RunCampaignFragment : Fragment() {
@@ -60,6 +56,10 @@ class RunCampaignFragment : Fragment() {
     private lateinit var tripData: TripData
     val userEmail = FirebaseAuth.getInstance().currentUser?.email
     lateinit var runCampaignViewModel: RunCampaignViewModel
+    private var mLocationPoints : ArrayList<Pair<Double,Double>> = arrayListOf()
+    val firebaseAuth = FirebaseAuth.getInstance()
+    private lateinit var tripId: String
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -82,273 +82,84 @@ class RunCampaignFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnSaveTrip.visibility = View.GONE
-        binding.btnStopTrip.visibility = View.GONE
+        println("run campaign onView Created")
+
+        if(requireActivity().intent.hasExtra("campaignApplication")){
+            campaignApplication = requireActivity().intent.getParcelableExtra<CampaignApplication>("campaignApplication")!!
+        }
+
+        snackbar = Snackbar.make(view, "You are out of bounds! Get back to campaign area!", Snackbar.LENGTH_INDEFINITE)
+        snackbar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorSnackBarError))
+
         runCampaignViewModel = ViewModelProvider(requireActivity()).get(RunCampaignViewModel::class.java)
         runCampaignViewModel.getPinfoFromApi()
-        runCampaignViewModel.getTimeFromApi("Vancouver")
         subscribeToObservers()
+        startTracking()
 
-
-
-        binding.btnStartTrip.setOnClickListener {
-            requestLocationAndNotificationPermissions()
-            checkBatteryOptimizationPermission()
-        }
-
-        binding.btnStopTrip.setOnClickListener {
+        binding.btnEndTripRunCampaign.setOnClickListener {
             stopTracking()
-            binding.tvKMDriven.text = "0.00 KM"
-            binding.btnStartTrip.visibility = View.VISIBLE
-            binding.btnStopTrip.visibility = View.GONE
-            binding.btnSaveTrip.visibility = View.GONE
-            lastDistanceInKm = 0.0
-            runCampaignViewModel.resetPayment()
-
-        }
-
-
-        binding.btnSaveTrip.setOnClickListener {
-            println("trip data = "+tripData.locationPoints)
-            tripData.endTime = System.currentTimeMillis()
-            tripData.userEmail = userEmail
-            saveTripDataToFirestore(tripData)
             lastDistanceInKm = 0.0
             runCampaignViewModel.resetPayment()
         }
+
+
     }
-
-    private fun saveTripDataToFirestore(tripData: TripData) {
-        val userId = FirebaseAuth.getInstance().currentUser?.uid
-        val db = FirebaseFirestore.getInstance()
-
-        if (userId != null) {
-            // Show ProgressBar
-            binding.progressBarRunCampaign.visibility = View.VISIBLE
-
-            db.collection("location_data")
-                .add(tripData)
-                .addOnSuccessListener {
-                    // Hide ProgressBar
-                    binding.progressBarRunCampaign.visibility = View.GONE
-
-                    Toast.makeText(requireContext(), "Trip data saved successfully", Toast.LENGTH_SHORT).show()
-                }
-                .addOnFailureListener { e ->
-                    // Hide ProgressBar
-                    binding.progressBarRunCampaign.visibility = View.GONE
-
-                    Toast.makeText(requireContext(), "Error saving trip data: ${e.message}", Toast.LENGTH_SHORT).show()
-                }
-        } else {
-            Toast.makeText(requireContext(), "User not logged in", Toast.LENGTH_SHORT).show()
-        }
-    }
-
-
 
 
     private fun startTracking() {
         val startIntent = Intent(requireContext(), LocationTrackingService::class.java).apply {
             action = LocationTrackingService.ACTION_START
+            putParcelableArrayListExtra(LocationTrackingService.EXTRA_LOCATION_LIST, campaignApplication.selectedCampaign.mapBorderLocationList)
         }
         ContextCompat.startForegroundService(requireContext(), startIntent)
 
-        binding.btnStartTrip.visibility = View.GONE
-        binding.btnStopTrip.visibility = View.VISIBLE
-        binding.btnSaveTrip.visibility = View.VISIBLE
     }
 
-    private val locationUpdateReceiver = object : BroadcastReceiver() {
-        @RequiresApi(Build.VERSION_CODES.O)
-        override fun onReceive(context: Context?, intent: Intent?) {
-            tripData = intent?.getParcelableExtra("tripData") ?: TripData()
-            val newDistanceInKm = tripData.distanceDriven
-            if (newDistanceInKm > lastDistanceInKm) {
-                val distanceDifference = newDistanceInKm- lastDistanceInKm
-                println("distance difference= "+distanceDifference)
-                val canadaTimeZones = listOf(
-                    "America/St_Johns",
-                    "America/Halifax",
-                    "America/Toronto",
-                    "America/Winnipeg",
-                    "America/Edmonton",
-                    "America/Vancouver"
-                )
-                val application : Application = AdviooApplication()
-                val currentTime = (application as AdviooApplication).trueTime.now()
-                val timeZone = canadaTimeZones[5]
-                val localTime = convertUtcToLocalTime(currentTime.toInstant(), timeZone)
-                println("Current Time ($timeZone): $localTime")
-                println("CURRENT TIME: ${currentTime}")
-                var isNight = false
-                isNight = localTime.hour !in 6..18
-                binding.tvCampaignNight.text = isNight.toString()
-                runCampaignViewModel.calculatePayment("L1",distanceDifference,isNight)
-                lastDistanceInKm = newDistanceInKm
-            }
-            binding.tvKMDriven.text = String.format("%.2f KM", tripData.distanceDriven)
-        }
-    }
+
+
 
     private fun stopTracking() {
         val stopIntent = Intent(requireContext(), LocationTrackingService::class.java).apply {
             action = LocationTrackingService.ACTION_STOP
         }
         requireContext().stopService(stopIntent)
-
-        binding.tvKMDriven.text = "0.00 KM"
+        LocationTrackingService.distanceDriven.value = 0.0
         runCampaignViewModel.resetPayment()
-        binding.tvPayment.text = "$0.00"
-        binding.btnStartTrip.visibility = View.VISIBLE
-        binding.btnStopTrip.visibility = View.GONE
-        binding.btnSaveTrip.visibility = View.GONE
+        requireActivity().onBackPressed()
+
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onResume() {
         super.onResume()
-        LocalBroadcastManager.getInstance(requireContext()).registerReceiver(
-            locationUpdateReceiver, IntentFilter(LocationTrackingService.ACTION_LOCATION_UPDATE)
-        )
+        subscribeToObservers()
     }
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onPause() {
         super.onPause()
-        LocalBroadcastManager.getInstance(requireContext()).unregisterReceiver(locationUpdateReceiver)
+        subscribeToObservers()
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        _binding = null
+        //_binding = null
 
     }
 
     @RequiresApi(Build.VERSION_CODES.O)
     fun convertUtcToLocalTime(utcTime: Instant, timeZone: String): ZonedDateTime {
+        println("zoneId = ${ZoneId.of(timeZone)}")
         val zoneId = ZoneId.of(timeZone)
-
-        val localTime = ZonedDateTime.ofInstant(utcTime, zoneId)
-
-        return localTime
+        return ZonedDateTime.ofInstant(utcTime, zoneId)
     }
 
 
-    private fun requestLocationAndNotificationPermissions() {
-        val permissions = mutableListOf(
-            Manifest.permission.ACCESS_FINE_LOCATION,
-            Manifest.permission.ACCESS_COARSE_LOCATION
-        )
-
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
-            permissions.add(Manifest.permission.POST_NOTIFICATIONS)
-        }
-
-        val notGrantedPermissions = permissions.filter { permission ->
-            ContextCompat.checkSelfPermission(requireContext(), permission) != PackageManager.PERMISSION_GRANTED
-        }
-
-        if (notGrantedPermissions.isNotEmpty()) {
-            ActivityCompat.requestPermissions(requireActivity(), notGrantedPermissions.toTypedArray(), LOCATION_AND_NOTIFICATION_PERMISSION_REQUEST_CODE)
-        } else {
-            startTracking()
-        }
-    }
-
-    private fun showRationaleDialog(message: String) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Permissions Required")
-            .setMessage(message)
-            .setPositiveButton("OK") { _, _ ->
-                requestLocationAndNotificationPermissions()
-            }
-            .setNegativeButton("Cancel", null)
-            .create()
-            .show()
-    }
-
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
-        if (requestCode == LOCATION_AND_NOTIFICATION_PERMISSION_REQUEST_CODE) {
-            if (grantResults.isNotEmpty() && grantResults.all { it == PackageManager.PERMISSION_GRANTED }) {
-                startTracking()
-            } else {
-                val deniedPermissions = permissions.zip(grantResults.toList())
-                    .filter { (_, result) -> result != PackageManager.PERMISSION_GRANTED }
-                    .map { (permission, _) -> permission }
-
-                val anyRationaleNeeded = deniedPermissions.any { permission ->
-                    ActivityCompat.shouldShowRequestPermissionRationale(requireActivity(), permission)
-                }
-
-                if (anyRationaleNeeded) {
-                    when {
-                        deniedPermissions.containsAll(listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) -> showRationaleDialog("This app requires location permissions to provide its services. Please grant the required permissions.")
-                        deniedPermissions.contains(Manifest.permission.POST_NOTIFICATIONS) -> showRationaleDialog("This app requires notification permissions to provide its services. Please grant the required permissions.")
-                        else -> showRationaleDialog("This app requires location and notification permissions to provide its services. Please grant the required permissions.")
-                    }
-                } else {
-                    when {
-                        deniedPermissions.containsAll(listOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION)) -> showPermissionDeniedDialog("Location permissions are required for the app to function properly. Since you have permanently denied the permissions, you need to enable them manually from the app settings.")
-                        deniedPermissions.contains(Manifest.permission.POST_NOTIFICATIONS) -> showPermissionDeniedDialog("Notification permissions are required for the app to function properly. Since you have permanently denied the permissions, you need to enable them manually from the app settings.")
-                        else -> showPermissionDeniedDialog("Location and notification permissions are required for the app to function properly. Since you have permanently denied the permissions, you need to enable them manually from the app settings.")
-                    }
-                }
-            }
-        }
-    }
-
-    private fun showPermissionDeniedDialog(message: String) {
-        AlertDialog.Builder(requireContext())
-            .setTitle("Permissions Denied")
-            .setMessage(message)
-            .setPositiveButton("Go to Settings") { _, _ ->
-                startActivity(Intent(Settings.ACTION_APPLICATION_DETAILS_SETTINGS).apply {
-                    data = Uri.fromParts("package", requireActivity().packageName, null)
-                })
-            }
-            .setNegativeButton("Cancel", null)
-            .create()
-            .show()
-    }
-
-    private fun requestBatteryOptimizationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val powerManager = requireActivity().getSystemService(Context.POWER_SERVICE) as PowerManager
-            val packageName = requireActivity().packageName
-            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
-                val intent = Intent(Settings.ACTION_REQUEST_IGNORE_BATTERY_OPTIMIZATIONS).apply {
-                    data = Uri.parse("package:$packageName")
-                }
-                startActivityForResult(intent, BATTERY_OPTIMIZATION_REQUEST_CODE)
-            } else {
-                startTracking()
-            }
-        } else {
-            startTracking()
-        }
-    }
-
-    private fun checkBatteryOptimizationPermission() {
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            val powerManager = requireActivity().getSystemService(Context.POWER_SERVICE) as PowerManager
-            val packageName = requireActivity().packageName
-            if (!powerManager.isIgnoringBatteryOptimizations(packageName)) {
-                binding.btnStartTrip.isEnabled = false
-                requestBatteryOptimizationPermission()
-            } else {
-                binding.btnStartTrip.isEnabled = true
-            }
-        }
-    }
-
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == BATTERY_OPTIMIZATION_REQUEST_CODE) {
-            checkBatteryOptimizationPermission()
-        }
-    }
 
 
+
+    @RequiresApi(Build.VERSION_CODES.O)
+    @SuppressLint("SetTextI18n")
     private fun subscribeToObservers(){
         runCampaignViewModel.pInfo.observe(viewLifecycleOwner, Observer{
             when(it.status){
@@ -374,19 +185,71 @@ class RunCampaignFragment : Fragment() {
         })
 
         runCampaignViewModel.payment.observe(viewLifecycleOwner, Observer {
-            println("PAYMENT = "+it.toString())
-            binding.tvPayment.text = String.format("$%.2f ", it)
+            println("PAYMENT = $it")
+            binding.tvPaymentRunCampaign.text = String.format("$%.2f ", it)
         })
 
         runCampaignViewModel.multiplier.observe(viewLifecycleOwner, Observer {
-            binding.tvMultiplier.text =  String.format("x%.2f ", it)
+            //binding.tvMultiplier.text =  String.format("x%.2f ", it)
         })
 
         runCampaignViewModel.campaignType.observe(viewLifecycleOwner, Observer {
-            binding.tvCampaignType.text = it.toString()
+            //binding.tvCampaignType.text = it.toString()
         })
 
 
+        LocationTrackingService.distanceDriven.observe(viewLifecycleOwner, Observer {distanceDriven->
+            println("distance driven observed = $distanceDriven")
+            binding.tvDistanceDrivenRunCampaign.text = String.format("%.2f",distanceDriven)+ " " + getString(R.string.km)
+            val application : Application = AdviooApplication()
+            if (distanceDriven > lastDistanceInKm) {
+                val distanceDifference = distanceDriven - lastDistanceInKm
+                println("distance difference= $distanceDifference")
+                (application as AdviooApplication).trueTime.sync()
+                val currentTime = (application as AdviooApplication).trueTime.now()
+                val timeZone = campaignApplication.selectedCampaign.campaignTimeZone
+                val localTime = convertUtcToLocalTime(currentTime.toInstant(), timeZone)
+                println("current gmt time (true time) : $currentTime")
+                println("User location current time =  ($timeZone): $localTime")
+                println("zoned hour = ${localTime.hour}")
+                val isNight = localTime.hour !in 6..18
+                println("true time = $currentTime")
+                println("is night = $isNight")
+                runCampaignViewModel.calculatePayment("L1", distanceDifference, isNight)
+                lastDistanceInKm = distanceDriven
+                tripId = UUID.randomUUID().toString() + "_" + System.currentTimeMillis()
+                val currentPayment = runCampaignViewModel.payment.value ?: 0.0
+                val paymentDifference = currentPayment - lastPayment
+                val localTripData = UserTripData(
+                    tripId = tripId,
+                    campaignApplicationId= campaignApplication.applicationId,
+                    driverId = firebaseAuth.uid.toString(),
+                    campaignId = campaignApplication.selectedCampaign.campaignId,
+                    kmDriven = distanceDifference,
+                    earnedPayment = paymentDifference,
+                    locationPoints = arrayListOf(), //TODO CHANGE HERE
+                    localSaveDate = System.currentTimeMillis(),
+                    isUploaded = false,
+                )
+                lastPayment = currentPayment
+                runCampaignViewModel.saveLocalTripData(localTripData)
+            }
+        })
+
+        LocationTrackingService.isOutOfBounds.observe(viewLifecycleOwner, Observer { isOutOfBounds ->
+            if (isOutOfBounds) {
+                if (!snackbar.isShown) {
+                    snackbar.show()
+                }
+            } else {
+                snackbar.dismiss()
+            }
+        })
+
+
+        LocationTrackingService.roadPoints.observe(viewLifecycleOwner){locationPoints->
+            mLocationPoints.addAll(locationPoints)
+        }
 
 
 

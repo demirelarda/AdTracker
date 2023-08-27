@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/run_campaign_navigation"
+    app:startDestination="@id/runCampaignFragment">
+
+    <action
+        android:id="@+id/action_global_runCampaignFragment"
+        app:destination="@+id/runCampaignFragment"
+        app:launchSingleTop="true" />
+
+    <action
+        android:id="@+id/action_normal_runCampaignFragment"
+        app:destination="@+id/runCampaignFragment" />
+
+
+    <fragment
+        android:id="@+id/runCampaignFragment"
+        android:name="com.mycompany.advioo.RunCampaignFragment"
+        android:label="fragment_run_campaign"
+        tools:layout="@layout/fragment_run_campaign" />
+
+</navigation>

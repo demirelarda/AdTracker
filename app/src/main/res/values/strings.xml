@@ -78,7 +78,7 @@
     <string name="permission_needed_location">Permission needed for precise location.</string>
     <string name="give_permission">Give Permission</string>
     <string name="start_trip">Start Trip</string>
-    <string name="stop_trip">Reset Trip</string>
+    <string name="stop_trip">STOP TRIP</string>
     <string name="resume_trip">Resume Trip</string>
     <string name="reset_trip">Reset Trip</string>
     <string name="total_km_driven">Total KM driven: </string>
@@ -126,7 +126,7 @@
     <string name="please_confirm_installer">Please confirm that you have selected this installer.</string>
     <string name="my_active_campaign">My Active Campaign</string>
     <string name="see_details">See Details</string>
-    <string name="start_campaign">Start Campaign</string>
+    <string name="start_campaign">Start Trip</string>
     <string name="resume_campaign">Resume Campaign</string>
     <string name="see_campaign_stats">See Stats</string>
     <string name="have_not_enrolled_campaign">You are not enrolled into any campaigns.</string>
@@ -153,7 +153,34 @@
     <string name="save_changes">Save Changes</string>
     <string name="error_while_updating_user_details">Error while updating your data!</string>
     <string name="update_successful">Profile updated successfully!</string>
+    <string name="current_trip">CURRENT TRIP</string>
+    <string name="km">KM</string>
+    <string name="end_trip">END TRIP</string>
+    <string name="please_allow_all_permissions">Permissions denied! Please go to settings and allow:</string>
+    <string name="the_following_permissions_denied">The following permissions has been denied, please allow them from settings: </string>
+    <string name="notifications">Notifications</string>
+    <string name="precise_location">Precise Location</string>
+    <string name="today">Today</string>
+    <string name="this_week">This Week</string>
+    <string name="this_month">This Month</string>
+    <string name="this_year">Total</string>
+    <string name="currency_symbol">$</string>
+    <string name="contact_us">Contact Us</string>
+    <string name="title">Title</string>
+    <string name="your_message">Your Message</string>
+    <string name="you_can_contact_us">If you have any problems, requests, or suggestions, you can contact us. We will respond to the email you used <b>during registration</b>.</string>
+    <string name="submit">Submit</string>
+    <string name="your_message_has_been_successfully_sent">Your message has been successfully sent, our team will contact you. Please check your email for a response.</string>
+    <string name="response_will_sent_to_this_email">The response will be sent to this email:</string>
 
+    <string name="receive_payment">Receive Payment</string>
+    <string name="payment_full_name">Full Name</string>
+    <string name="bank_account_number">Bank Account Number</string>
+    <string name="bank_transit_number">Bank Transit Number</string>
+    <string name="bank_institution_number">Bank Institution Number</string>
+    <string name="payment_address">Address</string>
+    <string name="send_payment_request">Send Payment Request</string>
+    <string name="odometer_photo">Select Odometer Photo From Gallery</string>
 
     <string-array name="car_conditions">
         <item>Like New</item>

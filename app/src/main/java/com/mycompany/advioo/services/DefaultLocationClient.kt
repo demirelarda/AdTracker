@@ -34,9 +34,9 @@ class DefaultLocationClient(
             }
 
 
-            val locationInterval = 10000L
-            val locationFastestInterval = 10000L
-            val locationMaxWaitTime = 10000L
+            val locationInterval = 3000L
+            val locationFastestInterval = 3000L
+            val locationMaxWaitTime = 3000L
 
             locationRequest = LocationRequest.Builder(Priority.PRIORITY_HIGH_ACCURACY, locationInterval)
                 .setWaitForAccurateLocation(false)
@@ -68,4 +68,3 @@ class DefaultLocationClient(
         }
     }
 }
-

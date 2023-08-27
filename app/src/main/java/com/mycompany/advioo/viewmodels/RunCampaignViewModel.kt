@@ -10,8 +10,9 @@ import com.mycompany.advioo.models.pinfo.Nredrate
 import com.mycompany.advioo.models.pinfo.Phour
 import com.mycompany.advioo.models.pinfo.Pinfo
 import com.mycompany.advioo.models.pinfo.PinfoResponse
+import com.mycompany.advioo.models.tripdata.UserTripData
 import com.mycompany.advioo.repo.PinfoRepositoryInterface
-import com.mycompany.advioo.repo.TimeRepositoryInterface
+import com.mycompany.advioo.repo.local.LocalDriverRepositoryInterface
 import com.mycompany.advioo.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.launch
@@ -20,9 +21,10 @@ import javax.inject.Inject
 @HiltViewModel
 class RunCampaignViewModel @Inject constructor(
     private val repository : PinfoRepositoryInterface,
-    private val timeRepository : TimeRepositoryInterface
+    private val localUserRepository: LocalDriverRepositoryInterface
 ) : ViewModel() {
 
+    val currentSpeed = MutableLiveData<Float>()
 
     private val _pInfo = MutableLiveData<Resource<PinfoResponse>>()
     val pInfo : LiveData<Resource<PinfoResponse>>
@@ -49,7 +51,25 @@ class RunCampaignViewModel @Inject constructor(
     val campaignType : LiveData<String>
         get() = _campaignType
 
+    private val _campaignLastUpdateTime = MutableLiveData<Long>()
+    val campaignLastUpdateTime : LiveData<Long>
+        get() = _campaignLastUpdateTime
+
     //
+
+
+    fun saveLocalTripData(localTripData: UserTripData){
+        viewModelScope.launch {
+            try{
+                localUserRepository.saveLocalTripData(localTripData)
+            }
+            catch (e:Exception){
+                println(e.localizedMessage)
+            }
+
+        }
+    }
+
 
 
     fun getPinfoFromApi(){
@@ -60,24 +80,19 @@ class RunCampaignViewModel @Inject constructor(
         }
     }
 
-    fun getTimeFromApi(location: String){
-        _serverTime.value = Resource.loading(null)
-        viewModelScope.launch {
-            val response = timeRepository.getTimeFromApi(location)
-            _serverTime.value = response
-        }
-    }
 
     fun calculatePayment(campaignLevel:String, distanceInKM : Double, isNight:Boolean){
         var multiplier = 0.0
         var nightEffect = 1.0
+
+
         if(isNight){
-            println("isNight = "+isNight)
+            println("isNight = $isNight")
             for(i in nDownRate){
                 println("entered night loop")
                 nightEffect = i.rate
                 println(i.rate)
-                println("night effect = "+nightEffect)
+                println("night effect = $nightEffect")
             }
         }
         for(i in pInfoList){
@@ -87,8 +102,8 @@ class RunCampaignViewModel @Inject constructor(
                 _campaignType.value = i.level //REMOVE LATER
             }
         }
-        println("multiplier = "+multiplier)
-        println("night effect = "+nightEffect)
+        println("multiplier = $multiplier")
+        println("night effect = $nightEffect")
         _payment.value = _payment.value?.plus(multiplier*distanceInKM*nightEffect)
         _multiplier.value = multiplier*nightEffect
 

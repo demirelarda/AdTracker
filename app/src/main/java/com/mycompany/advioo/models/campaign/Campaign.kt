@@ -24,5 +24,6 @@ data class Campaign(
     var addedOn: Timestamp = Timestamp(Date()),
     var totalPaymentRange: String = "",
     var enrolledUserIdLevelMap: ArrayList<Pair<String,String>> = ArrayList(),
-    var campaignStateId: String = ""
+    var campaignStateId: String = "",
+    var campaignTimeZone: String = ""
 ) : Parcelable
