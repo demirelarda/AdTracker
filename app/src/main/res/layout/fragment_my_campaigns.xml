@@ -1,12 +1,17 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".ui.fragments.campaigns.MyCampaignsFragment"
-    android:background="@color/app_gray"
-    android:id="@+id/fl_my_campaigns">
+    android:fillViewport="true">
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:context=".ui.fragments.campaigns.MyCampaignsFragment"
+        android:background="@color/app_gray"
+        android:id="@+id/fl_my_campaigns">
 
 
     <ProgressBar
@@ -204,7 +209,50 @@
             app:drawableTint="@color/app_blue">
         </TextView>
 
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/tv_permission_error"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/the_following_permissions_denied"
+                android:textColor="@color/colorSnackBarError"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:textStyle="bold"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="16sp">
+            </TextView>
+
+            <TextView
+                android:id="@+id/tv_permission_error_list"
+                android:visibility="gone"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                tools:text="Location Permission, Background Permission"
+                android:textColor="@color/app_blue"
+                android:layout_marginTop="10dp"
+                android:gravity="center"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:textSize="16sp"
+                android:layout_marginBottom="20dp">
+            </TextView>
+
+        </LinearLayout>
+
     </LinearLayout>
 
 
+
+
+
 </FrameLayout>
+
+    </ScrollView>
