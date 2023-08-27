@@ -22,6 +22,7 @@
     <color name="colorSnackBarError">#F72400</color>
     <color name="colorRadioButtonUnselected">#b5d5fa</color>
     <color name="colorRadioButtonSelected">#157DF7</color>
+    <color name="colorYellowButton">#FFC300</color>
 
 
 </resources>
