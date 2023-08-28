@@ -13,7 +13,6 @@ data class UserTripData(
     val campaignId: String = "",
     val kmDriven: Double = 0.0,
     val earnedPayment: Double = 0.0,
-    val locationPoints: ArrayList<MyPair> = arrayListOf(MyPair(0.0,0.0)),
     val localSaveDate: Long = 0L,
     var isUploaded: Boolean = false,
     val startTime: String = "",

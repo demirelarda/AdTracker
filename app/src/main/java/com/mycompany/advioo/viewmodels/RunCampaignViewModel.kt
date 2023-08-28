@@ -10,6 +10,7 @@ import com.mycompany.advioo.models.pinfo.Nredrate
 import com.mycompany.advioo.models.pinfo.Phour
 import com.mycompany.advioo.models.pinfo.Pinfo
 import com.mycompany.advioo.models.pinfo.PinfoResponse
+import com.mycompany.advioo.models.tripdata.TripLocationData
 import com.mycompany.advioo.models.tripdata.UserTripData
 import com.mycompany.advioo.repo.PinfoRepositoryInterface
 import com.mycompany.advioo.repo.local.LocalDriverRepositoryInterface
@@ -33,6 +34,10 @@ class RunCampaignViewModel @Inject constructor(
     private val _serverTime = MutableLiveData<Resource<ServerTime>>()
     val serverTime : LiveData<Resource<ServerTime>>
         get() = _serverTime
+
+    private val _tripId = MutableLiveData<String>()
+    val tripId: LiveData<String>
+        get() = _tripId
 
     val pInfoList: MutableList<Pinfo> = mutableListOf() //payment info list. This will be accessible from fragment, and under obverve function, if success, then assign list elements inside this list.
     val nDownRate: MutableList<Nredrate> = mutableListOf()  //night down rate, accessible from fragment
@@ -64,9 +69,20 @@ class RunCampaignViewModel @Inject constructor(
                 localUserRepository.saveLocalTripData(localTripData)
             }
             catch (e:Exception){
-                println(e.localizedMessage)
+                println(e.localizedMessage) //TODO: SET ERROR STATE AND SHOW SNACKBAR IN UI (NO SPACE AVAILABLE IN STORAGE ERROR)
             }
 
+        }
+    }
+
+    fun saveTripLocationData(locationData: TripLocationData){
+        viewModelScope.launch {
+            try{
+                localUserRepository.saveTripLocationData(locationData) //TODO: SET ERROR STATE AND SHOW SNACKBAR IN UI (NO SPACE AVAILABLE IN STORAGE ERROR)
+            }
+            catch(e:Exception){
+                println(e.localizedMessage)
+            }
         }
     }
 

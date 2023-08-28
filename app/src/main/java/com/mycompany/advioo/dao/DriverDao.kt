@@ -5,6 +5,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.mycompany.advioo.models.localuser.LocalDriver
+import com.mycompany.advioo.models.tripdata.TripLocationData
 import com.mycompany.advioo.models.tripdata.UserTripData
 import com.mycompany.advioo.services.TripData
 
@@ -44,8 +45,10 @@ interface DriverDao {
     @Query("SELECT * FROM tripData WHERE localSaveDate BETWEEN :yearStart AND :yearEnd AND driverId = :userId AND campaignId = :campaignID")
     suspend fun getAllTripDataFromThisYear(yearStart: Long, yearEnd: Long, userId: String, campaignID: String): List<UserTripData>
 
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
+    suspend fun insertTripLocationData(locationData: TripLocationData)
 
-
-
+    @Query("DELETE FROM tripLocationData WHERE tripId = :tripID ")
+    suspend fun deleteTripLocationData(tripID: String)
 
 }

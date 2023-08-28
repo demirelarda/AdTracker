@@ -2,6 +2,7 @@ package com.mycompany.advioo.services
 
 import android.os.Parcelable
 import com.google.firebase.firestore.GeoPoint
+import com.mycompany.advioo.models.campaign.LatLngPoint
 import kotlinx.parcelize.Parcelize
 import kotlinx.parcelize.RawValue
 
@@ -18,5 +19,6 @@ data class TripData(
     var startTime: Long = 0L,
     var endTime: Long = 0L,
     var userEmail: String? = null,
+    val locations: ArrayList<LatLngPoint> = ArrayList()
     //var speedList: MutableList<Triple<Float, @RawValue GeoPoint, Long>> = mutableListOf()
 ) : Parcelable

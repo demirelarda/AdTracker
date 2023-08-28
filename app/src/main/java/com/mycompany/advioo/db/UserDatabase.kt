@@ -9,10 +9,11 @@ import com.mycompany.advioo.models.localuser.LocalDriver
 
 
 import androidx.room.TypeConverters
+import com.mycompany.advioo.models.tripdata.TripLocationData
 import com.mycompany.advioo.models.tripdata.UserTripData
 import com.mycompany.advioo.util.DataConverter
 
-@Database(entities = [LocalDriver::class, UserTripData::class], version = 1, exportSchema = false)
+@Database(entities = [LocalDriver::class, UserTripData::class, TripLocationData::class], version = 1, exportSchema = false)
 @TypeConverters(DataConverter::class)
 abstract class UserDatabase : RoomDatabase(){
 

@@ -5,7 +5,6 @@ import android.app.*
 import android.content.Context
 import android.content.Intent
 import android.location.Location
-import android.os.IBinder
 import android.os.PowerManager
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
@@ -24,15 +23,12 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
-import org.locationtech.jts.geom.PrecisionModel
-
 
 class LocationTrackingService : LifecycleService() {
 
     private val serviceScope = CoroutineScope(SupervisorJob() + Dispatchers.IO)
     private lateinit var locationClient: LocationClient
     private lateinit var wakeLock: PowerManager.WakeLock
-    private lateinit var borderList: ArrayList<LatLngPoint>
 
     override fun onCreate() {
         super.onCreate()
@@ -119,13 +115,12 @@ class LocationTrackingService : LifecycleService() {
                         // Update distance and lastUpdateTime
                         isOutOfBounds.postValue(false)
                         val distance = locationClient.previousLocation?.distanceTo(location)?.div(1000.0)
+                        val newLocation = LatLngPoint(location.latitude, location.longitude)
+                        tripData.locations.add(newLocation)
+                        userLocations.postValue(tripData.locations)
                         if(locationClient.previousLocation!=null){
-                            val locationPointPair = Pair<Double,Double>(locationClient.previousLocation!!.latitude.toString().toDouble(),location.longitude.toString().toDouble())
-                            val locationPairArray = ArrayList<Pair<Double,Double>>()
-                            locationPairArray.add(locationPointPair)
-                            roadPoints.postValue(locationPairArray)
+                            //TODO: ADD THE LOCATION POINTS HERE
                         }
-
                         val geoPoint = GeoPoint(location.latitude, location.longitude)
 
                         if (distance != null) {
@@ -180,8 +175,7 @@ class LocationTrackingService : LifecycleService() {
         const val ACTION_LOCATION_UPDATE = "ACTION_LOCATION_UPDATE"
         const val ACTION_SPEED_UPDATE = "ACTION_SPEED_UPDATE"
         const val EXTRA_LOCATION_LIST = "EXTRA_LOCATION_LIST"
-        val isTracking = MutableLiveData<Boolean>()
-        val roadPoints = MutableLiveData<MutableList<Pair<Double,Double>>>()
+        val userLocations = MutableLiveData<List<LatLngPoint>>(ArrayList())
         val distanceDriven = MutableLiveData<Double>(0.0)
         val isOutOfBounds = MutableLiveData<Boolean>(false)
     }

@@ -2,6 +2,7 @@ package com.mycompany.advioo.repo.local
 
 
 import com.mycompany.advioo.models.localuser.LocalDriver
+import com.mycompany.advioo.models.tripdata.TripLocationData
 import com.mycompany.advioo.models.tripdata.UserTripData
 
 interface LocalDriverRepositoryInterface {
@@ -25,6 +26,10 @@ interface LocalDriverRepositoryInterface {
     suspend fun getAllTripDataFromThisMonth(monthStart: Long, monthEnd: Long, userId: String, campaignId: String): List<UserTripData>
 
     suspend fun getAllTripDataFromThisYear(yearStart: Long, yearEnd: Long, userId: String, campaignId: String): List<UserTripData>
+
+    suspend fun saveTripLocationData(tripLocationData: TripLocationData)
+
+    suspend fun deleteLocationList(tripId: String)
 
 
 }

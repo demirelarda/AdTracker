@@ -24,6 +24,7 @@ import com.mycompany.advioo.models.campaignapplication.CampaignApplication
 import com.mycompany.advioo.models.pinfo.Nredrate
 import com.mycompany.advioo.models.pinfo.Phour
 import com.mycompany.advioo.models.pinfo.Pinfo
+import com.mycompany.advioo.models.tripdata.TripLocationData
 import com.mycompany.advioo.models.tripdata.UserTripData
 import com.mycompany.advioo.services.LocationTrackingService
 import com.mycompany.advioo.services.TripData
@@ -56,10 +57,9 @@ class RunCampaignFragment : Fragment() {
     private lateinit var tripData: TripData
     val userEmail = FirebaseAuth.getInstance().currentUser?.email
     lateinit var runCampaignViewModel: RunCampaignViewModel
-    private var mLocationPoints : ArrayList<Pair<Double,Double>> = arrayListOf()
     val firebaseAuth = FirebaseAuth.getInstance()
     private lateinit var tripId: String
-
+    private lateinit var sessionId: String
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,7 +81,7 @@ class RunCampaignFragment : Fragment() {
     @RequiresApi(Build.VERSION_CODES.O)
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
+        sessionId = UUID.randomUUID().toString() + "_" + System.currentTimeMillis()
         println("run campaign onView Created")
 
         if(requireActivity().intent.hasExtra("campaignApplication")){
@@ -215,7 +215,7 @@ class RunCampaignFragment : Fragment() {
                 val isNight = localTime.hour !in 6..18
                 println("true time = $currentTime")
                 println("is night = $isNight")
-                runCampaignViewModel.calculatePayment("L1", distanceDifference, isNight)
+                runCampaignViewModel.calculatePayment("L1", distanceDifference, isNight) //TODO: CHANGE THE LEVEL, Set it dynamically
                 lastDistanceInKm = distanceDriven
                 tripId = UUID.randomUUID().toString() + "_" + System.currentTimeMillis()
                 val currentPayment = runCampaignViewModel.payment.value ?: 0.0
@@ -227,7 +227,6 @@ class RunCampaignFragment : Fragment() {
                     campaignId = campaignApplication.selectedCampaign.campaignId,
                     kmDriven = distanceDifference,
                     earnedPayment = paymentDifference,
-                    locationPoints = arrayListOf(), //TODO CHANGE HERE
                     localSaveDate = System.currentTimeMillis(),
                     isUploaded = false,
                 )
@@ -246,10 +245,33 @@ class RunCampaignFragment : Fragment() {
             }
         })
 
+        LocationTrackingService.userLocations.observe(viewLifecycleOwner, Observer{userLocations ->
+            if(userLocations != null){
+                if(userLocations.isNotEmpty()){
+                    if(userLocations.size < 80000){
+                        val userTripLocationData = TripLocationData(
+                            tripId = sessionId, //TODO: SET AND GET THIS FROM VIEWMODEL
+                            locationList = userLocations,
+                            date = System.currentTimeMillis(),
+                            driverId = firebaseAuth.currentUser!!.uid
+                        )
+                        runCampaignViewModel.saveTripLocationData(userTripLocationData)
+                    }
+                    //TODO: GENERATE ANOTHER SESSION ID AND USE IT:
+                    else{
+                       //tripId = sessionId, //TODO: SET AND GET THIS FROM VIEWMODEL
+                       // locationList = userLocations,
+                       // date = System.currentTimeMillis(),
+                       // driverId = firebaseAuth.currentUser!!.uid
+                       // )
+                       // runCampaignViewModel.saveTripLocationData(userTripLocationData)
+                    }
 
-        LocationTrackingService.roadPoints.observe(viewLifecycleOwner){locationPoints->
-            mLocationPoints.addAll(locationPoints)
-        }
+                }
+            }
+        })
+
+
 
 
 

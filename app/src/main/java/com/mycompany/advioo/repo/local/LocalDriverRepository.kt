@@ -2,6 +2,7 @@ package com.mycompany.advioo.repo.local
 
 import com.mycompany.advioo.dao.DriverDao
 import com.mycompany.advioo.models.localuser.LocalDriver
+import com.mycompany.advioo.models.tripdata.TripLocationData
 import com.mycompany.advioo.models.tripdata.UserTripData
 import javax.inject.Inject
 
@@ -68,6 +69,14 @@ class LocalDriverRepository @Inject constructor(
         campaignId: String
     ): List<UserTripData> {
         return driverDao.getAllTripDataFromThisYear(yearStart,yearEnd,userId,campaignId)
+    }
+
+    override suspend fun saveTripLocationData(tripLocationData: TripLocationData) {
+       driverDao.insertTripLocationData(tripLocationData)
+    }
+
+    override suspend fun deleteLocationList(tripId: String) {
+        driverDao.deleteTripLocationData(tripId)
     }
 
 }

@@ -5,23 +5,23 @@ import com.google.firebase.firestore.GeoPoint
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import com.mycompany.advioo.models.MyPair
+import com.mycompany.advioo.models.campaign.LatLngPoint
 import java.lang.reflect.Type
 
 class DataConverter {
 
 
-
     @TypeConverter
-    fun fromLocationPointsList(locationPoints: ArrayList<MyPair>): String {
+    fun fromLatLngPointList(latLngPoints: List<LatLngPoint>): String {
         val gson = Gson()
-        return gson.toJson(locationPoints)
+        return gson.toJson(latLngPoints)
     }
 
     @TypeConverter
-    fun toLocationPointsList(locationPointsString: String): ArrayList<MyPair> {
+    fun toLatLngPointList(latLngPointsString: String): List<LatLngPoint> {
         val gson = Gson()
-        val objectType = object : TypeToken<ArrayList<MyPair>>() {}.type
-        return gson.fromJson(locationPointsString, objectType)
+        val objectType = object : TypeToken<List<LatLngPoint>>() {}.type
+        return gson.fromJson(latLngPointsString, objectType)
     }
 
 }
