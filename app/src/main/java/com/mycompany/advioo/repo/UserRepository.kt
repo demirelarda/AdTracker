@@ -10,6 +10,7 @@ import com.mycompany.advioo.models.ContactMessage
 import com.mycompany.advioo.models.LocationSampleData
 import com.mycompany.advioo.models.campaign.Campaign
 import com.mycompany.advioo.models.tripdata.TotalTripData
+import com.mycompany.advioo.models.tripdata.TripLocationData
 import com.mycompany.advioo.models.tripdata.UserTripData
 import com.mycompany.advioo.models.user.Driver
 import javax.inject.Inject
@@ -58,6 +59,35 @@ class UserRepository @Inject constructor(
             .document(totalTripData.driverId)
             .set(totalTripData, SetOptions.merge())
     }
+
+    override fun uploadTripLocationData(tripLocationData: List<TripLocationData>): Task<Void> {
+        val batch = db.batch()
+
+        for (data in tripLocationData) {
+            val documentRef = db.collection("tripLocationData").document(data.tripId)
+            batch.set(documentRef, tripLocationDataToMap(data))
+        }
+
+        return batch.commit()
+    }
+
+
+    private fun tripLocationDataToMap(data: TripLocationData): Map<String, Any> {
+        return mapOf(
+            "tripId" to data.tripId,
+            "locationList" to data.locationList.map {
+                mapOf(
+                    "latitude" to it.latitude,
+                    "longitude" to it.longitude
+                )
+            },
+            "driverId" to data.driverId,
+            "campaignId" to data.campaignId,
+            "date" to data.date
+        )
+    }
+
+
 
     override fun getAllUserTripData(userId: String): Task<List<TotalTripData>> {
         val tripDataQuery = db.collection("tripData")

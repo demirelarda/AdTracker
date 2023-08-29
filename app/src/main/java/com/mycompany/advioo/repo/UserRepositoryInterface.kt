@@ -5,6 +5,7 @@ import com.google.android.gms.tasks.Task
 import com.mycompany.advioo.models.ContactMessage
 import com.mycompany.advioo.models.LocationSampleData
 import com.mycompany.advioo.models.tripdata.TotalTripData
+import com.mycompany.advioo.models.tripdata.TripLocationData
 import com.mycompany.advioo.models.user.Driver
 
 interface UserRepositoryInterface {
@@ -20,6 +21,8 @@ interface UserRepositoryInterface {
     fun updateDriverCampaignStatus(userId: String, enrolledCampaignId: String) : Task<Void>
 
     fun uploadTripData(totalTripData: TotalTripData) : Task<Void>
+
+    fun uploadTripLocationData(tripLocationData: List<TripLocationData>) : Task<Void>
 
     fun getAllUserTripData(userId: String) : Task<List<TotalTripData>>
 

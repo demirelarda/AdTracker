@@ -8,6 +8,7 @@ import com.google.type.DateTime
 import com.mycompany.advioo.models.campaign.Campaign
 import com.mycompany.advioo.models.localuser.LocalDriver
 import com.mycompany.advioo.models.tripdata.TotalTripData
+import com.mycompany.advioo.models.tripdata.TripLocationData
 import com.mycompany.advioo.models.tripdata.UserTripData
 import com.mycompany.advioo.models.user.Driver
 import com.mycompany.advioo.repo.CampaignRepositoryInterface
@@ -52,6 +53,8 @@ class HomeViewModel @Inject constructor(
         get() = _userObject
 
     private val _tripDataList = MutableLiveData<List<UserTripData>>()
+
+    private val _tripLocationData = MutableLiveData<List<TripLocationData>>()
 
     val campaigns: LiveData<List<Campaign>> = _triggerCampaigns.switchMap {
         liveData {
@@ -151,7 +154,7 @@ class HomeViewModel @Inject constructor(
                             for (tripData in it[0].tripDataList) {
                                 try {
                                     localDriverRepository.saveLocalTripData(tripData)
-                                    _loadingState.value = false
+                                    getAllTripLocationDataFromLocal()
                                 } catch (e: Exception) {
                                     _loadingState.value = false
                                     _failState.value = true
@@ -219,6 +222,40 @@ class HomeViewModel @Inject constructor(
                     _failState.value = true
                 }
             }
+        }
+    }
+
+    private fun getAllTripLocationDataFromLocal(){
+        _loadingState.value = true
+        viewModelScope.launch {
+            try{
+                _tripLocationData.value = localDriverRepository.getAllTripLocationData(auth.uid!!)
+                _tripLocationData.value?.let {tripLocationData->
+                    uploadTripLocationData(tripLocationData)
+                }
+            }catch(e:Exception){
+                _loadingState.value = false
+                _failState.value = true
+                println(e)
+            }
+        }
+    }
+
+    private fun uploadTripLocationData(tripLocationData: List<TripLocationData>){
+        userRepository.uploadTripLocationData(tripLocationData).addOnSuccessListener {
+            viewModelScope.launch {
+                try{
+                    localDriverRepository.deleteAllLocationList(auth.currentUser!!.uid)
+                    _loadingState.value = false
+                }catch(e:Exception){
+                    _loadingState.value = false
+                    _failState.value = true
+                    println(e)
+                }
+            }
+        }.addOnFailureListener {
+            _loadingState.value = false
+            _failState.value = true
         }
     }
 

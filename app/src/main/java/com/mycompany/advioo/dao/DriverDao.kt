@@ -49,6 +49,13 @@ interface DriverDao {
     suspend fun insertTripLocationData(locationData: TripLocationData)
 
     @Query("DELETE FROM tripLocationData WHERE tripId = :tripID ")
-    suspend fun deleteTripLocationData(tripID: String)
+    suspend fun deleteSingleTripLocationData(tripID: String)
+
+    @Query("DELETE FROM tripLocationData WHERE driverId = :driverID")
+    suspend fun deleteAllTripLocationData(driverID: String)
+
+    @Query("SELECT * FROM tripLocationData WHERE driverId = :userId")
+    suspend fun getAllTripLocationDataByUserId(userId: String) : List<TripLocationData>
+
 
 }
