@@ -60,6 +60,7 @@ class RunCampaignFragment : Fragment() {
     val firebaseAuth = FirebaseAuth.getInstance()
     private lateinit var tripId: String
     private lateinit var sessionId: String
+    private var locationCounter = 0
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -245,28 +246,25 @@ class RunCampaignFragment : Fragment() {
             }
         })
 
-        LocationTrackingService.userLocations.observe(viewLifecycleOwner, Observer{userLocations ->
-            if(userLocations != null){
-                if(userLocations.isNotEmpty()){
-                    if(userLocations.size < 80000){
-                        val userTripLocationData = TripLocationData(
-                            tripId = sessionId, //TODO: SET AND GET THIS FROM VIEWMODEL
-                            locationList = userLocations,
-                            date = System.currentTimeMillis(),
-                            driverId = firebaseAuth.currentUser!!.uid
-                        )
-                        runCampaignViewModel.saveTripLocationData(userTripLocationData)
-                    }
-                    //TODO: GENERATE ANOTHER SESSION ID AND USE IT:
-                    else{
-                       //tripId = sessionId, //TODO: SET AND GET THIS FROM VIEWMODEL
-                       // locationList = userLocations,
-                       // date = System.currentTimeMillis(),
-                       // driverId = firebaseAuth.currentUser!!.uid
-                       // )
-                       // runCampaignViewModel.saveTripLocationData(userTripLocationData)
+        LocationTrackingService.userLocations.observe(viewLifecycleOwner, Observer{ userLocations ->
+            if(userLocations != null) {
+                if(userLocations.isNotEmpty()) {
+                    locationCounter += userLocations.size
+                    //TODO: CONSIDER CHECKING THE PREVIOUS (SAVED) LOCATION LIST DATA AND ADD ON TO IT IF THE SIZE OF IT <8000
+                    if(locationCounter >= 8000) {
+                        sessionId = UUID.randomUUID().toString() + "_" + System.currentTimeMillis()
+                        locationCounter = 0
                     }
 
+                    val userTripLocationData = TripLocationData(
+                        tripId = sessionId,
+                        locationList = userLocations,
+                        campaignId= campaignApplication.selectedCampaign.campaignId,
+                        date = System.currentTimeMillis(),
+                        driverId = firebaseAuth.currentUser!!.uid
+                    )
+
+                    runCampaignViewModel.saveTripLocationData(userTripLocationData)
                 }
             }
         })

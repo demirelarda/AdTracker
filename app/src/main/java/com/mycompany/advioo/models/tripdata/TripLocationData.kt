@@ -8,5 +8,6 @@ data class TripLocationData(
     @PrimaryKey val tripId: String,
     val locationList: List<LatLngPoint>,
     val driverId: String,
+    val campaignId: String,
     val date: Long
 )
