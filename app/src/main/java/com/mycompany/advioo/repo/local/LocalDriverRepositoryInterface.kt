@@ -30,7 +30,11 @@ interface LocalDriverRepositoryInterface {
     suspend fun saveTripLocationData(tripLocationData: TripLocationData)
 
     suspend fun getAllTripLocationData(driverId: String) : List<TripLocationData>
+
+    suspend fun getTripLocationDataFromLastHour(driverId: String, currentTime: Long) : List<TripLocationData>
+
     suspend fun deleteAllLocationList(driverId: String)
+
     suspend fun deleteSingleLocationList(tripId: String)
 
 

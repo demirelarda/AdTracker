@@ -19,7 +19,10 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.launch
 import java.util.Date
+import java.util.UUID
 import javax.inject.Inject
+import kotlin.math.min
+
 
 
 @HiltViewModel
@@ -230,9 +233,47 @@ class HomeViewModel @Inject constructor(
         viewModelScope.launch {
             try{
                 _tripLocationData.value = localDriverRepository.getAllTripLocationData(auth.uid!!)
-                _tripLocationData.value?.let {tripLocationData->
-                    uploadTripLocationData(tripLocationData)
+                _tripLocationData.value?.let { tripLocationDataList ->
+                    if (tripLocationDataList.isNotEmpty()) {
+                        val lastElement = tripLocationDataList.last()
+                        val newDriverId = lastElement.driverId
+                        val newCampaignId = lastElement.campaignId
+                        val newDate = lastElement.date
+
+                        val allLocations = tripLocationDataList.flatMap { it.locationList }
+
+                        val size = allLocations.size
+                        var startIndex = 0
+                        var endIndex = min(8000, size)
+                        var remainingLocations = size
+
+                        val newTripLocationDataList = mutableListOf<TripLocationData>()
+
+                        while (remainingLocations > 0) {
+                            val newTripId = if (remainingLocations == size) lastElement.tripId else UUID.randomUUID().toString() + "_" + System.currentTimeMillis()
+                            val sublist = allLocations.subList(startIndex, endIndex)
+
+                            val newTripLocationData = TripLocationData(
+                                tripId = newTripId,
+                                locationList = sublist,
+                                driverId = newDriverId,
+                                campaignId = newCampaignId,
+                                date = newDate
+                            )
+
+                            newTripLocationDataList.add(newTripLocationData)
+
+                            remainingLocations -= 8000
+                            startIndex = endIndex
+                            endIndex += min(8000, remainingLocations)
+                        }
+
+                        uploadTripLocationData(newTripLocationDataList)
+
+                    }
                 }
+
+
             }catch(e:Exception){
                 _loadingState.value = false
                 _failState.value = true

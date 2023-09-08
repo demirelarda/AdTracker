@@ -79,6 +79,13 @@ class LocalDriverRepository @Inject constructor(
         return driverDao.getAllTripLocationDataByUserId(driverId)
     }
 
+    override suspend fun getTripLocationDataFromLastHour(
+        driverId: String,
+        currentTime: Long
+    ): List<TripLocationData> {
+        return driverDao.getTripLocationDataFromLastHour(driverId,currentTime)
+    }
+
     override suspend fun deleteAllLocationList(driverId: String) {
         driverDao.deleteAllTripLocationData(driverId)
     }

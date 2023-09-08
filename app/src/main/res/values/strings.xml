@@ -172,6 +172,7 @@
     <string name="submit">Submit</string>
     <string name="your_message_has_been_successfully_sent">Your message has been successfully sent, our team will contact you. Please check your email for a response.</string>
     <string name="response_will_sent_to_this_email">The response will be sent to this email:</string>
+    <string name="you_can_turn_off_or_background">Tip : You can minimize the app or turn off your phone\'s screen; it will keep tracking unless you end it in background services or end the trip.</string>
 
     <string name="receive_payment">Receive Payment</string>
     <string name="payment_full_name">Full Name</string>

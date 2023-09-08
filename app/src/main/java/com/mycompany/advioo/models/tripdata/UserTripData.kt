@@ -7,7 +7,6 @@ import com.mycompany.advioo.models.MyPair
 @Entity(tableName = "tripData")
 data class UserTripData(
     @PrimaryKey val tripId: String = "",
-    val sessionId: String = "",
     val campaignApplicationId: String = "",
     val driverId: String = "",
     val campaignId: String = "",

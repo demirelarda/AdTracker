@@ -89,6 +89,8 @@ class RunCampaignFragment : Fragment() {
             campaignApplication = requireActivity().intent.getParcelableExtra<CampaignApplication>("campaignApplication")!!
         }
 
+        tripId = UUID.randomUUID().toString() + "_" + System.currentTimeMillis()
+
         snackbar = Snackbar.make(view, "You are out of bounds! Get back to campaign area!", Snackbar.LENGTH_INDEFINITE)
         snackbar.view.setBackgroundColor(ContextCompat.getColor(requireContext(), R.color.colorSnackBarError))
 
@@ -218,7 +220,6 @@ class RunCampaignFragment : Fragment() {
                 println("is night = $isNight")
                 runCampaignViewModel.calculatePayment("L1", distanceDifference, isNight) //TODO: CHANGE THE LEVEL, Set it dynamically
                 lastDistanceInKm = distanceDriven
-                tripId = UUID.randomUUID().toString() + "_" + System.currentTimeMillis()
                 val currentPayment = runCampaignViewModel.payment.value ?: 0.0
                 val paymentDifference = currentPayment - lastPayment
                 val localTripData = UserTripData(
@@ -226,8 +227,8 @@ class RunCampaignFragment : Fragment() {
                     campaignApplicationId= campaignApplication.applicationId,
                     driverId = firebaseAuth.uid.toString(),
                     campaignId = campaignApplication.selectedCampaign.campaignId,
-                    kmDriven = distanceDifference,
-                    earnedPayment = paymentDifference,
+                    kmDriven = distanceDriven,
+                    earnedPayment = currentPayment,
                     localSaveDate = System.currentTimeMillis(),
                     isUploaded = false,
                 )

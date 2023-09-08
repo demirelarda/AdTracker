@@ -54,6 +54,10 @@ interface DriverDao {
     @Query("DELETE FROM tripLocationData WHERE driverId = :driverID")
     suspend fun deleteAllTripLocationData(driverID: String)
 
+    @Query("SELECT * FROM tripLocationData WHERE driverId = :driverID AND date >= :currentTime - 3600000")
+    suspend fun getTripLocationDataFromLastHour(driverID: String, currentTime: Long) : List<TripLocationData>
+
+
     @Query("SELECT * FROM tripLocationData WHERE driverId = :userId")
     suspend fun getAllTripLocationDataByUserId(userId: String) : List<TripLocationData>
 
