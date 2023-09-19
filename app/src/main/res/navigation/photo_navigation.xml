@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/photo_navigation"
+    app:startDestination="@id/showPhotoFragment">
+
+    <fragment
+        android:id="@+id/showPhotoFragment"
+        android:name="com.mycompany.advioo.ui.fragments.ShowPhotoFragment"
+        android:label="fragment_show_photo"
+        tools:layout="@layout/fragment_show_photo" >
+        <action
+            android:id="@+id/action_showPhotoFragment_to_takePhotoFragment2"
+            app:destination="@id/takePhotoFragment2" />
+        <argument
+            android:name="takenPhotosList"
+            app:argType="string[]"
+            app:nullable="true"
+            android:defaultValue="@null" />
+    </fragment>
+    <fragment
+        android:id="@+id/takePhotoFragment2"
+        android:name="com.mycompany.advioo.ui.fragments.TakePhotoFragment"
+        android:label="fragment_take_photo"
+        tools:layout="@layout/fragment_take_photo" >
+        <action
+            android:id="@+id/action_takePhotoFragment2_to_showPhotoFragment"
+            app:destination="@id/showPhotoFragment" />
+        <argument
+            android:name="photosToTakeList"
+            app:argType="string[]"
+            app:nullable="true" />
+    </fragment>
+</navigation>

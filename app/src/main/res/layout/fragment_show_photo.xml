@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout android:orientation="vertical"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.ShowPhotoFragment"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:paddingBottom="20dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginStart="16dp"
+        android:id="@+id/ll_car_photos">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/car_photos"
+            android:textSize="20sp"
+            android:textStyle="bold">
+        </TextView>
+        <androidx.viewpager2.widget.ViewPager2
+            android:id="@+id/image_slider_car_photos"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="300dp">
+        </androidx.viewpager2.widget.ViewPager2>
+
+        <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+            android:id="@+id/spring_dots_indicator_user_car_photos"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_marginTop="20dp"
+            app:dotsColor="@color/colorLightBlue"
+            app:dotsCornerRadius="8dp"
+            app:dotsSize="10dp"
+            app:dotsSpacing="4dp"
+            app:dotsWidthFactor="2.5"
+            app:selectedDotColor="@color/app_blue"
+            app:progressMode="true">
+        </com.tbuonomo.viewpagerdotsindicator.DotsIndicator>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/ll_car_photo_texts"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:layout_marginTop="50dp">
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/you_have_to_upload"
+            android:gravity="center"
+            android:textSize="20sp"
+            android:textStyle="bold">
+        </TextView>
+        <TextView
+            android:id="@+id/tv_photo_parts"
+            android:layout_marginTop="20dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            tools:text="Side Campaign Photo (Right or Left), Odometer Photo"
+            android:gravity="center"
+            android:textSize="18sp"
+            android:textColor="@color/black">
+        </TextView>
+
+    </LinearLayout>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_take_photos"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="18dp"
+        android:background="@drawable/button_background_blue"
+        android:text="@string/take_photos"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp">
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:id="@+id/btn_upload_photos"
+        android:layout_width="match_parent"
+        android:layout_height="55dp"
+        android:layout_marginStart="18dp"
+        android:layout_marginTop="50dp"
+        android:layout_marginEnd="18dp"
+        android:background="@drawable/button_background_blue"
+        android:text="@string/upload_photos"
+        android:textAllCaps="false"
+        android:textColor="@color/white"
+        android:textSize="16sp">
+    </androidx.appcompat.widget.AppCompatButton>
+
+</LinearLayout>

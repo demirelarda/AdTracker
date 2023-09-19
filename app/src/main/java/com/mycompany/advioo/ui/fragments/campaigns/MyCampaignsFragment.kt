@@ -25,6 +25,7 @@ import com.mycompany.advioo.ui.activities.RunCampaignActivity
 import com.mycompany.advioo.databinding.FragmentMyCampaignsBinding
 import com.mycompany.advioo.models.campaignapplication.CampaignApplication
 import com.mycompany.advioo.ui.activities.CampaignDetailsActivity
+import com.mycompany.advioo.ui.activities.PhotoActivity
 import com.mycompany.advioo.ui.fragments.CampaignStatsFragment
 import com.mycompany.advioo.util.SnackbarHelper
 import com.mycompany.advioo.util.Util.ACTION_NORMAL_TRACKING_FRAGMENT
@@ -149,7 +150,9 @@ class MyCampaignsFragment : Fragment(){
             binding.tvStartResumeCampaignMyCampaigns.text = getString(R.string.resume_campaign)
         }
         if(campaignApplication.status == 0){
-            binding.tvStartResumeCampaignMyCampaigns.visibility = View.GONE
+            binding.tvStartResumeCampaignMyCampaigns.visibility = View.VISIBLE
+            binding.tvStartResumeCampaignMyCampaigns.text = getString(R.string.upload_photos_to_start)
+            binding.tvStartResumeCampaignMyCampaigns.setTextColor(resources.getColor(R.color.colorSnackBarError))
             binding.tvCampaignApplicationStatus.text = getString(R.string.waiting_for_installment)
             binding.tvCampaignApplicationStatus.setTextColor(resources.getColor(R.color.colorSnackBarError))
         }
@@ -184,23 +187,33 @@ class MyCampaignsFragment : Fragment(){
         }
 
         binding.tvStartResumeCampaignMyCampaigns.setOnClickListener {
-            requestPermissions()
-            if(isNotificationPermissionGranted && isLocationPermissionGranted){
-                navigateToRunCampaign()
-            }
-            else{
-                val errorPermissionList: ArrayList<String> = arrayListOf()
-                if(!(isNotificationPermissionGranted)){
-                    errorPermissionList.add(getString(R.string.notifications))
-                }
-                if(!(isLocationPermissionGranted)){
-                    errorPermissionList.add(getString(R.string.precise_location))
-                }
-                binding.tvPermissionError.visibility = View.VISIBLE
-                binding.tvPermissionErrorList.visibility = View.VISIBLE
-                binding.tvPermissionErrorList.text = errorPermissionList.toString()
-                SnackbarHelper.showErrorSnackBar(requireView(),(getString(R.string.the_following_permissions_denied)+errorPermissionList.toString()))
+            if(campaignApplication.status == 1) {
+                requestPermissions()
+                if (isNotificationPermissionGranted && isLocationPermissionGranted) {
+                    navigateToRunCampaign()
+                } else {
+                    val errorPermissionList: ArrayList<String> = arrayListOf()
+                    if (!(isNotificationPermissionGranted)) {
+                        errorPermissionList.add(getString(R.string.notifications))
+                    }
+                    if (!(isLocationPermissionGranted)) {
+                        errorPermissionList.add(getString(R.string.precise_location))
+                    }
+                    binding.tvPermissionError.visibility = View.VISIBLE
+                    binding.tvPermissionErrorList.visibility = View.VISIBLE
+                    binding.tvPermissionErrorList.text = errorPermissionList.toString()
+                    SnackbarHelper.showErrorSnackBar(
+                        requireView(),
+                        (getString(R.string.the_following_permissions_denied) + errorPermissionList.toString())
+                    )
 
+                }
+            }
+            else if(campaignApplication.status == 0){
+                val intent = Intent(requireContext(),PhotoActivity::class.java)
+                intent.putExtra("campaignApplication",campaignApplication)
+                startActivity(intent)
+                requireActivity().finish()
             }
         }
 
@@ -255,14 +268,21 @@ class MyCampaignsFragment : Fragment(){
     }
 
     private fun navigateToRunCampaign(){
-        if(checkBatteryOptimizationPermission()){
-            val intent = Intent(requireContext(),RunCampaignActivity::class.java)
-            intent.action = ACTION_NORMAL_TRACKING_FRAGMENT
+        if(campaignApplication.status == 1) {
+            if (checkBatteryOptimizationPermission()) {
+                val intent = Intent(requireContext(), RunCampaignActivity::class.java)
+                intent.action = ACTION_NORMAL_TRACKING_FRAGMENT
+                intent.putExtra("campaignApplication", campaignApplication)
+                startActivity(intent)
+            } else {
+                requestBatteryOptimizationPermission()
+            }
+        }
+        else if(campaignApplication.status == 0){
+            val intent = Intent(requireContext(),PhotoActivity::class.java)
             intent.putExtra("campaignApplication",campaignApplication)
             startActivity(intent)
-        }
-        else{
-            requestBatteryOptimizationPermission()
+            requireActivity().finish()
         }
 
     }

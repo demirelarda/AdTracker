@@ -182,6 +182,22 @@
     <string name="payment_address">Address</string>
     <string name="send_payment_request">Send Payment Request</string>
     <string name="odometer_photo">Select Odometer Photo From Gallery</string>
+    <string name="upload_photos_to_start">Upload your car\'s photos to start!</string>
+    <string name="car_photos">Car Photos</string>
+    <string name="you_have_to_upload">You have to upload these photos to start:</string>
+    <string name="take_photos">Take Photos</string>
+    <string name="upload_photos">Upload Photos</string>
+    <string name="odometer">Odometer Photo</string>
+    <string name="side_right_left">Side Photo(Right Door or Left Door)</string>
+    <string name="hood">Hood Photo</string>
+    <string name="permission_needed_for_camera">Camera Permission Needed For Taking Photos!</string>
+    <string name="you_have_denied_camera_permission_twice">You have denied the camera permission twice, please go to settings and allow camera permission for Advioo</string>
+    <string name="capture_odometer_photo">Capture Odometer Photo</string>
+    <string name="capture_side_photo">Capture Side Photo</string>
+    <string name="capture_hood_photo">Capture Hood Photo</string>
+    <string name="captured_photo">Captured Photo</string>
+    <string name="something_went_wrong_camera">Something went wrong, please take the photo again.</string>
+    <string name="take_photos_again">Take Photos Again</string>
 
     <string-array name="car_conditions">
         <item>Like New</item>

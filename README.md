@@ -1,8 +1,8 @@
-# Advioo
+# AdTracker
 
 ## Description
-Introducing our revolutionary new app that lets you turn your vehicle into a moving billboard! With our app, users can choose from a range of eye-catching advertisements to wrap their vehicle with and earn extra income while they drive. Imagine cruising around town in a sleek, professionally branded car or truck, all while making money on the side. Our app is currently exclusive to Canada, giving Canadian drivers the chance to be part of this exciting new venture before anyone else.
 
+Turn your car into more than just a mode of transportation! With our app, you can wrap your vehicle in stylish advertisements, earning extra income while making a statement on the road. And here's the best part for businesses: they can set specific regions where they want their ads to be showcased. So, as a driver, when you travel within these designated areas, you'll earn for displaying the ad. It's a win-win! Businesses ensure their ads get maximum visibility in their target zones, and drivers profit from staying within these boundaries. Dive into this exciting venture and redefine your driving experience.
 ## Technical Details
 * Test driven development
 * MVVM
@@ -12,6 +12,7 @@ Introducing our revolutionary new app that lets you turn your vehicle into a mov
 * Room
 * Foreground Service
 * Location Tracking
+* OSM (Open Street Map)
 
 ## Copyright
 

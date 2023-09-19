@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.fragments.TakePhotoFragment">
+
+    <ProgressBar
+        android:visibility="gone"
+        android:id="@+id/progressBarTakePhoto"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:layout_centerVertical="true">
+    </ProgressBar>
+
+    <TextView
+        android:background="@drawable/blue_app_background"
+        android:id="@+id/tv_photo_to_take"
+        android:gravity="center"
+        android:textColor="@color/white"
+        android:textStyle="bold"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentEnd="true"
+        android:layout_alignParentStart="true"
+        android:textSize="24sp"
+        android:paddingTop="10dp"
+        android:paddingBottom="10dp"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+    </TextView>
+
+    <TextureView
+        android:layout_below="@+id/tv_photo_to_take"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/texture_view">
+    </TextureView>
+
+    <ImageView
+        android:id="@+id/iv_captured_photo"
+        android:layout_below="@+id/tv_photo_to_take"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone"
+        android:contentDescription="@string/captured_photo"/>
+
+
+    <View
+        android:id="@+id/center_view"
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp"
+        android:visibility="gone" />
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/tick_circle_24"
+        android:backgroundTint="@color/app_green"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btn_confirm_photo"
+        android:layout_toEndOf="@id/center_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp">
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:background="@drawable/baseline_cancel_24"
+        android:backgroundTint="@color/colorSnackBarError"
+        android:layout_alignParentBottom="true"
+        android:id="@+id/btn_cancel_photo"
+        android:layout_toStartOf="@id/center_view"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp">
+    </androidx.appcompat.widget.AppCompatButton>
+
+    <androidx.appcompat.widget.AppCompatButton
+        android:layout_width="70dp"
+        android:layout_height="70dp"
+        android:background="@drawable/camera_capture_icon_24"
+        android:backgroundTint="@color/app_blue"
+        android:id="@+id/btn_capture_photo"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        android:layout_marginBottom="30dp">
+    </androidx.appcompat.widget.AppCompatButton>
+
+</RelativeLayout>
