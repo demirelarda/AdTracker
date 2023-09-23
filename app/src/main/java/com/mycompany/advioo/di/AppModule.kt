@@ -9,6 +9,7 @@ import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.Timestamp
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.storage.FirebaseStorage
 import com.mycompany.advioo.R
 import com.mycompany.advioo.api.CityAPI
 import com.mycompany.advioo.api.PinfoAPI
@@ -48,6 +49,11 @@ object AppModule {
             .build()
             .create(CityAPI::class.java)
     }
+
+    @Singleton
+    @Provides
+    fun provideFirebaseStorage(): FirebaseStorage = FirebaseStorage.getInstance()
+
 
     @Singleton
     @Provides
@@ -92,7 +98,7 @@ object AppModule {
 
     @Singleton
     @Provides
-    fun provideNormalUserRepository(db: FirebaseFirestore) = UserRepository(db) as UserRepositoryInterface
+    fun provideNormalUserRepository(db: FirebaseFirestore, storage: FirebaseStorage) = UserRepository(db,storage) as UserRepositoryInterface
 
     @Singleton
     @Provides

@@ -198,6 +198,7 @@
     <string name="captured_photo">Captured Photo</string>
     <string name="something_went_wrong_camera">Something went wrong, please take the photo again.</string>
     <string name="take_photos_again">Take Photos Again</string>
+    <string name="upload_photo_success">Successfully Uploaded Images!</string>
 
     <string-array name="car_conditions">
         <item>Like New</item>

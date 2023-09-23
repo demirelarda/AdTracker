@@ -2,6 +2,7 @@ package com.mycompany.advioo.repo
 
 
 import com.google.android.gms.tasks.Task
+import com.mycompany.advioo.models.CarImageDetails
 import com.mycompany.advioo.models.ContactMessage
 import com.mycompany.advioo.models.LocationSampleData
 import com.mycompany.advioo.models.tripdata.TotalTripData
@@ -27,5 +28,12 @@ interface UserRepositoryInterface {
     fun getAllUserTripData(userId: String) : Task<List<TotalTripData>>
 
     fun sendContactMessage(contactMessage: ContactMessage) : Task<Void>
+
+    fun uploadCarPhotos(images: List<ByteArray>): Task<List<String>>
+
+    fun uploadCarPhotoDetails(carImageDetails: CarImageDetails ):Task<Void>
+
+    fun updateCampaignStatus(campaignApplicationId: String, updateValue: Int): Task<Void>
+
 
 }

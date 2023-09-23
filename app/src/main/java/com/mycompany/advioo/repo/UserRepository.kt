@@ -1,25 +1,26 @@
 package com.mycompany.advioo.repo
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.google.android.gms.tasks.Task
+import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
-import com.google.firebase.firestore.QuerySnapshot
 import com.google.firebase.firestore.SetOptions
+import com.google.firebase.storage.FirebaseStorage
+import com.mycompany.advioo.models.CarImageDetails
 import com.mycompany.advioo.models.ContactMessage
 import com.mycompany.advioo.models.LocationSampleData
-import com.mycompany.advioo.models.campaign.Campaign
 import com.mycompany.advioo.models.tripdata.TotalTripData
 import com.mycompany.advioo.models.tripdata.TripLocationData
-import com.mycompany.advioo.models.tripdata.UserTripData
 import com.mycompany.advioo.models.user.Driver
+import java.util.UUID
 import javax.inject.Inject
 
 class UserRepository @Inject constructor(
-    private val db: FirebaseFirestore
+    private val db: FirebaseFirestore,
+    private val storage: FirebaseStorage
 ) : UserRepositoryInterface {
 
     private val usersCollection = db.collection("users")
+    private val campaignApplicationsCollection = db.collection("campaignApplications")
 
     override fun uploadUserData(driver: Driver): Task<Void> {
         return usersCollection
@@ -107,6 +108,40 @@ class UserRepository @Inject constructor(
         return db.collection("userMessages")
             .document()
             .set(contactMessage, SetOptions.merge())
+    }
+
+    override fun uploadCarPhotos(images: List<ByteArray>): Task<List<String>> {
+        val tasks: MutableList<Task<String>> = mutableListOf()
+
+        for (image in images) {
+            val fileName = "car_image_${System.currentTimeMillis().toString()+"_"+UUID.randomUUID()}.jpg"
+            val fileRef = storage.reference.child("carImages/$fileName")
+
+            val uploadTask = fileRef.putBytes(image).continueWithTask { task ->
+                if (!task.isSuccessful) {
+                    throw task.exception!!
+                }
+                fileRef.downloadUrl
+            }.continueWith { task ->
+                task.result?.toString() ?: throw Exception("Download URL is null")
+            }
+
+            tasks.add(uploadTask)
+        }
+
+        return Tasks.whenAllSuccess<String>(tasks)
+    }
+
+    override fun uploadCarPhotoDetails(carImageDetails: CarImageDetails): Task<Void> {
+        return db.collection("carPhotos")
+            .document()
+            .set(carImageDetails, SetOptions.merge())
+    }
+
+    override fun updateCampaignStatus(campaignApplicationId: String, updateValue: Int): Task<Void> {
+        return campaignApplicationsCollection
+            .document(campaignApplicationId)
+            .update("status",updateValue)
     }
 
 
