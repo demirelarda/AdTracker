@@ -18,6 +18,9 @@
             app:argType="string[]"
             app:nullable="true"
             android:defaultValue="@null" />
+        <action
+            android:id="@+id/action_showPhotoFragment_to_receivePaymentFragment"
+            app:destination="@id/receivePaymentFragment" />
     </fragment>
     <fragment
         android:id="@+id/takePhotoFragment2"
@@ -31,5 +34,27 @@
             android:name="photosToTakeList"
             app:argType="string[]"
             app:nullable="true" />
+        <argument
+            android:name="fromWhere"
+            app:argType="string"
+            app:nullable="true"
+            android:defaultValue="campaignUpload" />
+        <action
+            android:id="@+id/action_takePhotoFragment2_to_receivePaymentFragment"
+            app:destination="@id/receivePaymentFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/receivePaymentFragment"
+        android:name="com.mycompany.advioo.ui.fragments.ReceivePaymentFragment"
+        android:label="fragment_receive_payment"
+        tools:layout="@layout/fragment_receive_payment" >
+        <action
+            android:id="@+id/action_receivePaymentFragment_to_takePhotoFragment2"
+            app:destination="@id/takePhotoFragment2" />
+        <argument
+            android:name="takenPhotosList"
+            app:argType="string[]"
+            app:nullable="true"
+            android:defaultValue="@null" />
     </fragment>
 </navigation>

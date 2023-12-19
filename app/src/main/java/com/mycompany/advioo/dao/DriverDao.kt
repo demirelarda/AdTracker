@@ -24,6 +24,9 @@ interface DriverDao {
     @Query("UPDATE drivers SET currentEnrolledCampaign = :campaignId WHERE id = :driverId")
     suspend fun updateEnrolledCampaigns(driverId: String, campaignId: String)
 
+    @Query("UPDATE drivers SET currentCampaignApplicationId = :campaignApplicationId WHERE id = :driverId")
+    suspend fun updateEnrolledCampaignApplicationId(driverId: String, campaignApplicationId: String)
+
     @Query("SELECT * FROM tripData WHERE tripId = :tripId")
     suspend fun getTripData(tripId: String) : UserTripData?
 

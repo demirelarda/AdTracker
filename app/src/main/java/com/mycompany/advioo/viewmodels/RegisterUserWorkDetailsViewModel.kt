@@ -64,18 +64,16 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
                     cityId = driver.userCity.cityId,
                     currentEnrolledCampaign = driver.currentEnrolledCampaign,
                     city = driver.city,
-                    addressRow1 = driver.addressRow1,
-                    addressRow2 = driver.addressRow2,
                     carModel = driver.carModel,
                     carCondition = driver.carCondition,
                     carYear = driver.carYear,
-                    licensePlate = driver.licensePlate,
                     avgKmDriven = driver.avgKmDriven,
-                    workCity = driver.workCity,
                     rideShareDriver = driver.rideShareDriver,
                     allowedContact = driver.allowedContact,
                     zipCode = driver.zipCode,
-                    carBrand = driver.carBrand
+                    carBrand = driver.carBrand,
+                    currentCampaignApplicationId = driver.currentEnrolledCampaign,
+                    phoneNumber = driver.driverPhoneNumber
                 )
 
                 viewModelScope.launch {
@@ -165,9 +163,7 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
         carModel: String,
         carYear: String,
         carCondition: String,
-        licensePlate: String,
         avgKmDriven: String,
-        workCity: String,
         termsConditions: CheckBox,
     ): Boolean {
         var isValid = true
@@ -199,11 +195,6 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
 
         }
 
-        if (licensePlate.isEmpty()) {
-            _errorLiveData.value = R.string.license_plate_error
-            errorList.add(_errorLiveData.value!!)
-            isValid = false
-        }
 
         if (avgKmDriven.isEmpty()) {
             _errorLiveData.value = R.string.avg_km_error
@@ -211,11 +202,6 @@ class RegisterUserWorkDetailsViewModel @Inject constructor(
             isValid = false
         }
 
-        if (workCity.isEmpty()) {
-            _errorLiveData.value = R.string.working_city_error
-            errorList.add(_errorLiveData.value!!)
-            isValid = false
-        }
 
         if( !(isUpdating) && !(termsConditions.isChecked)){
             println("entered terms")

@@ -5,6 +5,7 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import com.google.firebase.Timestamp
+import com.google.firebase.auth.FirebaseAuth
 import com.mycompany.advioo.models.CarImageDetails
 import com.mycompany.advioo.models.campaignapplication.CampaignApplication
 import com.mycompany.advioo.repo.UserRepositoryInterface
@@ -37,14 +38,8 @@ class ShowPhotoViewModel @Inject constructor(
     val photosToTakeList : LiveData<List<String>>
         get() = _photosToTakeList
 
-
     fun setCampaignApplication(campaignApplication: CampaignApplication){
         _campaignApplication.value = campaignApplication
-    }
-
-    fun setPhotosToTakeList(photosToTake: List<String>){
-        println("photos to take list set from fragment = ${photosToTake}")
-        _photosToTakeList.postValue(photosToTake)
     }
 
 
@@ -82,7 +77,8 @@ class ShowPhotoViewModel @Inject constructor(
                 campaignApplication.selectedCampaignLevel,
                 campaignApplication.selectedCampaign.campaignId,
                 campaignApplication.selectedInstaller.installerId,
-                imageURLList
+                imageURLList,
+                campaignApplication.applicationId
             )
             userRepository.uploadCarPhotoDetails(carImageDetails).addOnSuccessListener {
                 userRepository.updateCampaignStatus(campaignApplication.applicationId,1).addOnSuccessListener {

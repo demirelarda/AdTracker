@@ -7,6 +7,7 @@
     <string name="welcome">Welcome,</string>
     <string name="glad_to_see_you">Glad to see you!</string>
     <string name="email">Email Address</string>
+    <string name="driver_phone_number">Phone Number</string>
     <string name="password">Password</string>
     <string name="forgot_password"><u>Forgot Password?</u></string>
     <string name="create_account">Create Account</string>
@@ -51,6 +52,7 @@
     <string name="last_name_error">Last name is required!</string>
     <string name="email_invalid_error">A valid e-mail is required!</string>
     <string name="email_empty_error">E-Mail address is required!</string>
+    <string name="phone_number_empty_error">Phone number is required!</string>
     <string name="password_empty_error">Password is required!</string>
     <string name="password_length_error">Password must be at least 8 characters long!</string>
     <string name="password_confirm_empty_error">Please confirm your password!</string>
@@ -181,14 +183,16 @@
     <string name="bank_institution_number">Bank Institution Number</string>
     <string name="payment_address">Address</string>
     <string name="send_payment_request">Send Payment Request</string>
-    <string name="odometer_photo">Select Odometer Photo From Gallery</string>
+    <string name="odometer_photo">Please take a photo of your odometer</string>
     <string name="upload_photos_to_start">Upload your car\'s photos to start!</string>
     <string name="car_photos">Car Photos</string>
     <string name="you_have_to_upload">You have to upload these photos to start:</string>
     <string name="take_photos">Take Photos</string>
     <string name="upload_photos">Upload Photos</string>
     <string name="odometer">Odometer Photo</string>
-    <string name="side_right_left">Side Photo(Right Door or Left Door)</string>
+    <string name="side_right_left">Side Photos(Right Door and Left Door)</string>
+    <string name="capture_other_side_photo">Capture Other Side Photo</string>
+    <string name="other_side_photo">Other Side Photo(Right Door or Left Door)</string>
     <string name="hood">Hood Photo</string>
     <string name="permission_needed_for_camera">Camera Permission Needed For Taking Photos!</string>
     <string name="you_have_denied_camera_permission_twice">You have denied the camera permission twice, please go to settings and allow camera permission for Advioo</string>
@@ -199,6 +203,16 @@
     <string name="something_went_wrong_camera">Something went wrong, please take the photo again.</string>
     <string name="take_photos_again">Take Photos Again</string>
     <string name="upload_photo_success">Successfully Uploaded Images!</string>
+    <string name="payment_request_success">Successfully Sent Payment Request!</string>
+    <string name="payment_not_available">Payment is not available at the moment. Reach the minimum KM to get paid!</string>
+    <string name="save_payment_info">Save Payment Info</string>
+    <string name="you_get_paid">You\'ll get paid after</string>
+    <string name="days">days</string>
+    <string name="hours">hours</string>
+    <string name="minutes">minutes</string>
+    <string name="if_you_reach">If you reach:</string>
+    <string name="minimum_km">(Minimum KM)</string>
+    <string name="already_reached">Already Reached</string>
 
     <string-array name="car_conditions">
         <item>Like New</item>

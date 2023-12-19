@@ -48,7 +48,7 @@ class DefaultLocationClient(
                 override fun onLocationResult(result: LocationResult) {
                     super.onLocationResult(result)
                     result.locations.lastOrNull()?.let { location ->
-                        if (location.accuracy <= 12) {
+                        if (location.accuracy <= 18) { //12
                             launch { send(location) }
                         }
                     }

@@ -12,6 +12,7 @@ import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.storage.FirebaseStorage
 import com.mycompany.advioo.R
 import com.mycompany.advioo.api.CityAPI
+import com.mycompany.advioo.api.MailjetAPI
 import com.mycompany.advioo.api.PinfoAPI
 import com.mycompany.advioo.dao.DriverDao
 import com.mycompany.advioo.db.UserDatabase
@@ -28,6 +29,7 @@ import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -48,6 +50,16 @@ object AppModule {
             .baseUrl(BASE_URL)
             .build()
             .create(CityAPI::class.java)
+    }
+
+    @Singleton
+    @Provides
+    fun provideMailjetRetrofitAPI(): MailjetAPI {
+        return Retrofit.Builder()
+            .addConverterFactory(GsonConverterFactory.create())
+            .baseUrl("https://api.mailjet.com/")
+            .build()
+            .create(MailjetAPI::class.java)
     }
 
     @Singleton
@@ -172,17 +184,12 @@ object AppModule {
             lastName = "",
             email = "",
             city = "",
-            addressFullName = "",
-            addressRow1 = "",
-            addressRow2 = "",
             zipCode = "",
             regDate = Timestamp.now(),
             carBrand = "",
             carYear = "",
             carModel = "",
             carCondition = "",
-            workCity = "",
-            licensePlate ="",
             allowedContact = false,
             avgKmDriven = "",
             rideShareDriver = false,

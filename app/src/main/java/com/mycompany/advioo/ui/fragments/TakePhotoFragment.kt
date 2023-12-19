@@ -3,7 +3,6 @@ package com.mycompany.advioo.ui.fragments
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.Intent
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.graphics.ImageFormat
@@ -24,12 +23,10 @@ import android.view.Surface
 import android.view.TextureView
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.Navigation
 import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentTakePhotoBinding
-import com.mycompany.advioo.ui.activities.AppAdActivity
 import com.mycompany.advioo.util.SnackbarHelper
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
@@ -55,6 +52,7 @@ class TakePhotoFragment : Fragment() {
     private var currentPhoto: Bitmap? = null
     private val photoList : MutableList<Bitmap> = mutableListOf()
     private var isLoading: Boolean = false
+    private var fromPayment: Boolean = false
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -80,6 +78,11 @@ class TakePhotoFragment : Fragment() {
             val args = TakePhotoFragmentArgs.fromBundle(bundle)
             args.photosToTakeList?.forEach {
                 photosToTakeList.add(it)
+            }
+            if(args.fromWhere != null){
+                if(args.fromWhere == "payment"){
+                    fromPayment = true
+                }
             }
         }
 
@@ -129,8 +132,7 @@ class TakePhotoFragment : Fragment() {
             }
             else{
                 SnackbarHelper.showErrorSnackBar(requireView(),getString(R.string.something_went_wrong_camera))
-            }
-            Toast.makeText(requireContext(),"image captured",Toast.LENGTH_SHORT).show() },
+            } },
             handler)
 
         setupOnClickListeners()
@@ -198,7 +200,12 @@ class TakePhotoFragment : Fragment() {
                     isLoading = false
                     updateProgressBarVisibility()
                     if(savedFiles.isNotEmpty()){
-                        navigateToShowPhotoFragment(savedFiles)
+                        if(fromPayment){
+                            navigateToReceivePaymentFragment(savedFiles)
+                        }
+                        else{
+                            navigateToShowPhotoFragment(savedFiles)
+                        }
                     }
                 }
             } else {
@@ -326,6 +333,11 @@ class TakePhotoFragment : Fragment() {
 
     private fun navigateToShowPhotoFragment(photoList: List<String>){
         val action = TakePhotoFragmentDirections.actionTakePhotoFragment2ToShowPhotoFragment(photoList.toTypedArray())
+        Navigation.findNavController(requireView()).navigate(action)
+    }
+
+    private fun navigateToReceivePaymentFragment(photoList: List<String>){
+        val action = TakePhotoFragmentDirections.actionTakePhotoFragment2ToReceivePaymentFragment(photoList.toTypedArray())
         Navigation.findNavController(requireView()).navigate(action)
     }
 

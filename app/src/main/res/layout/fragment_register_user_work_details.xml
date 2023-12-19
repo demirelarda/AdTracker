@@ -139,22 +139,6 @@
 
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="@string/car_license_plate"
-            style="@style/TfCustomLayout"
-            app:startIconDrawable="@drawable/license_plate"
-            >
-            <EditText
-                android:id="@+id/tf_license_plate"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"/>
-        </com.google.android.material.textfield.TextInputLayout>
 
         <com.google.android.material.textfield.TextInputLayout
             android:layout_width="match_parent"
@@ -173,22 +157,6 @@
                 android:inputType="text"/>
         </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="18dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="@string/where_do_you_work"
-            style="@style/TfCustomLayout"
-            app:startIconDrawable="@drawable/working_location_icon"
-            >
-            <EditText
-                android:id="@+id/tf_work_city"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"/>
-        </com.google.android.material.textfield.TextInputLayout>
 
         <LinearLayout
             android:layout_marginStart="20dp"

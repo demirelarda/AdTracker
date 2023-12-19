@@ -131,13 +131,10 @@ class RegisterAddressDetailsFragment : Fragment() {
             findNavController().navigate(action)
         }
         binding.btnContinueUserWorkDetails.setOnClickListener {
-            val fullName = binding.tfFullName.text.toString().trim()
             val city= binding.tvSelectCity.text.toString().trim()
-            val address1 = binding.tfAddressRow1.text.toString().trim()
-            val address2 = binding.tfAddressRow2.text.toString().trim()
             val zipCode = binding.tfPostalCode.text.toString().trim()
-            if(registerAddressDetailsViewModel.isInputDataValid(fullName = fullName, city = city, addressRow1 = address1, zipCode = zipCode)){
-                sharedRegisterViewModel.updateDriverAddressData(fullName,city,address1,address2,zipCode)
+            if(registerAddressDetailsViewModel.isInputDataValid(city = city, zipCode = zipCode)){
+                sharedRegisterViewModel.updateDriverAddressData(city,zipCode)
             }
         }
     }
@@ -145,7 +142,6 @@ class RegisterAddressDetailsFragment : Fragment() {
     private fun setupNormalViews(){
 
         //viewModel = ViewModelProvider(requireActivity()).get(SharedRegisterViewModel::class.java)
-        binding.tfFullName.setText((sharedRegisterViewModel.driver.value?.firstName.toString() ?: "") +" "+ (sharedRegisterViewModel.driver.value?.lastName.toString() ?: ""))
         binding.tvSelectCity.setOnClickListener {
             sharedRegisterViewModel.setEditMode(false)
             val action = RegisterAddressDetailsFragmentDirections.actionRegisterAddressDetailsFragmentToStateListFragment()
@@ -153,19 +149,11 @@ class RegisterAddressDetailsFragment : Fragment() {
         }
 
         binding.btnContinueUserWorkDetails.setOnClickListener {
-            val fullName = binding.tfFullName.text.toString().trim()
             val city= binding.tvSelectCity.text.toString().trim()
-            val address1 = binding.tfAddressRow1.text.toString().trim()
-            val address2 = binding.tfAddressRow2.text.toString().trim()
             val zipCode = binding.tfPostalCode.text.toString().trim()
 
-            if (registerAddressDetailsViewModel.isInputDataValid(fullName,city,address1,zipCode)) {
-                sharedRegisterViewModel.setAddressFullName(fullName)
+            if (registerAddressDetailsViewModel.isInputDataValid(city,zipCode)) {
                 sharedRegisterViewModel.setCity(city)
-                sharedRegisterViewModel.setAddressRow1(address1)
-                if(address2.isNotEmpty()){
-                    sharedRegisterViewModel.setAddressRow2(address2)
-                }
                 sharedRegisterViewModel.setZipCode(zipCode)
                 val action = RegisterAddressDetailsFragmentDirections.actionRegisterAddressDetailsFragmentToRegisterUserWorkDetailsFragment(REGISTER_STRING)
                 Navigation.findNavController(requireView()).navigate(action)
@@ -183,15 +171,10 @@ class RegisterAddressDetailsFragment : Fragment() {
     @SuppressLint("SetTextI18n")
     private fun observeLocalDriver(editedCity: Boolean){
         sharedRegisterViewModel.localDriver.observe(viewLifecycleOwner){localDriver->
-            binding.tfFullName.setText(localDriver.name+" "+localDriver.surname)
             if(!editedCity){
                 binding.tvSelectCity.text = localDriver.stateName+","+localDriver.cityName
             }
-            binding.tfAddressRow1.setText(localDriver.addressRow1)
             binding.tfPostalCode.setText(localDriver.zipCode)
-            if(localDriver.addressRow2 != ""){
-                binding.tfAddressRow2.setText(localDriver.addressRow2)
-            }
         }
 
         sharedRegisterViewModel.successState.observe(viewLifecycleOwner){success->

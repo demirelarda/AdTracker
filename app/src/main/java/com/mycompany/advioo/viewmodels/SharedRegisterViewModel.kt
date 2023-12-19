@@ -85,6 +85,14 @@ class SharedRegisterViewModel @Inject constructor(
         }
     }
 
+    fun setPhoneNumber(phoneNumber: String){
+        val currentUserObject = _driver.value
+        currentUserObject?.let {
+            val updatedUser = it.copy(driverPhoneNumber = phoneNumber)
+            _driver.value = updatedUser
+        }
+    }
+
     fun setCity(city: String) {
         val currentUserObject = _driver.value
         currentUserObject?.let {
@@ -101,29 +109,8 @@ class SharedRegisterViewModel @Inject constructor(
         }
     }
 
-    fun setAddressFullName(addressFullName: String) {
-        val currentUserObject = _driver.value
-        currentUserObject?.let {
-            val updatedUser = it.copy(addressFullName = addressFullName)
-            _driver.value = updatedUser
-        }
-    }
 
-    fun setAddressRow1(addressRow1: String) {
-        val currentUserObject = _driver.value
-        currentUserObject?.let {
-            val updatedUser = it.copy(addressRow1 = addressRow1)
-            _driver.value = updatedUser
-        }
-    }
 
-    fun setAddressRow2(addressRow2: String) {
-        val currentUserObject = _driver.value
-        currentUserObject?.let {
-            val updatedUser = it.copy(addressRow2 = addressRow2)
-            _driver.value = updatedUser
-        }
-    }
 
     fun setZipCode(zipCode: String) {
         val currentUserObject = _driver.value
@@ -173,21 +160,9 @@ class SharedRegisterViewModel @Inject constructor(
         }
     }
 
-    fun setLicensePlate(licensePlate: String) {
-        val currentUserObject = _driver.value
-        currentUserObject?.let {
-            val updatedUser = it.copy(licensePlate = licensePlate)
-            _driver.value = updatedUser
-        }
-    }
 
-    fun setWorkCity(workCity: String) {
-        val currentUserObject = _driver.value
-        currentUserObject?.let {
-            val updatedUser = it.copy(workCity = workCity)
-            _driver.value = updatedUser
-        }
-    }
+
+
 
     fun setAllowContact(allowContact: Boolean) {
         val currentUserObject = _driver.value
@@ -230,21 +205,23 @@ class SharedRegisterViewModel @Inject constructor(
     }
 
 
-    fun updateUserPersonalDetails(updatedEmail: String, updatedName: String, updatedSurname: String) {
+    fun updateUserPersonalDetails(updatedEmail: String, updatedName: String, updatedSurname: String, updatedPhoneNumber: String) {
         _loadingState.value = true
         val currentUserObject = _localDriver.value
         currentUserObject?.let {
             val updatedUser = it.copy(
                 email = updatedEmail,
                 name = updatedName,
-                surname = updatedSurname
+                surname = updatedSurname,
+                phoneNumber = updatedPhoneNumber
             )
             _localDriver.value = updatedUser
             val updateMap = mutableMapOf<String, Any>()
             updateMap["email"] = _localDriver.value!!.email
             updateMap["name"] = _localDriver.value!!.name
             updateMap["lastName"] = _localDriver.value!!.surname
-            updateDriver(email = updatedEmail, firstName = updatedName, lastName = updatedSurname,updateMap)
+            updateMap["driverPhoneNumber"] = _localDriver.value!!.phoneNumber
+            updateDriver(email = updatedEmail, firstName = updatedName, lastName = updatedSurname, updateMap=updateMap)
 
         }
     }
@@ -309,8 +286,8 @@ class SharedRegisterViewModel @Inject constructor(
     }
 
 
-    fun updateWorkDetails(carBrand: String, carModel: String, carYear: String, carCondition: String, licensePlate: String,
-                          avgKmDriven: String, workCity: String, rideShare: Boolean, allowContact: Boolean) {
+    fun updateWorkDetails(carBrand: String, carModel: String, carYear: String, carCondition: String,
+                          avgKmDriven: String, rideShare: Boolean, allowContact: Boolean) {
         _loadingState.value = true
         val currentUserObject = _localDriver.value
         currentUserObject?.let {
@@ -319,9 +296,7 @@ class SharedRegisterViewModel @Inject constructor(
                 carModel = carModel,
                 carYear = carYear,
                 carCondition = carCondition,
-                licensePlate = licensePlate,
                 avgKmDriven = avgKmDriven,
-                workCity = workCity,
                 rideShareDriver = rideShare,
                 allowedContact = allowContact
             )
@@ -333,24 +308,20 @@ class SharedRegisterViewModel @Inject constructor(
         updateMap["carModel"] = _localDriver.value!!.name
         updateMap["carYear"] = _localDriver.value!!.carYear
         updateMap["carCondition"] = _localDriver.value!!.carCondition
-        updateMap["licensePlate"] = _localDriver.value!!.licensePlate
         updateMap["avgKmDriven"] = _localDriver.value!!.avgKmDriven
-        updateMap["workCity"] = _localDriver.value!!.workCity
         updateMap["rideShareDriver"] = _localDriver.value!!.rideShareDriver
         updateMap["allowedContact"] = _localDriver.value!!.allowedContact
         updateDriverWorkData(updateMap)
 
     }
 
-     fun updateDriverAddressData(fullName:String, city:String, address1:String, address2:String, zipCode:String){
+     fun updateDriverAddressData(city:String, zipCode:String){
         _loadingState.value = true
         val currentUserObject = _localDriver.value
         currentUserObject?.let {
             val updatedCity = _driver.value!!.userCity
             val updatedUser = it.copy(
                 city = city,
-                addressRow1 = address1,
-                addressRow2 = address2,
                 zipCode = zipCode,
                 cityId = updatedCity.cityId,
                 stateId = updatedCity.stateId,
@@ -366,8 +337,6 @@ class SharedRegisterViewModel @Inject constructor(
         updateMap["stateId"] = _localDriver.value!!.stateId
         updateMap["cityName"] = _localDriver.value!!.cityName
         updateMap["stateName"] = _localDriver.value!!.stateName
-        updateMap["addressRow1"] = _localDriver.value!!.addressRow1
-        updateMap["addressRow2"] = _localDriver.value!!.addressRow2
         updateMap["userCity"] = _driver.value!!.userCity
         updateDriverWorkData(updateMap)
 

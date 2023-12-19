@@ -6,13 +6,17 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.FragmentUserSettingsBinding
+import com.mycompany.advioo.models.tripdata.UserTripData
 import com.mycompany.advioo.ui.activities.MainActivity
+import com.mycompany.advioo.ui.activities.PhotoActivity
 import com.mycompany.advioo.ui.fragments.ContactUsFragment
 import com.mycompany.advioo.ui.fragments.ReceivePaymentFragment
+import com.mycompany.advioo.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
 
@@ -23,6 +27,9 @@ class UserSettingsFragment : Fragment() {
 
     private var _binding: FragmentUserSettingsBinding? = null
     private val binding get() = _binding!!
+    private val mainViewModel : MainViewModel by activityViewModels()
+    private var tripDataList : List<UserTripData> = listOf()
+    private var currentCampaignMinKM : Int? = null
 
     @Inject
     lateinit var firebaseAuth: FirebaseAuth
@@ -46,10 +53,37 @@ class UserSettingsFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requireActivity().findViewById<BottomNavigationView>(R.id.bottomNavView).visibility = View.VISIBLE
+        subscribeToObservers()
         setupViews()
         setupOnClickListeners()
 
 
+    }
+
+    private fun subscribeToObservers(){
+        mainViewModel.tripDataList.observe(viewLifecycleOwner){userTripDataList->
+            tripDataList = userTripDataList
+            println("trip data list from settings = $tripDataList")
+        }
+
+        mainViewModel.currentCampaign.observe(viewLifecycleOwner){currentCampaign->
+            currentCampaignMinKM = currentCampaign?.campaignMinKM
+        }
+
+        /*
+        mainViewModel.loadingState.observe(viewLifecycleOwner){isLoading->
+            if(isLoading){
+                println("main viewmodel loading from user settings")
+                binding.llAccountSettings.visibility = View.GONE
+                binding.progressBarAccountSettings.visibility = View.VISIBLE
+            }
+            else{
+                println("stopped loading")
+                binding.progressBarAccountSettings.visibility = View.GONE
+                binding.llAccountSettings.visibility = View.VISIBLE
+            }
+        }
+         */
     }
 
 
@@ -95,11 +129,11 @@ class UserSettingsFragment : Fragment() {
         }
 
         binding.tvBtnGetPayment.setOnClickListener {
-            val fragment = ReceivePaymentFragment()
-            val transaction = requireActivity().supportFragmentManager.beginTransaction()
-            transaction.replace(R.id.mainFrameLayout, fragment)
-            transaction.addToBackStack(null)
-            transaction.commit()
+            val intent = Intent(requireContext(),PhotoActivity::class.java)
+            intent.putExtra("fromWhere","payment")
+            intent.putExtra("tripDataList",tripDataList.toTypedArray())
+            intent.putExtra("minKm",currentCampaignMinKM)
+            startActivity(intent)
         }
 
 

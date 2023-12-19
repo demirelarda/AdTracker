@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.location.Location
 import android.os.PowerManager
+import android.util.Log
 import androidx.core.app.NotificationCompat
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
@@ -23,6 +24,10 @@ import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 import org.locationtech.jts.geom.Coordinate
 import org.locationtech.jts.geom.GeometryFactory
+import kotlin.math.atan2
+import kotlin.math.cos
+import kotlin.math.sin
+import kotlin.math.sqrt
 
 class LocationTrackingService : LifecycleService() {
 
@@ -32,18 +37,39 @@ class LocationTrackingService : LifecycleService() {
 
     override fun onCreate() {
         super.onCreate()
+        Log.d("location tracking service","service started")
         locationClient = DefaultLocationClient(
             applicationContext,
             LocationServices.getFusedLocationProviderClient(applicationContext)
         )
     }
 
-    private fun updateIntervalBasedOnSpeed(speed: Float): Long {
-        return when {
+    /*
             speed < 10 -> 9_000L
             speed < 30 -> 7_700L
             speed < 60 -> 7_700L
             speed < 90 -> 5_700L
+            else -> 3_000L
+     */
+
+    /*      BEST ONE SO FAR
+                return when {
+            speed < 10 -> 9_000L
+            speed < 30 -> 5_000L
+            speed < 60 -> 5_000L
+            speed < 90 -> 5_000L
+            else -> 3_000L
+        }
+
+     */
+
+
+    private fun updateIntervalBasedOnSpeed(speed: Float): Long {
+        return when {
+            speed < 10 -> 9_000L
+            speed < 30 -> 8_000L
+            speed < 60 -> 8_000L
+            speed < 90 -> 5_000L
             else -> 3_000L
         }
     }
@@ -114,9 +140,11 @@ class LocationTrackingService : LifecycleService() {
                     if (isLocationWithinBorders(location, mapBorderLocationList)) {
                         // Update distance and lastUpdateTime
                         isOutOfBounds.postValue(false)
-                        val distance = locationClient.previousLocation?.distanceTo(location)?.div(1000.0)
+                        //val distance = locationClient.previousLocation?.distanceTo(location)?.div(1000.0)
+                        val distance = haversineDistance(locationClient.previousLocation, location)
                         val newLocation = LatLngPoint(location.latitude, location.longitude)
                         tripData.locations.add(newLocation)
+                        Log.d("location tracking service","get location updates")
                         userLocations.postValue(tripData.locations)
                         if(locationClient.previousLocation!=null){
                             //TODO: ADD THE LOCATION POINTS HERE
@@ -168,6 +196,23 @@ class LocationTrackingService : LifecycleService() {
         }
         serviceScope.cancel()
     }
+
+    private fun haversineDistance(loc1: Location?, loc2: Location?): Double? {
+        if (loc1 == null || loc2 == null) {
+            return null
+        }
+
+        val R = 6371.0
+        val dLat = Math.toRadians(loc2.latitude - loc1.latitude)
+        val dLon = Math.toRadians(loc2.longitude - loc1.longitude)
+        val a = sin(dLat / 2) * sin(dLat / 2) +
+                cos(Math.toRadians(loc1.latitude)) * cos(Math.toRadians(loc2.latitude)) *
+                sin(dLon / 2) * Math.sin(dLon / 2)
+        val c = 2 * atan2(sqrt(a), sqrt(1 - a))
+        return R * c
+    }
+
+
 
     companion object{
         const val ACTION_START = "ACTION_START"

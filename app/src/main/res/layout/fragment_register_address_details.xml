@@ -61,22 +61,6 @@
                 android:id="@+id/progressBarAddressDetails">
             </ProgressBar>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginStart="18dp"
-                android:layout_marginEnd="18dp"
-                android:hint="@string/full_name"
-                style="@style/TfCustomLayout"
-                app:startIconDrawable="@drawable/user_icon"
-                >
-                <EditText
-                    android:id="@+id/tf_full_name"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="text"/>
-            </com.google.android.material.textfield.TextInputLayout>
 
             <TextView
                 android:id="@+id/tv_select_city"
@@ -99,40 +83,7 @@
                 app:drawableEndCompat="@drawable/baseline_arrow_forward_ios_24"
                 android:focusable="true" />
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginStart="18dp"
-                android:layout_marginEnd="18dp"
-                android:hint="@string/address_row"
-                style="@style/TfCustomLayout"
-                app:startIconDrawable="@drawable/location_icon"
-                >
-                <EditText
-                    android:id="@+id/tf_address_row1"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="text"/>
-            </com.google.android.material.textfield.TextInputLayout>
 
-            <com.google.android.material.textfield.TextInputLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="18dp"
-                android:layout_marginStart="18dp"
-                android:layout_marginEnd="18dp"
-                android:hint="@string/address_row2"
-                style="@style/TfCustomLayout"
-                app:startIconDrawable="@drawable/location_icon"
-                >
-
-                <EditText
-                    android:id="@+id/tf_address_row2"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:inputType="text"/>
-            </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"

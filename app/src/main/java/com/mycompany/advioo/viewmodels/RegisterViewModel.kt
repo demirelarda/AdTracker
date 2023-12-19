@@ -21,7 +21,8 @@ class RegisterViewModel : ViewModel(){
         email: String,
         password: String,
         confirmPassword: String,
-        editMode: Boolean
+        editMode: Boolean,
+        phoneNumber: String
     ): Boolean {
         var isValid = true
 
@@ -45,6 +46,12 @@ class RegisterViewModel : ViewModel(){
             isValid = false
         } else if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
             _errorLiveData.value = R.string.email_invalid_error
+            errorList.add(_errorLiveData.value!!)
+            isValid = false
+        }
+
+        if (phoneNumber.isEmpty()) {
+            _errorLiveData.value = R.string.email_empty_error
             errorList.add(_errorLiveData.value!!)
             isValid = false
         }

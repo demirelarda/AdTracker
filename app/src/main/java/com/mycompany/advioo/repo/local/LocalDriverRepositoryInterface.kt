@@ -37,5 +37,7 @@ interface LocalDriverRepositoryInterface {
 
     suspend fun deleteSingleLocationList(tripId: String)
 
+    suspend fun updateCurrentCampaignApplicationId(driverId: String, campaignApplicationId: String)
+
 
 }

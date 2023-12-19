@@ -94,6 +94,12 @@ class LocalDriverRepository @Inject constructor(
         driverDao.deleteSingleTripLocationData(tripId)
     }
 
+    override suspend fun updateCurrentCampaignApplicationId(
+        driverId: String,
+        campaignApplicationId: String
+    ) {
+        driverDao.updateEnrolledCampaignApplicationId(driverId,campaignApplicationId)
+    }
 
 
 }

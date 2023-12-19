@@ -115,17 +115,15 @@ class RegisterUserWorkDetailsFragment : Fragment() {
             val carModel = binding.tfCarModel.text.toString().trim()
             val carYear = binding.tfCarYear.text.toString().trim()
             val carCondition = binding.carConditionDropDown.text.toString().trim()
-            val licensePlate = binding.tfLicensePlate.text.toString().trim()
             val avgKmDriven = binding.tfAvgKmDrivenPerMonth.text.toString().trim()
-            val workCity = binding.tfWorkCity.text.toString().trim()
             var allowContact = false
             var rideShare = false
             allowContact = binding.cboxAllowMailPhone.isChecked
             rideShare = binding.cboxRideshare.isChecked
             println("car brand first = $carBrand")
-            if(userWorkDetailsViewModel.isInputDataValid(carBrand = carBrand, carModel = carModel, carYear = carYear,carCondition=carCondition, licensePlate = licensePlate, avgKmDriven = avgKmDriven, workCity = workCity, termsConditions = binding.cboxTermsConditions, isUpdating = true)){
+            if(userWorkDetailsViewModel.isInputDataValid(carBrand = carBrand, carModel = carModel, carYear = carYear,carCondition=carCondition, avgKmDriven = avgKmDriven, termsConditions = binding.cboxTermsConditions, isUpdating = true)){
                 println("car brand second = $carBrand")
-                sharedRegisterViewModel.updateWorkDetails(carBrand,carModel,carYear,carCondition,licensePlate,avgKmDriven,workCity,rideShare,allowContact)
+                sharedRegisterViewModel.updateWorkDetails(carBrand,carModel,carYear,carCondition,avgKmDriven,rideShare,allowContact)
             }
             else{
                 val errorMessage: String = resources.getString(userWorkDetailsViewModel.errorList[0])
@@ -142,19 +140,15 @@ class RegisterUserWorkDetailsFragment : Fragment() {
             val carModel = binding.tfCarModel.text.toString().trim()
             val carYear = binding.tfCarYear.text.toString().trim()
             val carCondition = binding.carConditionDropDown.text.toString().trim()
-            val licensePlate = binding.tfLicensePlate.text.toString().trim()
             val avgKmDriven = binding.tfAvgKmDrivenPerMonth.text.toString().trim()
-            val workCity = binding.tfWorkCity.text.toString().trim()
 
-            if (userWorkDetailsViewModel.isInputDataValid(carBrand = carBrand, carModel = carModel, carYear = carYear,carCondition=carCondition, licensePlate = licensePlate, avgKmDriven = avgKmDriven, workCity = workCity, termsConditions = binding.cboxTermsConditions, isUpdating = false)) {
+            if (userWorkDetailsViewModel.isInputDataValid(carBrand = carBrand, carModel = carModel, carYear = carYear,carCondition=carCondition, avgKmDriven = avgKmDriven, termsConditions = binding.cboxTermsConditions, isUpdating = false)) {
                 sharedRegisterViewModel.driver.value
                 sharedRegisterViewModel.setCarBrand(carBrand)
                 sharedRegisterViewModel.setCarModel(carModel)
                 sharedRegisterViewModel.setCarCondition(carCondition)
                 sharedRegisterViewModel.setCarYear(carYear)
                 sharedRegisterViewModel.setAvgKmDriven(avgKmDriven)
-                sharedRegisterViewModel.setWorkCity(workCity)
-                sharedRegisterViewModel.setLicensePlate(licensePlate)
 
                 if(binding.cboxAllowMailPhone.isChecked){
                     sharedRegisterViewModel.setAllowContact(true)
@@ -200,8 +194,6 @@ class RegisterUserWorkDetailsFragment : Fragment() {
         sharedRegisterViewModel.localDriver.observe(viewLifecycleOwner){localDriver->
             binding.tfCarBrand.setText(localDriver.carBrand)
             binding.tfCarModel.setText(localDriver.carModel)
-            binding.tfWorkCity.setText(localDriver.workCity)
-            binding.tfLicensePlate.setText(localDriver.licensePlate)
             binding.tfAvgKmDrivenPerMonth.setText(localDriver.avgKmDriven)
             binding.tfCarYear.setText(localDriver.carYear)
             binding.carConditionDropDown.setText(localDriver.carCondition)

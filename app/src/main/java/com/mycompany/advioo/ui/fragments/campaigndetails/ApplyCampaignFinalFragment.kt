@@ -21,6 +21,7 @@ import com.mycompany.advioo.databinding.FragmentApplyCampaignFinalBinding
 import com.mycompany.advioo.models.campaignapplication.CampaignApplication
 import com.mycompany.advioo.ui.activities.AppAdActivity
 import com.mycompany.advioo.util.SnackbarHelper
+import com.mycompany.advioo.util.Status
 import com.mycompany.advioo.viewmodels.ApplyCampaignSharedViewModel
 import org.osmdroid.config.Configuration
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
@@ -221,6 +222,7 @@ class ApplyCampaignFinalFragment : Fragment() {
             }
         }
 
+        /*
         campaignApplicationSharedViewModel.successState.observe(viewLifecycleOwner){success->
             if(success){
                 if(!installerDetails){
@@ -229,6 +231,34 @@ class ApplyCampaignFinalFragment : Fragment() {
                 }
             }
         }
+
+         */
+
+        campaignApplicationSharedViewModel.emailResponse.observe(viewLifecycleOwner) { response ->
+            when (response.status) {
+               Status.SUCCESS -> {
+                   if(!installerDetails){
+                       val action = ApplyCampaignFinalFragmentDirections.actionApplyCampaignFinalFragmentToApplyCampaignSucessFragment(campaignApplication)
+                       Navigation.findNavController(requireView()).navigate(action)
+                   }
+                }
+
+                Status.ERROR -> {
+                    println("error response = ${response.message}")
+                    println("error response = ${response.status}")
+                    println("error response = ${response.data}")
+                    SnackbarHelper.showErrorSnackBar(requireView(),getString(R.string.an_error_occurred_network))
+                    binding.btnEnrollCampaignFinal.isEnabled = true
+                }
+
+                Status.LOADING -> {
+                    binding.scrollViewCampaignApplication.visibility = View.GONE
+                    binding.progressBarApplyCampaign.visibility = View.VISIBLE
+                    binding.btnEnrollCampaignFinal.isEnabled = false
+                }
+            }
+        }
+
     }
 
 

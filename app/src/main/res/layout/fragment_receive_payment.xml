@@ -1,15 +1,36 @@
 <?xml version="1.0" encoding="utf-8"?>
 <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.fragments.ReceivePaymentFragment">
 
+    <ProgressBar
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone"
+        android:id="@+id/progress_bar_receive_payment">
+    </ProgressBar>
+
+    <TextView
+        android:id="@+id/tv_payment_not_available"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/payment_not_available"
+        android:textSize="20sp"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:textStyle="bold"
+        android:visibility="gone"
+        >
+    </TextView>
+
     <ScrollView
         android:id="@+id/scrollViewReceivePayment"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
-
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -26,8 +47,8 @@
 
             <ImageView
                 android:id="@+id/iv_btn_back_from_receive_payment"
-                android:layout_width="30dp"
-                android:layout_height="30dp"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
                 android:layout_gravity="center"
                 android:src="@drawable/back_button_icon">
             </ImageView>
@@ -38,132 +59,207 @@
                 android:layout_weight="1"
                 android:text="@string/receive_payment"
                 android:gravity="center"
-                android:textSize="30sp"
+                android:textSize="25sp"
                 android:textStyle="bold"
                 android:textColor="@color/black">
             </TextView>
 
         </LinearLayout>
 
-
-        <TextView
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp"
-            android:textStyle="bold"
-            android:layout_marginTop="20dp"
-            android:textSize="16sp"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/odometer_photo">
-        </TextView>
+            android:orientation="vertical"
+            android:id="@+id/ll_receive_payment">
 
-        <ImageView
-            android:id="@+id/iv_odometer_photo"
-            android:layout_width="match_parent"
-            android:layout_height="300dp"
-            android:layout_marginTop="20dp"
-            android:scaleType="fitCenter"
-            android:src="@drawable/baseline_add_photo_alternate_24"
-            android:layout_marginStart="16dp"
-            android:layout_marginEnd="16dp">
-        </ImageView>
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="50dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="@string/payment_full_name"
-            style="@style/TfCustomLayout"
-            >
-            <EditText
-                android:id="@+id/tf_payment_full_name"
+            <LinearLayout
+                android:visibility="gone"
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:paddingBottom="20dp"
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
+                android:id="@+id/ll_car_photos">
+                <TextView
+                    android:id="@+id/tvCarPhotosPayment"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/car_photos"
+                    android:textSize="20sp"
+                    android:textStyle="bold">
+                </TextView>
+                <androidx.viewpager2.widget.ViewPager2
+                    android:id="@+id/image_slider_car_photos_payment"
+                    android:layout_marginTop="20dp"
+                    android:layout_width="match_parent"
+                    android:layout_height="300dp">
+                </androidx.viewpager2.widget.ViewPager2>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="@string/payment_address"
-            style="@style/TfCustomLayout"
-            >
-            <EditText
-                android:id="@+id/tf_payment_address"
+                <com.tbuonomo.viewpagerdotsindicator.DotsIndicator
+                    android:id="@+id/spring_dots_indicator_user_car_photos_payment"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="20dp"
+                    app:dotsColor="@color/colorLightBlue"
+                    app:dotsCornerRadius="8dp"
+                    app:dotsSize="10dp"
+                    app:dotsSpacing="4dp"
+                    app:dotsWidthFactor="2.5"
+                    app:selectedDotColor="@color/app_blue"
+                    app:progressMode="true">
+                </com.tbuonomo.viewpagerdotsindicator.DotsIndicator>
+
+            </LinearLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="text"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="30dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="@string/payment_full_name"
+                style="@style/TfCustomLayout"
+                >
+                <EditText
+                    android:id="@+id/tf_payment_full_name"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="@string/bank_account_number"
-            style="@style/TfCustomLayout"
-            >
-            <EditText
-                android:id="@+id/tf_bank_account_number"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="number"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="@string/payment_address"
+                style="@style/TfCustomLayout"
+                >
+                <EditText
+                    android:id="@+id/tf_payment_address"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="text"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="@string/bank_transit_number"
-            style="@style/TfCustomLayout"
-            >
-            <EditText
-                android:id="@+id/tf_bank_transit_number"
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="number"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="@string/bank_account_number"
+                style="@style/TfCustomLayout"
+                >
+                <EditText
+                    android:id="@+id/tf_bank_account_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
-        <com.google.android.material.textfield.TextInputLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="35dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginEnd="18dp"
-            android:hint="@string/bank_institution_number"
-            style="@style/TfCustomLayout"
-            >
-            <EditText
-                android:id="@+id/tf_bank_institution_number"
+            <com.google.android.material.textfield.TextInputLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:inputType="number"/>
-        </com.google.android.material.textfield.TextInputLayout>
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="@string/bank_transit_number"
+                style="@style/TfCustomLayout"
+                >
+                <EditText
+                    android:id="@+id/tf_bank_transit_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="20dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="@string/bank_institution_number"
+                style="@style/TfCustomLayout"
+                >
+                <EditText
+                    android:id="@+id/tf_bank_institution_number"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="number"/>
+            </com.google.android.material.textfield.TextInputLayout>
 
 
-        <androidx.appcompat.widget.AppCompatButton
-            android:id="@+id/btn_submit_contact_message"
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:layout_marginStart="18dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginTop="50dp"
-            android:layout_marginEnd="18dp"
-            android:background="@drawable/button_background_blue"
-            android:text="@string/send_payment_request"
-            android:textAllCaps="false"
-            android:textColor="@color/white"
-            android:textSize="16sp">
-        </androidx.appcompat.widget.AppCompatButton>
+            <LinearLayout
+                android:id="@+id/ll_payment_texts"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginStart="16dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginTop="20dp">
+
+
+                <TextView
+                    android:id="@+id/you_get_paid_after"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    tools:text="You'll get paid after:">
+                </TextView>
+
+                <TextView
+                    android:id="@+id/tv_payment_days"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="@color/black"
+                    android:layout_marginTop="5dp"
+                    tools:text="28 days, 12 hours">
+                </TextView>
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:textSize="18sp"
+                    android:layout_marginTop="5dp"
+                    android:textStyle="bold"
+                    android:textColor="@color/colorSnackBarError"
+                    tools:text="If you reach 500 KM (Minimum KM)">
+                </TextView>
+
+            </LinearLayout>
+
+
+
+
+            <androidx.appcompat.widget.AppCompatButton
+                android:id="@+id/btn_submit_payment_request_or_save_payment_details"
+                android:layout_width="match_parent"
+                android:layout_height="55dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginBottom="30dp"
+                android:layout_marginTop="30dp"
+                android:layout_marginEnd="18dp"
+                android:background="@drawable/button_background_blue"
+                android:text="@string/send_payment_request"
+                android:textAllCaps="false"
+                android:textColor="@color/white"
+                android:textSize="16sp">
+            </androidx.appcompat.widget.AppCompatButton>
+
+        </LinearLayout>
 
 
 

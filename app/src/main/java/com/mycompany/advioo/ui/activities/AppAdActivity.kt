@@ -3,9 +3,13 @@ package com.mycompany.advioo.ui.activities
 
 import android.content.Intent
 import android.location.LocationManager
+import android.os.Build
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.ViewModelProvider
+import com.instacart.truetime.time.TrueTimeImpl
 import com.mycompany.advioo.ui.fragments.campaigns.MyCampaignsFragment
 import com.mycompany.advioo.R
 import com.mycompany.advioo.databinding.ActivityAppAdBinding
@@ -14,8 +18,10 @@ import com.mycompany.advioo.ui.fragments.AppFragmentFactory
 import com.mycompany.advioo.ui.fragments.campaigns.HomeFragment
 import com.mycompany.advioo.ui.fragments.campaigns.UserSettingsFragment
 import com.mycompany.advioo.RunCampaignFragment
+import com.mycompany.advioo.viewmodels.MainViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import javax.inject.Inject
+
 
 @AndroidEntryPoint
 class AppAdActivity : AppCompatActivity() {
@@ -26,9 +32,11 @@ class AppAdActivity : AppCompatActivity() {
     @Inject
     lateinit var locationManager: LocationManager
 
+    private lateinit var mainViewModel: MainViewModel
 
 
 
+    @RequiresApi(Build.VERSION_CODES.O)
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         supportFragmentManager.fragmentFactory = fragmentFactory
@@ -38,6 +46,9 @@ class AppAdActivity : AppCompatActivity() {
         locationManager = AppModule.provideLocationManager(this)
 
         intentHandler(intent)
+
+        mainViewModel = ViewModelProvider(this).get(MainViewModel::class.java)
+        mainViewModel.doNecessaryProcesses()
 
 
 

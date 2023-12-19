@@ -116,6 +116,23 @@
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="18dp"
+                android:layout_marginStart="18dp"
+                android:layout_marginEnd="18dp"
+                android:hint="@string/phone_number"
+                style="@style/TfCustomLayout"
+                app:startIconDrawable="@drawable/phone_icon">
+
+                <EditText
+                    android:id="@+id/tf_phone_number_signup"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:inputType="phone"/>
+            </com.google.android.material.textfield.TextInputLayout>
+
+            <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/til_password_register"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"

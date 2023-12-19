@@ -8,4 +8,6 @@ interface CampaignApplicationRepositoryInterface {
 
     fun getCampaignApplicationsByApplicantId(uid: String): Task<List<CampaignApplication>>
 
+    fun getCampaignApplicationById(campaignApplicationId: String) : Task<List<CampaignApplication>>
+
 }

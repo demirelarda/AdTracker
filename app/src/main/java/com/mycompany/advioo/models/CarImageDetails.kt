@@ -10,5 +10,6 @@ data class CarImageDetails(
     val campaignLevel: String,
     val campaignId: String,
     val installerId: String,
-    val imageUrls: List<String>
+    val imageUrls: List<String>,
+    val campaignApplicationId: String
 )

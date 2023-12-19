@@ -1,9 +1,12 @@
 package com.mycompany.advioo.models.tripdata
 
+import android.os.Parcelable
 import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.mycompany.advioo.models.MyPair
+import kotlinx.parcelize.Parcelize
 
+@Parcelize
 @Entity(tableName = "tripData")
 data class UserTripData(
     @PrimaryKey val tripId: String = "",
@@ -16,6 +19,6 @@ data class UserTripData(
     var isUploaded: Boolean = false,
     val startTime: String = "",
     val endTime: String = "",
-)
+) : Parcelable
 
 

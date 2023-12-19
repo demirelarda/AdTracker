@@ -66,6 +66,12 @@ class ShowPhotoFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        if(requireActivity().intent.hasExtra("fromWhere")){
+            if(requireActivity().intent.getStringExtra("fromWhere") == "payment"){
+                val action = ShowPhotoFragmentDirections.actionShowPhotoFragmentToReceivePaymentFragment()
+                Navigation.findNavController(requireView()).navigate(action)
+            }
+        }
         registerLauncher()
         subscribeToObservers()
         val bundle = arguments
@@ -90,18 +96,20 @@ class ShowPhotoFragment : Fragment() {
                     photoPartsString = getString(R.string.odometer)+", "+getString(R.string.side_right_left)
                     photosToTakeList.add(getString(R.string.capture_odometer_photo))
                     photosToTakeList.add(getString(R.string.capture_side_photo))
+                    photosToTakeList.add(getString(R.string.capture_other_side_photo))
                 }
                 "Advanced"->{
                     photoPartsString = getString(R.string.odometer)+", "+getString(R.string.side_right_left)
                     photosToTakeList.add(getString(R.string.capture_odometer_photo))
                     photosToTakeList.add(getString(R.string.capture_side_photo))
+                    photosToTakeList.add(getString(R.string.capture_other_side_photo))
                 }
                 "Pro"->{
                     photoPartsString = getString(R.string.odometer)+", "+getString(R.string.side_right_left)+", "+getString(R.string.hood)
                     photosToTakeList.add(getString(R.string.capture_odometer_photo))
                     photosToTakeList.add(getString(R.string.capture_side_photo))
+                    photosToTakeList.add(getString(R.string.capture_other_side_photo))
                     photosToTakeList.add(getString(R.string.capture_hood_photo))
-
                 }
             }
             //showPhotoViewModel.setPhotosToTakeList(photosToTakeList)

@@ -2,6 +2,7 @@ package com.mycompany.advioo.repo
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import com.google.android.gms.tasks.Task
 import com.google.firebase.firestore.FirebaseFirestore
 import com.google.firebase.firestore.QuerySnapshot
 import com.mycompany.advioo.models.campaign.Campaign
@@ -18,39 +19,34 @@ class CampaignRepository @Inject constructor(
 
     private val campaignsCollection = db.collection("campaigns")
 
-    override fun getCampaigns(stateId: String): LiveData<List<Campaign>> {
-        val liveData = MutableLiveData<List<Campaign>>()
-
-        campaignsCollection.whereEqualTo("campaignStateId", stateId)
-            .addSnapshotListener { value, error ->
-                if (error != null) {
-                    liveData.value = emptyList()
-                    println("error while getting campaigns from firestore = "+error.localizedMessage)
-                    return@addSnapshotListener
+    override fun getCampaigns(stateId: String): Task<List<Campaign>> {
+        return campaignsCollection
+            .whereEqualTo("campaignStateId", stateId)
+            .get()
+            .continueWith { task ->
+                val documents = task.result?.documents ?: emptyList()
+                documents.mapNotNull { document ->
+                    document.toObject(Campaign::class.java)?.apply {
+                        campaignId = document.id
+                    }
                 }
-
-                liveData.value = value?.toCampaigns() ?: emptyList()
             }
-
-        return liveData
     }
 
 
-
-    override fun getSingleCampaignById(campaignId: String): LiveData<Campaign?> {
-        val campaignLiveData = MutableLiveData<Campaign?>()
-        campaignsCollection.document(campaignId).get().addOnSuccessListener { document ->
-            if (document.exists()) {
-                campaignLiveData.value = document.toObject(Campaign::class.java)?.copy(campaignId= document.id)
-            } else {
-                campaignLiveData.value = null
+    override fun getSingleCampaignById(campaignId: String): Task<List<Campaign>> {
+        return campaignsCollection
+            .whereEqualTo("campaignId", campaignId)
+            .get()
+            .continueWith { task ->
+                val documents = task.result?.documents ?: emptyList()
+                documents.mapNotNull { document ->
+                    document.toObject(Campaign::class.java)?.apply {
+                        this.campaignId = document.id
+                    }
+                }
             }
-        }.addOnFailureListener {
-            campaignLiveData.value = null
-        }
-        return campaignLiveData
     }
-
 
     private fun QuerySnapshot.toCampaigns(): List<Campaign> {
         return documents.mapNotNull { document ->
@@ -59,5 +55,6 @@ class CampaignRepository @Inject constructor(
             }
         }
     }
+
 
 }

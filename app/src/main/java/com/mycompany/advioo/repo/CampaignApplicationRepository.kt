@@ -22,4 +22,16 @@ class CampaignApplicationRepository @Inject constructor(
                 }
             }
     }
+
+    override fun getCampaignApplicationById(campaignApplicationId: String): Task<List<CampaignApplication>> {
+        return campaignApplicationCollection.whereEqualTo("applicationId", campaignApplicationId).get()
+            .continueWith { task ->
+                if (task.isSuccessful) {
+                    println("task result isStarted= "+ task.result?.documents?.get(0)!!.toObject(CampaignApplication::class.java)!!.started)
+                    task.result?.documents?.mapNotNull { it.toObject(CampaignApplication::class.java) }
+                } else {
+                    null
+                }
+            }
+    }
 }

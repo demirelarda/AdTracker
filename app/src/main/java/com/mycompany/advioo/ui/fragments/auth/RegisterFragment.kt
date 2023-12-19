@@ -105,13 +105,13 @@ class RegisterFragment: Fragment() {
                 val firstName = binding.tfFirstName.text.toString().trim()
                 val lastName = binding.tfLastName.text.toString().trim()
                 val email = binding.tfEmailSignup.text.toString().trim()
+                val phoneNumber = binding.tfPhoneNumberSignup.text.toString().trim()
 
-                if (registerViewModel.isInputDataValid(firstName, lastName, email,"","",true)) {
-                    sharedRegisterViewModel.driver.value
+                if (registerViewModel.isInputDataValid(firstName, lastName, email,"","",true,phoneNumber)) {
                     sharedRegisterViewModel.setFirstName(firstName)
                     sharedRegisterViewModel.setLastName(lastName)
                     sharedRegisterViewModel.setEmail(email)
-                    sharedRegisterViewModel.updateUserPersonalDetails(email,firstName,lastName)
+                    sharedRegisterViewModel.updateUserPersonalDetails(email,firstName,lastName,phoneNumber)
                 } else {
                     val errorMessage: String = resources.getString(registerViewModel.errorList[0]) //list contains all the errors, get the first error message.
                     SnackbarHelper.showErrorSnackBar(requireView(),errorMessage)
@@ -126,13 +126,15 @@ class RegisterFragment: Fragment() {
             val email = binding.tfEmailSignup.text.toString().trim()
             val password = binding.tfPassword.text.toString().trim()
             val passwordAgain = binding.tfPasswordAgain.text.toString().trim()
+            val phoneNumber = binding.tfPhoneNumberSignup.text.toString().trim()
 
-            if (registerViewModel.isInputDataValid(firstName, lastName, email, password, passwordAgain,false)) {
+            if (registerViewModel.isInputDataValid(firstName, lastName, email, password, passwordAgain,false,phoneNumber)) {
                 sharedRegisterViewModel.driver.value
                 sharedRegisterViewModel.setFirstName(firstName)
                 sharedRegisterViewModel.setLastName(lastName)
                 sharedRegisterViewModel.setEmail(email)
                 sharedRegisterViewModel.setPassword(password)
+                sharedRegisterViewModel.setPhoneNumber(phoneNumber)
                 val action = RegisterFragmentDirections.actionRegisterFragmentToRegisterAddressDetailsFragment(REGISTER_STRING)
                 Navigation.findNavController(requireView()).navigate(action)
             } else {
@@ -148,6 +150,7 @@ class RegisterFragment: Fragment() {
             binding.tfFirstName.setText(localDriver.name)
             binding.tfLastName.setText(localDriver.surname)
             binding.tfEmailSignup.setText(localDriver.email)
+            binding.tfPhoneNumberSignup.setText(localDriver.phoneNumber)
         }
 
         sharedRegisterViewModel.errorMessage.observe(viewLifecycleOwner){errorMessage->

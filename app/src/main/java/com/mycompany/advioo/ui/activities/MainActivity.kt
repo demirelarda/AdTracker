@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.navigation.findNavController
+import com.google.firebase.auth.FirebaseAuth
 import com.mycompany.advioo.R
 import com.mycompany.advioo.ui.fragments.AppFragmentFactory
 import com.mycompany.advioo.util.Util.EDIT_STRING
@@ -19,7 +20,6 @@ class MainActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         supportFragmentManager.fragmentFactory = fragmentFactory
         setContentView(R.layout.activity_main)
-
 
 
 

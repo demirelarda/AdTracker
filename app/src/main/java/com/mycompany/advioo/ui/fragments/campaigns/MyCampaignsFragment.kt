@@ -237,7 +237,14 @@ class MyCampaignsFragment : Fragment(){
     private fun subscribeToObservers(){
         myCampaignsViewModel.campaignApplication.observe(viewLifecycleOwner){
             campaignApplication = it
-            setupViews()
+            if(campaignApplication.status != 9){ //state 9 -> campaign ended state
+                setupViews()
+            }
+            else{
+                binding.llMyCampaigns.visibility = View.GONE
+                binding.tvErrorHaveNotEnrolledCampaign.visibility = View.VISIBLE
+                binding.progressbarMyCampaigns.visibility = View.GONE
+            }
         }
 
         myCampaignsViewModel.loadingState.observe(viewLifecycleOwner){loading->

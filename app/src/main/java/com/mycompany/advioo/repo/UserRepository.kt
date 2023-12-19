@@ -3,11 +3,13 @@ package com.mycompany.advioo.repo
 import com.google.android.gms.tasks.Task
 import com.google.android.gms.tasks.Tasks
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.FirebaseFirestoreException
 import com.google.firebase.firestore.SetOptions
 import com.google.firebase.storage.FirebaseStorage
 import com.mycompany.advioo.models.CarImageDetails
 import com.mycompany.advioo.models.ContactMessage
 import com.mycompany.advioo.models.LocationSampleData
+import com.mycompany.advioo.models.campaignapplication.CampaignApplication
 import com.mycompany.advioo.models.tripdata.TotalTripData
 import com.mycompany.advioo.models.tripdata.TripLocationData
 import com.mycompany.advioo.models.user.Driver
@@ -48,12 +50,18 @@ class UserRepository @Inject constructor(
 
     override fun updateDriverCampaignStatus(
         userId: String,
-        enrolledCampaignId: String
+        enrolledCampaignId: String,
+        enrolledCampaignApplication: String
     ): Task<Void> {
+        val updates = mapOf(
+            "currentEnrolledCampaign" to enrolledCampaignId,
+            "currentCampaignApplicationId" to enrolledCampaignApplication
+        )
         return usersCollection
             .document(userId)
-            .update("currentEnrolledCampaign",enrolledCampaignId)
+            .update(updates)
     }
+
 
     override fun uploadTripData(totalTripData: TotalTripData): Task<Void> {
         return db.collection("tripData")
@@ -90,9 +98,10 @@ class UserRepository @Inject constructor(
 
 
 
-    override fun getAllUserTripData(userId: String): Task<List<TotalTripData>> {
+    override fun getAllUserTripData(userId: String, currentCampaignId: String): Task<List<TotalTripData>> {
         val tripDataQuery = db.collection("tripData")
             .whereEqualTo("driverId", userId)
+            .whereEqualTo("campaignApplicationId",currentCampaignId)
 
         return tripDataQuery.get().continueWith { task ->
             if (task.isSuccessful) {
@@ -151,7 +160,42 @@ class UserRepository @Inject constructor(
             .set(locationData, SetOptions.merge())
     }
 
+    override fun getCurrentEnrolledCampaign(userId: String): Task<List<String>> {
+        return usersCollection.document(userId).get()
+            .continueWith { task ->
+                val result = mutableListOf<String>()
+                if (task.isSuccessful) {
+                    val document = task.result
+                    if (document != null && document.exists()) {
+                        val currentEnrolledCampaign = document.getString("currentEnrolledCampaign")
+                        val currentCampaignApplicationId = document.getString("currentCampaignApplicationId")
 
+                        if (currentEnrolledCampaign != null) {
+                            result.add(currentEnrolledCampaign)
+                        }
+                        if (currentCampaignApplicationId != null) {
+                            result.add(currentCampaignApplicationId)
+                        }
+                    }
+                }
+                result
+            }
+    }
+
+    override fun getCurrentCampaignApplication(campaignApplicationId: String): Task<CampaignApplication> {
+        return campaignApplicationsCollection.document(campaignApplicationId).get().continueWith { task ->
+            if (task.isSuccessful) {
+                val document = task.result
+                if (document.exists()) {
+                    document.toObject(CampaignApplication::class.java)
+                } else {
+                    throw FirebaseFirestoreException("Couldn't found the document!", FirebaseFirestoreException.Code.NOT_FOUND)
+                }
+            } else {
+                throw task.exception ?: FirebaseFirestoreException("Couldn't fetch the document!", FirebaseFirestoreException.Code.UNKNOWN)
+            }
+        }
+    }
 
 
 }
